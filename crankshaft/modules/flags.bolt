@@ -1,0 +1,11 @@
+"""Module from which builtin flags are imported."""
+
+from ./flags/is_baby import is_baby
+from ./flags/is_airborne import is_airborne
+from ./flags/is_burning import is_burning
+from ./flags/is_player import is_player
+from ./flags/is_sneaking import is_sneaking
+from ./flags/is_sprinting import is_sprinting
+from ./flags/is_swimming import is_swimming
+from ./flags/is_gliding import is_gliding
+from ./flags/is_charging_bow import is_charging_bow

@@ -1,0 +1,20 @@
+from lightning_rod:api import tag, untag
+from ../event_handler import Event, Listener
+from ./on_player_tick import on_player_tick
+from ../config import Config
+from ../flags/is_gliding import is_gliding 
+
+
+def handler(event):
+    event_fired_tag = f"{Config.TAG_ROOT}.event_handler.{event.event_id}"
+
+    @Listener(on_player_tick)
+    def player_tick():
+        if not is_gliding:
+            if entity @s[tag=event_fired_tag] function event.path('nest_0'):
+                untag(event_fired_tag)
+                event.trigger()
+        else:
+            tag(event_fired_tag)
+
+on_player_glide_end = Event(handler=handler, event_id='on_player_glide_end')

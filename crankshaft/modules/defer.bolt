@@ -1,0 +1,16 @@
+from mecha import Mecha, AstRoot, AstChildren
+from bolt import Runtime
+
+
+def defer(f):
+    def wrapper(ctx):
+        mc = ctx.inject(Mecha)
+        runtime = ctx.inject(Runtime)
+        current_path = runtime.modules.current_path
+        yield
+        with runtime.scope() as commands:
+            f()
+        result = mc.compile(AstRoot(commands=AstChildren(commands)), report=mc.diagnostics)
+        # ctx.data.functions.setdefault(current_path, Function()).append(result)
+    ctx.require(wrapper)
+    return f

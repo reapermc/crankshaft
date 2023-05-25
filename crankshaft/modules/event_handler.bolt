@@ -1,0 +1,92 @@
+from dataclasses import dataclass, field
+from typing import Callable
+
+from ./config import Config
+
+
+@dataclass
+class Event:
+    handler: Callable = field(kw_only=True, repr=False)
+    event_id: str = field(kw_only=True)
+
+    active: bool = field(init=False, default=False)
+    payload_params: list = field(init=False, default_factory=list)
+
+    def __post_init__(self):
+        local_dir = f"{Config.ROOT_LOCAL}/event_handler/builtin/{self.event_id}"
+        global_dir = f"{Config.ROOT}/event_handler/builtin/{self.event_id}"
+
+        self.handler_dir = f"{global_dir}/__handler__"
+        self.payload_path = f"{local_dir}/__payload__"
+        self.fork_path = f"{global_dir}/__fork__"
+
+    def trigger(self, *params):
+        """Triggers the event on runtime."""
+
+        self.payload_params = params
+        function f"#{self.fork_path}"
+
+    def activate(self):
+        """Activates and deploys the handler into the datapack."""
+
+        if self.active:
+            return
+
+        self.handler(self)
+        self._fork_to_payload()
+        self.active = True
+
+    def path(self, subpath: str) -> str:
+        """Generates a function path inside the event working directory."""
+
+        return f"{self.handler_dir}/{subpath}"
+
+    def attach_payload(self, payload_ref: Callable):
+        append function self.payload_path:
+            payload_ref(*self.payload_params)
+
+    def _fork_to_payload(self):
+        merge function_tag self.fork_path {"values": [self.payload_path]}
+
+
+@dataclass
+class CustomEvent:
+    handler: Callable = field(kw_only=True, repr=False)
+
+    active: bool = field(init=False, default=False)
+
+    def __post_init__(self):
+        self.event_id = id(self)
+
+        local_dir = f"{Config.ROOT_LOCAL}/event_handler/custom/{self.event_id}"
+
+        self.handler_dir = f"{local_dir}/__handler__"
+        self.payload_path = f"{local_dir}/__payload__"
+
+    def trigger(self):
+        """Triggers the event on runtime."""
+
+        function self.payload_path
+
+    def activate(self):
+        """Activates and deploys the handler into the datapack."""
+
+        self.handler(self)
+        self.active = True
+
+    def path(self, subpath: str) -> str:
+        """Generates a function path inside the event working directory."""
+
+        return f"{self.handler_dir}/{subpath}"
+
+    def attach_payload(self, payload_ref: Callable):
+        append function self.payload_path:
+            payload_ref()
+
+@dataclass
+class Listener:
+    event: Event
+
+    def __call__(self, callback):
+        self.event.activate()
+        self.event.attach_payload(callback)

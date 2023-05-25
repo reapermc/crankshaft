@@ -1,0 +1,17 @@
+from wicked_expressions:api import Scoreboard
+from ../event_handler import Event, Listener
+from ../config import Config
+from ./on_player_tick import on_player_tick
+
+
+def handler(event):
+    @Listener(on_player_tick)
+    def player_tick():
+        join_tracker = Scoreboard(f"{Config.SCOREBOARD_ROOT}.{event.event_id}", 'custom:leave_game')['@s']
+
+        if join_tracker >= 1:
+            execute function event.path('main'):
+                join_tracker = 0
+                event.trigger()
+
+on_player_join = Event(handler=handler, event_id='on_player_join')

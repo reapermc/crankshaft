@@ -1,0 +1,21 @@
+from lightning_rod:api import tag, untag
+from ../event_handler import Event, Listener
+from ./on_player_tick import on_player_tick
+from ../config import Config
+from ../flags/is_airborne import is_airborne
+
+
+def handler(event):
+    @Listener(on_player_tick)
+    def player_tick():
+        available_tag = f"{Config.TAG_ROOT}.event_handler.{event.event_id}"
+
+        if is_airborne:
+            tag(available_tag)
+        else:
+            if entity @s[tag=available_tag]:
+                execute function event.path('main'):
+                    untag(available_tag)
+                    event.trigger()
+
+on_player_land = Event(handler=handler, event_id='on_player_land')

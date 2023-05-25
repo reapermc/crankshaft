@@ -1,0 +1,11 @@
+import logging
+from mecha import Mecha
+from ./config import Config
+
+
+mc = ctx.inject(Mecha)
+logger = logging.getLogger(Config.LIBRARY_NAME)
+
+
+def selector(value):
+    return mc.parse(value, using="selector")

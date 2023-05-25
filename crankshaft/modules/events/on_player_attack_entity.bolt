@@ -1,0 +1,42 @@
+from wicked_expressions:api import StaticVar, this
+from wicked_expressions:nbtlib import Bool
+from lightning_rod:api import tag, untag
+from ../event_handler import Event
+from ../lib/entity_hit_matching/api import append_target_trigger
+from ../utils import selector
+from ../config import Config
+
+
+def handler(event):
+    has_owner = StaticVar(Bool)
+    attacker_tag = f"{Config.TAG_ROOT}.event_handler.{event.event_id}.attacker"
+    child_tag = f"{Config.TAG_ROOT}.event_handler.{event.event_id}.child"
+    attacker = selector(f"@e[tag={attacker_tag}]")
+    child = selector(f"@e[tag={child_tag}]")
+    entrypoint = event.path('entrypoint')
+
+    append_target_trigger(entrypoint)
+    function entrypoint:
+        as @e if score @s reapermc.crankshaft.lib.ehm.id = $direct reapermc.crankshaft.lib.ehm.id function event.path('nested_0'):
+            with has_owner.store(mode='success'):
+                this.Owner.get()
+
+            if has_owner == 1:
+                execute function event.path('nested_1'):
+                    tag(child_tag)
+
+                    on origin:
+                        tag(attacker_tag)
+            else:
+                tag(attacker_tag)
+
+        event.trigger(attacker, child)
+
+        # cleanup 
+        as attacker:
+            untag(attacker_tag)
+        
+        as child:
+            untag(child_tag)
+
+on_player_attack_entity = Event(handler=handler, event_id='on_player_attack_entity')

@@ -1,0 +1,18 @@
+from ../flag import Flag
+
+
+def body(flag):
+    predicate flag.path('predicate_check') {
+        "condition": "minecraft:entity_properties",
+        "entity": "this",
+        "predicate": {
+            "flags": {
+                "is_on_fire": true
+            }
+        }
+    }
+
+    with flag.set_condition():
+        if predicate flag.path('predicate_check')
+
+is_burning = Flag(body=body, flag_id='is_burning')

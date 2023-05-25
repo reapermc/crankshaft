@@ -1,0 +1,12 @@
+from ../event_handler import Event, Listener
+from ../flags/is_sneaking import is_sneaking
+from ./on_player_tick import on_player_tick
+
+
+def handler(event):
+    @Listener(on_player_tick)
+    def player_tick():
+        if is_sneaking:
+            event.trigger()
+
+on_player_sneak = Event(handler=handler, event_id='on_player_sneak')
