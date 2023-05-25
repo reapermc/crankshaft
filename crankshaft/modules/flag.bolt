@@ -69,12 +69,13 @@ class CustomFlag:
     body: Callable = field(kw_only=True, repr=False)
 
     gate: ClassVar[ExpressionNode] = StaticVar(Bool)
-    active: bool = field(init=-False, default=False)
+    active: bool = field(init=False, default=False)
     invert: bool = field(kw_only=True, default=False)
     initialized: bool = field(kw_only=True, default=False)
+    next_id: ClassVar[int] = 0
 
     def __post_init__(self):
-        self.flag_id = id(self)
+        self.flag_id = f"{ctx.project_id}__{self._get_next_id()}"
 
         local_dir = f"{Config.ROOT_LOCAL}/flag/custom/{self.flag_id}"
 
@@ -121,3 +122,9 @@ class CustomFlag:
 
         self.body(self)
         self.active = True
+
+    @classmethod
+    def _get_next_id(cls) -> int:
+        index = cls.next_id
+        cls.next_id += 1
+        return index

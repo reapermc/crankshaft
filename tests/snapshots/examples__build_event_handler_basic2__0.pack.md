@@ -84,8 +84,8 @@ execute as @a at @s run function #reapermc:crankshaft/event_handler/builtin/on_p
 
 ```mcfunction
 execute if score @s reapermc.crankshaft.on_player_join matches 1.. run function reapermc:crankshaft/event_handler/builtin/on_player_join/__handler__/main
-execute if data entity @s SelectedItem run function event_handler_basic2:reapermc/crankshaft/event_handler/custom/1414974220816/__payload__
-execute if data entity @s Inventory[{Slot: -106b}] run function event_handler_basic2:reapermc/crankshaft/event_handler/custom/1414974220816/__payload__
+execute if data entity @s SelectedItem run function event_handler_basic2:reapermc/crankshaft/event_handler/custom/event_handler_basic2__0/__payload__
+execute if data entity @s Inventory[{Slot: -106b}] run function event_handler_basic2:reapermc/crankshaft/event_handler/custom/event_handler_basic2__0/__payload__
 ```
 
 `@function event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_player_join/__payload__`
@@ -107,7 +107,7 @@ execute as @a at @s run function #reapermc:crankshaft/event_handler/builtin/on_p
 say runs on both join and reload
 ```
 
-`@function event_handler_basic2:reapermc/crankshaft/event_handler/custom/1414974220816/__payload__`
+`@function event_handler_basic2:reapermc/crankshaft/event_handler/custom/event_handler_basic2__0/__payload__`
 
 ```mcfunction
 say Im holding an item!

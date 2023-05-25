@@ -30,7 +30,7 @@ def handler(event):
             event.trigger()
         # offhand
         if data entity @s Inventory[{Slot: -106b}]:
-            event.trigger
+            event.trigger()
 
 on_player_holding_item = CustomEvent(handler=handler)
 

@@ -21,12 +21,6 @@
 
 ```
 
-`@function(strip_final_newline) demo:main/nested_execute_0`
-
-```mcfunction
-
-```
-
 ### minecraft
 
 `@function_tag minecraft:load`
@@ -98,11 +92,11 @@ execute as @a at @s run function #reapermc:crankshaft/event_handler/builtin/on_p
 `@function event_handler_basic:reapermc/crankshaft/event_handler/builtin/on_player_tick/__payload__`
 
 ```mcfunction
-execute if data entity @s SelectedItem run function event_handler_basic:reapermc/crankshaft/event_handler/custom/1414981730000/__payload__
-execute if data entity @s Inventory[{Slot: -106b}] run function demo:main/nested_execute_0
+execute if data entity @s SelectedItem run function event_handler_basic:reapermc/crankshaft/event_handler/custom/event_handler_basic__0/__payload__
+execute if data entity @s Inventory[{Slot: -106b}] run function event_handler_basic:reapermc/crankshaft/event_handler/custom/event_handler_basic__0/__payload__
 ```
 
-`@function event_handler_basic:reapermc/crankshaft/event_handler/custom/1414981730000/__payload__`
+`@function event_handler_basic:reapermc/crankshaft/event_handler/custom/event_handler_basic__0/__payload__`
 
 ```mcfunction
 say Im holding an item!

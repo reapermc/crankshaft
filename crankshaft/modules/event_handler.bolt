@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Callable
+from typing import Callable, ClassVar
 
 from ./config import Config
 
@@ -48,15 +48,16 @@ class Event:
     def _fork_to_payload(self):
         merge function_tag self.fork_path {"values": [self.payload_path]}
 
-
 @dataclass
 class CustomEvent:
     handler: Callable = field(kw_only=True, repr=False)
 
     active: bool = field(init=False, default=False)
+    payload_params: list = field(init=False, default_factory=list)
+    next_id: ClassVar[int] = 0
 
     def __post_init__(self):
-        self.event_id = id(self)
+        self.event_id = f"{ctx.project_id}__{self._get_next_id()}"
 
         local_dir = f"{Config.ROOT_LOCAL}/event_handler/custom/{self.event_id}"
 
@@ -81,7 +82,14 @@ class CustomEvent:
 
     def attach_payload(self, payload_ref: Callable):
         append function self.payload_path:
-            payload_ref()
+            payload_ref(*self.payload_params)
+
+    @classmethod
+    def _get_next_id(cls) -> int:
+        index = cls.next_id
+        cls.next_id += 1
+        return index
+
 
 @dataclass
 class Listener:

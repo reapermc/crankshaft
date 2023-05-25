@@ -25,13 +25,6 @@ def handler(event):
 on_player_holding_item = CustomEvent(handler=handler)
 
 
-
-
-
-from crankshaft:api import Listener
-
-
-
 @Listener(on_player_holding_item)
 def player_holding_item():
     say Im holding an item!
