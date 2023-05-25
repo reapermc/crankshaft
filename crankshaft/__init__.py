@@ -12,4 +12,6 @@ def beet_default(ctx: Context):
                 "data/crankshaft/modules": "@crankshaft/modules",
             },
         ),
+        'wicked_expressions',
+        'lightning_rod',
     )

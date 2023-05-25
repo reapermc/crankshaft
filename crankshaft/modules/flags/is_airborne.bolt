@@ -1,0 +1,16 @@
+from ../flag import Flag
+
+
+def body(flag):
+    predicate flag.path('predicate_check') {
+        "condition": "minecraft:entity_properties",
+        "entity": "this",
+        "predicate": {
+            "nbt": "{OnGround: 0b}"
+        }
+    }
+
+    with flag.set_condition():
+        if predicate flag.path('predicate_check')
+
+is_airborne = Flag(body=body, flag_id='is_airborne')

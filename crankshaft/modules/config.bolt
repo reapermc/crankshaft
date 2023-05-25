@@ -1,0 +1,8 @@
+
+
+class Config:
+    LIBRARY_NAME = 'crankshaft'
+    ROOT = 'reapermc:crankshaft'
+    ROOT_LOCAL = generate_path('reapermc/crankshaft')
+    SCOREBOARD_ROOT = 'reapermc.crankshaft'
+    TAG_ROOT = 'reapermc.crankshaft'

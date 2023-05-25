@@ -1,0 +1,10 @@
+from ../event_handler import Event
+
+
+def handler(event):
+    merge function_tag minecraft:load {"values": [event.path('main')]}
+
+    function event.path('main'):
+        event.trigger()
+
+on_load = Event(handler=handler, event_id='on_load')

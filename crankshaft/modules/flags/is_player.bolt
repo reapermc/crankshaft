@@ -1,0 +1,8 @@
+from ../flag import Flag
+
+
+def body(flag):
+    with flag.set_condition():
+        if entity @s[type=player]
+
+is_player = Flag(body=body, flag_id='is_player')

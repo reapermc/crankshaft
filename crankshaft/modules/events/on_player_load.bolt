@@ -1,0 +1,16 @@
+from ../event_handler import Event, Listener
+from ./on_load import on_load
+from ./on_player_join import on_player_join
+
+
+def handler(event):
+    @Listener(on_load)
+    def load():
+        as @a at @s:
+            event.trigger()
+
+    @Listener(on_player_join)
+    def player_join():
+        event.trigger()
+
+on_player_load = Event(handler=handler, event_id='on_player_load')

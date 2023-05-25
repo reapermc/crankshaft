@@ -1,7 +1,11 @@
+output: dist
+
 require:
   - bolt
   - crankshaft
+
 data_pack:
   load: "src"
+
 pipeline:
   - mecha

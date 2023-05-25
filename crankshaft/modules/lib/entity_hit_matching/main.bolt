@@ -1,0 +1,1562 @@
+from wicked_expressions:api import this
+from ../../event_handler import Listener
+from ../../events/on_tick import on_tick
+from ../../events/on_load import on_load
+from ../../config import Config
+
+ROOT_DIR = f"{Config.ROOT}/lib/entity_hit_matching"
+ROOT_GENERIC = f"{Config.SCOREBOARD_ROOT}.lib.ehm"
+
+TARGET_HURT_PLAYER = f"{ROOT_DIR}/player_is_hurt_by_target"
+PLAYER_HURT_TARGET = f"{ROOT_DIR}/target_is_hurt_by_player"
+
+merge function_tag TARGET_HURT_PLAYER {"replace": false, "values": []}
+merge function_tag PLAYER_HURT_TARGET {"replace": false, "values": []}
+
+
+
+def forge_tag_nbt(tag):
+    return f"{{Tags:[\"{ROOT_GENERIC}.{tag}\"]}}"
+
+merge entity_type_tag f"{ROOT_DIR}/excluded" {
+    "values": [
+        "minecraft:item",
+        "minecraft:item_display",
+        "minecraft:item_frame",
+        "minecraft:glow_item_frame",
+        "minecraft:boat",
+        "minecraft:text_display",
+        "minecraft:spawner_minecart",
+        "minecraft:painting",
+        "minecraft:minecart",
+        "minecraft:leash_knot",
+        "minecraft:hopper_minecart",
+        "minecraft:eye_of_ender",
+        "minecraft:furnace_minecart",
+        "minecraft:falling_block",
+        "minecraft:experience_orb",
+        "minecraft:experience_bottle",
+        "minecraft:command_block_minecart",
+        "minecraft:chest_minecart",
+        "minecraft:chest_boat",
+        "minecraft:marker"
+    ]
+}
+
+
+@Listener(on_load)
+def load():
+	execute function f"{ROOT_DIR}/load":
+		# This objective tracks IDs, along with variables and constants
+		scoreboard objectives add f"{ROOT_GENERIC}.id" dummy
+		scoreboard players set #3 f"{ROOT_GENERIC}.id" 3
+
+		# These objectives track the individual bits of IDs
+		scoreboard objectives add f"{ROOT_GENERIC}.id.0" dummy
+		scoreboard objectives add f"{ROOT_GENERIC}.id.1" dummy
+		scoreboard objectives add f"{ROOT_GENERIC}.id.2" dummy
+		scoreboard objectives add f"{ROOT_GENERIC}.id.3" dummy
+		scoreboard objectives add f"{ROOT_GENERIC}.id.4" dummy
+		scoreboard objectives add f"{ROOT_GENERIC}.id.5" dummy
+		scoreboard objectives add f"{ROOT_GENERIC}.id.6" dummy
+		scoreboard objectives add f"{ROOT_GENERIC}.id.7" dummy
+		scoreboard objectives add f"{ROOT_GENERIC}.id.8" dummy
+#
+
+@Listener(on_tick)
+def tick():
+	execute function f"{ROOT_DIR}/tick":
+		# Assigns IDs to the entities that need them
+		execute as @e unless score @s f"{ROOT_GENERIC}.id" = @s f"{ROOT_GENERIC}.id" run function f"{ROOT_DIR}/id/filter"
+#
+
+function f"{ROOT_DIR}/id/assign":
+    # Removes existing ID-related function tags from the executor
+    function f"{ROOT_DIR}/id/remove_tags"
+
+    # Assigns a new ID to the executor
+    execute if score #next_id f"{ROOT_GENERIC}.id" matches 19683.. run function f"{ROOT_DIR}/id/reset_all"
+    scoreboard players operation @s f"{ROOT_GENERIC}.id" = #next_id f"{ROOT_GENERIC}.id"
+    scoreboard players add #next_id f"{ROOT_GENERIC}.id" 1
+
+    # Appends ID-related function tags to the executor
+    # These function tags represent the ID's ternary representation
+    scoreboard players operation #_temp_id f"{ROOT_GENERIC}.id" = @s f"{ROOT_GENERIC}.id"
+
+    function f"{ROOT_DIR}/id/next_bit"
+    scoreboard players operation @s f"{ROOT_GENERIC}.id.0" = #_bit f"{ROOT_GENERIC}.id"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 0 run tag @s add f"{ROOT_GENERIC}.0_0"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 1 run tag @s add f"{ROOT_GENERIC}.0_1"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 2 run tag @s add f"{ROOT_GENERIC}.0_2"
+
+    function f"{ROOT_DIR}/id/next_bit"
+    scoreboard players operation @s f"{ROOT_GENERIC}.id.1" = #_bit f"{ROOT_GENERIC}.id"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 0 run tag @s add f"{ROOT_GENERIC}.1_0"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 1 run tag @s add f"{ROOT_GENERIC}.1_1"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 2 run tag @s add f"{ROOT_GENERIC}.1_2"
+
+    function f"{ROOT_DIR}/id/next_bit"
+    scoreboard players operation @s f"{ROOT_GENERIC}.id.2" = #_bit f"{ROOT_GENERIC}.id"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 0 run tag @s add f"{ROOT_GENERIC}.2_0"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 1 run tag @s add f"{ROOT_GENERIC}.2_1"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 2 run tag @s add f"{ROOT_GENERIC}.2_2"
+
+    function f"{ROOT_DIR}/id/next_bit"
+    scoreboard players operation @s f"{ROOT_GENERIC}.id.3" = #_bit f"{ROOT_GENERIC}.id"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 0 run tag @s add f"{ROOT_GENERIC}.3_0"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 1 run tag @s add f"{ROOT_GENERIC}.3_1"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 2 run tag @s add f"{ROOT_GENERIC}.3_2"
+
+    function f"{ROOT_DIR}/id/next_bit"
+    scoreboard players operation @s f"{ROOT_GENERIC}.id.4" = #_bit f"{ROOT_GENERIC}.id"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 0 run tag @s add f"{ROOT_GENERIC}.4_0"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 1 run tag @s add f"{ROOT_GENERIC}.4_1"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 2 run tag @s add f"{ROOT_GENERIC}.4_2"
+
+    function f"{ROOT_DIR}/id/next_bit"
+    scoreboard players operation @s f"{ROOT_GENERIC}.id.5" = #_bit f"{ROOT_GENERIC}.id"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 0 run tag @s add f"{ROOT_GENERIC}.5_0"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 1 run tag @s add f"{ROOT_GENERIC}.5_1"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 2 run tag @s add f"{ROOT_GENERIC}.5_2"
+
+    function f"{ROOT_DIR}/id/next_bit"
+    scoreboard players operation @s f"{ROOT_GENERIC}.id.6" = #_bit f"{ROOT_GENERIC}.id"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 0 run tag @s add f"{ROOT_GENERIC}.6_0"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 1 run tag @s add f"{ROOT_GENERIC}.6_1"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 2 run tag @s add f"{ROOT_GENERIC}.6_2"
+
+    function f"{ROOT_DIR}/id/next_bit"
+    scoreboard players operation @s f"{ROOT_GENERIC}.id.7" = #_bit f"{ROOT_GENERIC}.id"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 0 run tag @s add f"{ROOT_GENERIC}.7_0"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 1 run tag @s add f"{ROOT_GENERIC}.7_1"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 2 run tag @s add f"{ROOT_GENERIC}.7_2"
+
+    function f"{ROOT_DIR}/id/next_bit"
+    scoreboard players operation @s f"{ROOT_GENERIC}.id.8" = #_bit f"{ROOT_GENERIC}.id"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 0 run tag @s add f"{ROOT_GENERIC}.8_0"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 1 run tag @s add f"{ROOT_GENERIC}.8_1"
+    execute if score #_bit f"{ROOT_GENERIC}.id" matches 2 run tag @s add f"{ROOT_GENERIC}.8_2"
+# 
+
+function f"{ROOT_DIR}/id/filter":
+	execute if entity @s[type=f"!#{ROOT_DIR}/excluded"] run function f"{ROOT_DIR}/id/assign"
+	execute unless score @s f"{ROOT_GENERIC}.id" = @s f"{ROOT_GENERIC}.id" run tag @s[tag=!f"{ROOT_GENERIC}.no_id"] add f"{ROOT_GENERIC}.no_id"
+# 
+
+function f"{ROOT_DIR}/id/next_bit":
+    scoreboard players operation #_bit f"{ROOT_GENERIC}.id" = #_temp_id f"{ROOT_GENERIC}.id"
+    scoreboard players operation #_bit f"{ROOT_GENERIC}.id" %= #3 f"{ROOT_GENERIC}.id"
+    scoreboard players operation #_temp_id f"{ROOT_GENERIC}.id" /= #3 f"{ROOT_GENERIC}.id"
+#
+
+function f"{ROOT_DIR}/id/remove_tags":
+    tag @s[tag=f"{ROOT_GENERIC}.no_id"] remove f"{ROOT_GENERIC}.no_id"
+    tag @s[tag=f"{ROOT_GENERIC}.0_0"] remove f"{ROOT_GENERIC}.0_0"
+    tag @s[tag=f"{ROOT_GENERIC}.0_1"] remove f"{ROOT_GENERIC}.0_1"
+    tag @s[tag=f"{ROOT_GENERIC}.0_2"] remove f"{ROOT_GENERIC}.0_2"
+    tag @s[tag=f"{ROOT_GENERIC}.1_0"] remove f"{ROOT_GENERIC}.1_0"
+    tag @s[tag=f"{ROOT_GENERIC}.1_1"] remove f"{ROOT_GENERIC}.1_1"
+    tag @s[tag=f"{ROOT_GENERIC}.1_2"] remove f"{ROOT_GENERIC}.1_2"
+    tag @s[tag=f"{ROOT_GENERIC}.2_0"] remove f"{ROOT_GENERIC}.2_0"
+    tag @s[tag=f"{ROOT_GENERIC}.2_1"] remove f"{ROOT_GENERIC}.2_1"
+    tag @s[tag=f"{ROOT_GENERIC}.2_2"] remove f"{ROOT_GENERIC}.2_2"
+    tag @s[tag=f"{ROOT_GENERIC}.3_0"] remove f"{ROOT_GENERIC}.3_0"
+    tag @s[tag=f"{ROOT_GENERIC}.3_1"] remove f"{ROOT_GENERIC}.3_1"
+    tag @s[tag=f"{ROOT_GENERIC}.3_2"] remove f"{ROOT_GENERIC}.3_2"
+    tag @s[tag=f"{ROOT_GENERIC}.4_0"] remove f"{ROOT_GENERIC}.4_0"
+    tag @s[tag=f"{ROOT_GENERIC}.4_1"] remove f"{ROOT_GENERIC}.4_1"
+    tag @s[tag=f"{ROOT_GENERIC}.4_2"] remove f"{ROOT_GENERIC}.4_2"
+    tag @s[tag=f"{ROOT_GENERIC}.5_0"] remove f"{ROOT_GENERIC}.5_0"
+    tag @s[tag=f"{ROOT_GENERIC}.5_1"] remove f"{ROOT_GENERIC}.5_1"
+    tag @s[tag=f"{ROOT_GENERIC}.5_2"] remove f"{ROOT_GENERIC}.5_2"
+    tag @s[tag=f"{ROOT_GENERIC}.6_0"] remove f"{ROOT_GENERIC}.6_0"
+    tag @s[tag=f"{ROOT_GENERIC}.6_1"] remove f"{ROOT_GENERIC}.6_1"
+    tag @s[tag=f"{ROOT_GENERIC}.6_2"] remove f"{ROOT_GENERIC}.6_2"
+    tag @s[tag=f"{ROOT_GENERIC}.7_0"] remove f"{ROOT_GENERIC}.7_0"
+    tag @s[tag=f"{ROOT_GENERIC}.7_1"] remove f"{ROOT_GENERIC}.7_1"
+    tag @s[tag=f"{ROOT_GENERIC}.7_2"] remove f"{ROOT_GENERIC}.7_2"
+    tag @s[tag=f"{ROOT_GENERIC}.8_0"] remove f"{ROOT_GENERIC}.8_0"
+    tag @s[tag=f"{ROOT_GENERIC}.8_1"] remove f"{ROOT_GENERIC}.8_1"
+    tag @s[tag=f"{ROOT_GENERIC}.8_2"] remove f"{ROOT_GENERIC}.8_2"
+#
+
+function f"{ROOT_DIR}/id/reset_all":
+    scoreboard players reset * f"{ROOT_GENERIC}.id"
+    scoreboard players set #3 f"{ROOT_GENERIC}.id" 3
+
+    scoreboard players reset * f"{ROOT_GENERIC}.id.0"
+    scoreboard players reset * f"{ROOT_GENERIC}.id.1"
+    scoreboard players reset * f"{ROOT_GENERIC}.id.2"
+    scoreboard players reset * f"{ROOT_GENERIC}.id.3"
+    scoreboard players reset * f"{ROOT_GENERIC}.id.4"
+    scoreboard players reset * f"{ROOT_GENERIC}.id.5"
+    scoreboard players reset * f"{ROOT_GENERIC}.id.6"
+    scoreboard players reset * f"{ROOT_GENERIC}.id.7"
+    scoreboard players reset * f"{ROOT_GENERIC}.id.8"
+#
+
+function f"{ROOT_DIR}/hurt_player/find_direct_id":
+    scoreboard players set $direct f"{ROOT_GENERIC}.id" 0
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_0_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 1
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_0_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 2
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_1_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 3
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_1_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 6
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_2_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 9
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_2_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 18
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_3_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 27
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_3_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 54
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_4_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 81
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_4_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 162
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_5_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 243
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_5_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 486
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_6_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 729
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_6_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 1458
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_7_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 2187
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_7_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 4374
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_8_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 6561
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={drt_bit_8_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 13122
+#
+
+function f"{ROOT_DIR}/hurt_player/logic":
+    # Determines the id of the entity inflicting damage
+    scoreboard players reset $direct f"{ROOT_GENERIC}.id"
+    execute if entity @s[advancements={f"{ROOT_DIR}/target_hurts_player"={direct_has_no_id=false}}] run function f"{ROOT_DIR}/hurt_player/find_direct_id"
+
+    # Determines the id of the entity receiving damage
+    scoreboard players operation $victim f"{ROOT_GENERIC}.id" = @s f"{ROOT_GENERIC}.id"
+
+    # Revokes the advancement, so it can be triggered again
+    advancement revoke @s only f"{ROOT_DIR}/target_hurts_player"
+
+    # Runs the provided functions that work off of this reward function
+    execute if score $direct f"{ROOT_GENERIC}.id" = $direct f"{ROOT_GENERIC}.id" run function f"#{ROOT_DIR}/player_is_hurt_by_target"
+#
+
+function f"{ROOT_DIR}/hurt_player/reward":
+    execute unless score #_override f"{ROOT_GENERIC}.id" matches 1 run function f"{ROOT_DIR}/hurt_player/logic"
+#
+
+function f"{ROOT_DIR}/hurt_target/find_direct_id":
+    scoreboard players set $direct f"{ROOT_GENERIC}.id" 0
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_0_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 1
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_0_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 2
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_1_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 3
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_1_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 6
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_2_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 9
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_2_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 18
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_3_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 27
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_3_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 54
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_4_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 81
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_4_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 162
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_5_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 243
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_5_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 486
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_6_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 729
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_6_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 1458
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_7_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 2187
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_7_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 4374
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_8_1=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 6561
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={drt_bit_8_2=true}}] run scoreboard players add $direct f"{ROOT_GENERIC}.id" 13122
+#
+
+function f"{ROOT_DIR}/hurt_target/find_victim_id":
+    scoreboard players set $victim f"{ROOT_GENERIC}.id" 0
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_0_1=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 1
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_0_2=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 2
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_1_1=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 3
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_1_2=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 6
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_2_1=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 9
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_2_2=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 18
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_3_1=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 27
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_3_2=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 54
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_4_1=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 81
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_4_2=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 162
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_5_1=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 243
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_5_2=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 486
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_6_1=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 729
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_6_2=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 1458
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_7_1=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 2187
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_7_2=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 4374
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_8_1=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 6561
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={vtm_bit_8_2=true}}] run scoreboard players add $victim f"{ROOT_GENERIC}.id" 13122
+#
+
+function f"{ROOT_DIR}/hurt_target/logic":
+    # Determines the id of the entity inflicting damage
+    scoreboard players reset $direct f"{ROOT_GENERIC}.id"
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={direct_has_no_id=false}}] run function f"{ROOT_DIR}/hurt_target/find_direct_id"
+
+    # Determines the id of the entity receiving damage
+    scoreboard players reset $victim f"{ROOT_GENERIC}.id"
+    execute if entity @s[advancements={f"{ROOT_DIR}/player_hurts_target"={victim_has_no_id=false}}] run function f"{ROOT_DIR}/hurt_target/find_victim_id"
+
+    # Revokes the advancement, so it can be triggered again
+    advancement revoke @s only f"{ROOT_DIR}/player_hurts_target"
+
+    # Runs the provided functions that work off of this reward function
+    execute if score $direct f"{ROOT_GENERIC}.id" = $direct f"{ROOT_GENERIC}.id" if score $victim f"{ROOT_GENERIC}.id" = $victim f"{ROOT_GENERIC}.id" as @e if score @s f"{ROOT_GENERIC}.id" = $victim f"{ROOT_GENERIC}.id" at @s run function f"#{ROOT_DIR}/target_is_hurt_by_player"
+#
+
+function f"{ROOT_DIR}/hurt_target/reward":
+    execute unless score #_override f"{ROOT_GENERIC}.id" matches 1 run function f"{ROOT_DIR}/hurt_target/logic"
+#
+
+advancement f"{ROOT_DIR}/target_hurts_player" {
+    "criteria": {
+        "direct_has_no_id": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('no_id')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_0_0": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('0_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_0_1": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('0_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_0_2": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('0_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_1_0": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('1_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_1_1": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('1_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_1_2": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('1_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_2_0": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('2_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_2_1": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('2_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_2_2": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('2_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_3_0": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('3_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_3_1": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('3_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_3_2": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('3_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_4_0": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('4_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_4_1": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('4_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_4_2": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('4_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_5_0": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('5_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_5_1": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('5_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_5_2": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('5_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_6_0": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('6_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_6_1": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('6_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_6_2": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('6_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_7_0": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('7_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_7_1": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('7_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_7_2": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('7_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_8_0": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('8_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_8_1": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('8_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_8_2": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('8_2')
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "requirements": [
+        [
+            "drt_bit_0_0",
+            "drt_bit_0_1",
+            "drt_bit_0_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_1_0",
+            "drt_bit_1_1",
+            "drt_bit_1_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_2_0",
+            "drt_bit_2_1",
+            "drt_bit_2_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_3_0",
+            "drt_bit_3_1",
+            "drt_bit_3_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_4_0",
+            "drt_bit_4_1",
+            "drt_bit_4_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_5_0",
+            "drt_bit_5_1",
+            "drt_bit_5_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_6_0",
+            "drt_bit_6_1",
+            "drt_bit_6_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_7_0",
+            "drt_bit_7_1",
+            "drt_bit_7_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_8_0",
+            "drt_bit_8_1",
+            "drt_bit_8_2",
+            "direct_has_no_id"
+        ]
+    ],
+    "rewards": {
+        "function": f"{ROOT_DIR}/hurt_player/reward"
+        
+    }
+}
+
+advancement f"{ROOT_DIR}/player_hurts_target" {
+    "criteria": {
+        "direct_has_no_id": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('no_id')
+                        }
+                    }
+                }
+            }
+        },
+        "victim_has_no_id": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:inverted",
+                        "term": {
+                            "condition": "minecraft:entity_scores",
+                            "entity": "this",
+                            "scores": {
+                                "reapermc.crankshaft.lib.ehm.id": {
+                                    "min": {
+                                        "type": "minecraft:score",
+                                        "target": "this",
+                                        "score": f"{ROOT_GENERIC}.id"
+                                    },
+                                    "max": {
+                                        "type": "minecraft:score",
+                                        "target": "this",
+                                        "score": f"{ROOT_GENERIC}.id"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "drt_bit_0_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('0_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_0_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('0_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_0_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('0_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_1_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('1_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_1_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('1_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_1_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('1_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_2_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('2_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_2_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('2_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_2_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('2_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_3_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('3_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_3_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('3_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_3_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('3_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_4_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('4_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_4_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('4_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_4_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('4_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_5_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('5_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_5_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('5_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_5_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('5_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_6_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('6_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_6_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('6_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_6_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('6_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_7_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('7_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_7_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('7_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_7_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('7_2')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_8_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('8_0')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_8_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('8_1')
+                        }
+                    }
+                }
+            }
+        },
+        "drt_bit_8_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "direct_entity": {
+                            "nbt": forge_tag_nbt('8_2')
+                        }
+                    }
+                }
+            }
+        },
+        "vtm_bit_0_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.0": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_0_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.0": 1
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_0_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.0": 2
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_1_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.1": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_1_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.1": 1
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_1_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.1": 2
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_2_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.2": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_2_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.2": 1
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_2_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.2": 2
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_3_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.3": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_3_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.3": 1
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_3_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.3": 2
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_4_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.4": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_4_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.4": 1
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_4_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.4": 2
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_5_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.5": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_5_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.5": 1
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_5_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.5": 2
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_6_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.6": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_6_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.6": 1
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_6_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.6": 2
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_7_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.7": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_7_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.7": 1
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_7_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.7": 2
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_8_0": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.8": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_8_1": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.8": 1
+                        }
+                    }
+                ]
+            }
+        },
+        "vtm_bit_8_2": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_scores",
+                        "entity": "this",
+                        "scores": {
+                            "reapermc.crankshaft.lib.ehm.id.8": 2
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "requirements": [
+        [
+            "drt_bit_0_0",
+            "drt_bit_0_1",
+            "drt_bit_0_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_1_0",
+            "drt_bit_1_1",
+            "drt_bit_1_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_2_0",
+            "drt_bit_2_1",
+            "drt_bit_2_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_3_0",
+            "drt_bit_3_1",
+            "drt_bit_3_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_4_0",
+            "drt_bit_4_1",
+            "drt_bit_4_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_5_0",
+            "drt_bit_5_1",
+            "drt_bit_5_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_6_0",
+            "drt_bit_6_1",
+            "drt_bit_6_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_7_0",
+            "drt_bit_7_1",
+            "drt_bit_7_2",
+            "direct_has_no_id"
+        ],
+        [
+            "drt_bit_8_0",
+            "drt_bit_8_1",
+            "drt_bit_8_2",
+            "direct_has_no_id"
+        ],
+        [
+            "vtm_bit_0_0",
+            "vtm_bit_0_1",
+            "vtm_bit_0_2",
+            "victim_has_no_id"
+        ],
+        [
+            "vtm_bit_1_0",
+            "vtm_bit_1_1",
+            "vtm_bit_1_2",
+            "victim_has_no_id"
+        ],
+        [
+            "vtm_bit_2_0",
+            "vtm_bit_2_1",
+            "vtm_bit_2_2",
+            "victim_has_no_id"
+        ],
+        [
+            "vtm_bit_3_0",
+            "vtm_bit_3_1",
+            "vtm_bit_3_2",
+            "victim_has_no_id"
+        ],
+        [
+            "vtm_bit_4_0",
+            "vtm_bit_4_1",
+            "vtm_bit_4_2",
+            "victim_has_no_id"
+        ],
+        [
+            "vtm_bit_5_0",
+            "vtm_bit_5_1",
+            "vtm_bit_5_2",
+            "victim_has_no_id"
+        ],
+        [
+            "vtm_bit_6_0",
+            "vtm_bit_6_1",
+            "vtm_bit_6_2",
+            "victim_has_no_id"
+        ],
+        [
+            "vtm_bit_7_0",
+            "vtm_bit_7_1",
+            "vtm_bit_7_2",
+            "victim_has_no_id"
+        ],
+        [
+            "vtm_bit_8_0",
+            "vtm_bit_8_1",
+            "vtm_bit_8_2",
+            "victim_has_no_id"
+        ]
+    ],
+    "rewards": {
+        "function": f"{ROOT_DIR}/hurt_target/reward"
+    }
+}

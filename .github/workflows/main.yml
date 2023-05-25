@@ -26,7 +26,7 @@ jobs:
           path: ~/.local
           key: poetry-${{ runner.os }}
       - name: Install poetry
-        if: steps.cache-poetry.outputs.cache-hit != 'true'
+        # if: steps.cache-poetry.outputs.cache-hit != 'true'
         uses: snok/install-poetry@v1
         with:
           virtualenvs-in-project: true
@@ -49,6 +49,7 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "action@github.com"

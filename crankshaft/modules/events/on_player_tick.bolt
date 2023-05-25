@@ -1,0 +1,11 @@
+from ../event_handler import Event, Listener
+from ./on_tick import on_tick
+
+
+def handler(event):
+    @Listener(on_tick)
+    def tick():
+        as @a at @s:
+            event.trigger()
+
+on_player_tick = Event(handler=handler, event_id='on_player_tick')

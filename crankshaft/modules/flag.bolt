@@ -1,0 +1,123 @@
+from dataclasses import dataclass, field
+from typing import ClassVar, Callable
+from contextlib import contextmanager
+
+from wicked_expressions:api import ExpressionNode, StaticVar, Bool, Rebindable
+from ./config import Config
+
+
+@dataclass
+class Flag:
+    body: Callable = field(kw_only=True, repr=False)
+    flag_id: str = field(kw_only=True)
+
+    invert: bool = field(kw_only=True, default=False)
+    initialized: bool = field(kw_only=True, default=False)
+    gate: ClassVar[ExpressionNode] = StaticVar(Bool)
+    active: bool = field(init=False, default=False)
+
+    def __post_init__(self):
+        local_dir = f"{Config.ROOT_LOCAL}/flag/builtin/{self.flag_id}"
+        global_dir = f"{Config.ROOT}/flag/builtin/{self.flag_id}"
+
+        self.root_dir = f"{global_dir}/__root__"
+        self.condition_path = f"{global_dir}/__condition__"
+
+    @contextmanager
+    def __branch__(self):
+        self.activate()
+
+        if not self.initialized:
+            self.check_condition()
+            self.initialized = True
+
+        if not self.invert:
+            if self.gate == 1:
+                yield True
+        else:
+            if self.gate == 0:
+                yield True
+
+    def __not__(self):
+        return self.__class__(body=self.body, flag_id=self.flag_id, invert=not self.invert, initialized=self.initialized)
+
+    @contextmanager
+    def set_condition(self):
+        """Use along the 'with' statement to set the flag condition."""
+
+        function self.condition_path:
+            with self.gate.store(mode='success'):
+                yield True
+
+    def path(self, subpath: str) -> str:
+        """Generates a function path inside the flag root directory."""
+
+        return f"{self.root_dir}/{subpath}"
+
+    def check_condition(self):
+        function self.condition_path
+
+    def activate(self):
+        if self.active:
+            return
+
+        self.body(self)
+        self.active = True
+
+@dataclass
+class CustomFlag:
+    body: Callable = field(kw_only=True, repr=False)
+
+    gate: ClassVar[ExpressionNode] = StaticVar(Bool)
+    active: bool = field(init=-False, default=False)
+    invert: bool = field(kw_only=True, default=False)
+    initialized: bool = field(kw_only=True, default=False)
+
+    def __post_init__(self):
+        self.flag_id = id(self)
+
+        local_dir = f"{Config.ROOT_LOCAL}/flag/custom/{self.flag_id}"
+
+        self.root_dir = f"{local_dir}/__root__"
+        self.condition_path = f"{local_dir}/__condition__"
+
+    @contextmanager
+    def __branch__(self):
+        self.activate()
+
+        if not self.initialized:
+            self.check_condition()
+            self.initialized = True
+
+        if not self.invert:
+            if self.gate == 1:
+                yield True
+        else:
+            if self.gate == 0:
+                yield True
+
+    def __not__(self):
+        return self.__class__(body=self.body, invert=not self.invert, initialized=self.initialized)
+
+    @contextmanager
+    def set_condition(self):
+        """Use along the 'with' statement to set the flag condition."""
+
+        function self.condition_path:
+            with self.gate.store(mode='success'):
+                yield True
+
+    def path(self, subpath: str) -> str:
+        """Generates a function path inside the flag root directory."""
+
+        return f"{self.root_dir}/{subpath}"
+
+    def check_condition(self):
+        function self.condition_path
+
+    def activate(self):
+        if self.active:
+            return
+
+        self.body(self)
+        self.active = True

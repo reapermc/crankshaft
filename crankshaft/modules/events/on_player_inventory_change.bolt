@@ -1,0 +1,24 @@
+from ../event_handler import Event
+from lightning_rod:api import revoke_advancement
+
+
+def handler(event):
+    advancement_path = event.path('advancement')
+    reward_path = event.path('advancement_reward')
+
+    advancement advancement_path {
+        "criteria": {
+            "requirement": {
+                "trigger": "minecraft:inventory_changed"
+            }
+        },
+        "rewards": {
+            "function": reward_path
+        }
+    }
+
+    function reward_path:
+        revoke_advancement(advancement_path)
+        event.trigger()
+ 
+on_player_inventory_change = Event(handler=handler, event_id='on_player_inventory_change')

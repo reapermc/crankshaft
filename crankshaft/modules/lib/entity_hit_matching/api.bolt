@@ -1,0 +1,10 @@
+# Conditional imports to hold code generation until it's needed
+# This is utterly terrible, but I'm too lazy to refactor the library
+
+def append_target_trigger(path):
+    from ./main import PLAYER_HURT_TARGET
+    merge function_tag PLAYER_HURT_TARGET {"values": [path]}
+
+def append_player_trigger(path):
+    from ./main import TARGET_HURT_PLAYER
+    merge function_tag TARGET_HURT_PLAYER {"values": [path]}
