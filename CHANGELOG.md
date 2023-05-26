@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.1 (2023-05-26)
+### Fix
+* Name conflicts for custom flag and event ([`ed7421f`](https://github.com/reapermc/crankshaft/commit/ed7421f1d5e00364be0b0c177ba86ff421b74796))
+
 ## v0.1.0 (2023-05-25)
 ### Feature
 * First release ([`b27417e`](https://github.com/reapermc/crankshaft/commit/b27417eb5b63e08a0e77b7c7d6e7fbd5146eb194))
