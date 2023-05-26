@@ -92,11 +92,11 @@ execute as @a at @s run function #reapermc:crankshaft/event_handler/builtin/on_p
 `@function event_handler_basic:reapermc/crankshaft/event_handler/builtin/on_player_tick/__payload__`
 
 ```mcfunction
-execute if data entity @s SelectedItem run function event_handler_basic:reapermc/crankshaft/event_handler/custom/event_handler_basic__0/__payload__
-execute if data entity @s Inventory[{Slot: -106b}] run function event_handler_basic:reapermc/crankshaft/event_handler/custom/event_handler_basic__0/__payload__
+execute if data entity @s SelectedItem run function event_handler_basic:reapermc/crankshaft/event_handler/custom/0__event_handler_basic/__payload__
+execute if data entity @s Inventory[{Slot: -106b}] run function event_handler_basic:reapermc/crankshaft/event_handler/custom/0__event_handler_basic/__payload__
 ```
 
-`@function event_handler_basic:reapermc/crankshaft/event_handler/custom/event_handler_basic__0/__payload__`
+`@function event_handler_basic:reapermc/crankshaft/event_handler/custom/0__event_handler_basic/__payload__`
 
 ```mcfunction
 say Im holding an item!

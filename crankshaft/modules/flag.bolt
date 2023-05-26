@@ -75,7 +75,7 @@ class CustomFlag:
     next_id: ClassVar[int] = 0
 
     def __post_init__(self):
-        self.flag_id = f"{ctx.project_id}__{self._get_next_id()}"
+        self.flag_id = f"{self._get_next_id()}__{ctx.project_id}"
 
         local_dir = f"{Config.ROOT_LOCAL}/flag/custom/{self.flag_id}"
 
