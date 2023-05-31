@@ -4,12 +4,12 @@ from ./on_player_join import on_player_join
 
 
 def handler(event):
-    @Listener(on_load)
+    @Listener(on_load, bypass_fork=True)
     def load():
         as @a at @s:
             event.trigger()
 
-    @Listener(on_player_join)
+    @Listener(on_player_join, bypass_fork=True)
     def player_join():
         event.trigger()
 

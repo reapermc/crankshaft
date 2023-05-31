@@ -38,6 +38,7 @@
 
 ```json
 {
+  "replace": false,
   "values": [
     "reapermc:crankshaft/event_handler/builtin/on_tick/__handler__/main"
   ]
@@ -49,28 +50,19 @@
 `@function event_handler_basic:reapermc/wicked_expressions/safe_load`
 
 ```mcfunction
-function event_handler_basic:reapermc/wicked_expressions/safe_load/scoreboard_setup
 function event_handler_basic:reapermc/wicked_expressions/safe_load/flush_variable/bool
-function event_handler_basic:reapermc/wicked_expressions/safe_load/flush_variable/int
-```
-
-`@function event_handler_basic:reapermc/wicked_expressions/safe_load/scoreboard_setup`
-
-```mcfunction
-scoreboard objectives add reapermc.wicked_expressions dummy
 ```
 
 `@function event_handler_basic:reapermc/wicked_expressions/safe_load/flush_variable/bool`
 
 ```mcfunction
 scoreboard players reset $event_handler_basic#bool$0 reapermc.wicked_expressions
-scoreboard players reset $event_handler_basic#bool$1 reapermc.wicked_expressions
-```
-
-`@function event_handler_basic:reapermc/wicked_expressions/safe_load/flush_variable/int`
-
-```mcfunction
-scoreboard players reset $event_handler_basic#int$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic#bool$0 reapermc.wicked_expressions
 ```
 
 `@function event_handler_basic:reapermc/crankshaft/event_handler/builtin/on_load/__payload__`
@@ -86,7 +78,12 @@ help pls work
 
 ```mcfunction
 say hello this is a tick
-execute as @a at @s run function #reapermc:crankshaft/event_handler/builtin/on_player_tick/__fork__
+```
+
+`@function event_handler_basic:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__`
+
+```mcfunction
+execute as @a at @s run function reapermc:crankshaft/event_handler/builtin/on_player_tick/__trigger__
 ```
 
 `@function event_handler_basic:reapermc/crankshaft/event_handler/builtin/on_player_tick/__payload__`
@@ -103,6 +100,39 @@ say Im holding an item!
 ```
 
 ### reapermc
+
+`@function reapermc:crankshaft/event_handler/builtin/on_load/__trigger__`
+
+```mcfunction
+function #reapermc:crankshaft/event_handler/builtin/on_load/__bypass_fork_tag__
+function #reapermc:crankshaft/event_handler/builtin/on_load/__fork__
+```
+
+`@function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__`
+
+```mcfunction
+function #reapermc:crankshaft/event_handler/builtin/on_tick/__bypass_fork_tag__
+function #reapermc:crankshaft/event_handler/builtin/on_tick/__fork__
+```
+
+`@function reapermc:crankshaft/event_handler/builtin/on_player_tick/__trigger__`
+
+```mcfunction
+function #reapermc:crankshaft/event_handler/builtin/on_player_tick/__bypass_fork_tag__
+function #reapermc:crankshaft/event_handler/builtin/on_player_tick/__fork__
+```
+
+`@function reapermc:crankshaft/event_handler/builtin/on_load/__handler__/main`
+
+```mcfunction
+function reapermc:crankshaft/event_handler/builtin/on_load/__trigger__
+```
+
+`@function reapermc:crankshaft/event_handler/builtin/on_tick/__handler__/main`
+
+```mcfunction
+function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__
+```
 
 `@function_tag reapermc:crankshaft/event_handler/builtin/on_load/__fork__`
 
@@ -124,6 +154,16 @@ say Im holding an item!
 }
 ```
 
+`@function_tag reapermc:crankshaft/event_handler/builtin/on_tick/__bypass_fork_tag__`
+
+```json
+{
+  "values": [
+    "event_handler_basic:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__"
+  ]
+}
+```
+
 `@function_tag reapermc:crankshaft/event_handler/builtin/on_player_tick/__fork__`
 
 ```json
@@ -132,16 +172,4 @@ say Im holding an item!
     "event_handler_basic:reapermc/crankshaft/event_handler/builtin/on_player_tick/__payload__"
   ]
 }
-```
-
-`@function reapermc:crankshaft/event_handler/builtin/on_load/__handler__/main`
-
-```mcfunction
-function #reapermc:crankshaft/event_handler/builtin/on_load/__fork__
-```
-
-`@function reapermc:crankshaft/event_handler/builtin/on_tick/__handler__/main`
-
-```mcfunction
-function #reapermc:crankshaft/event_handler/builtin/on_tick/__fork__
 ```

@@ -6,7 +6,7 @@ from ../flags/is_airborne import is_airborne
 
 
 def handler(event):
-    @Listener(on_player_tick)
+    @Listener(on_player_tick, bypass_fork=True)
     def player_tick():
         available_tag = f"{Config.TAG_ROOT}.event_handler.{event.event_id}"
 

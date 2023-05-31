@@ -11,7 +11,7 @@ def body(flag):
     advancement_path = flag.path('advancement')
     reward_path = flag.path('advancement_reward')
 
-    @Listener(on_player_tick)
+    @Listener(on_player_tick, bypass_fork=True)
     def player_tick():
         nonlocal is_charging
 

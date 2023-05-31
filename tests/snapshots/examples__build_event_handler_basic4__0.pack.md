@@ -38,6 +38,7 @@
 
 ```json
 {
+  "replace": false,
   "values": [
     "reapermc:crankshaft/event_handler/builtin/on_tick/__handler__/main"
   ]
@@ -49,9 +50,34 @@
 `@function event_handler_basic4:reapermc/wicked_expressions/safe_load`
 
 ```mcfunction
-function event_handler_basic4:reapermc/wicked_expressions/safe_load/scoreboard_setup
 function event_handler_basic4:reapermc/wicked_expressions/safe_load/flush_variable/bool
-function event_handler_basic4:reapermc/wicked_expressions/safe_load/flush_variable/int
+function event_handler_basic4:reapermc/wicked_expressions/safe_load/scoreboard_setup
+```
+
+`@function event_handler_basic4:reapermc/wicked_expressions/safe_load/flush_variable/bool`
+
+```mcfunction
+scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic4#bool$1 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic4#bool$2 reapermc.wicked_expressions
+```
+
+`@function event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_load/__bypass_fork__`
+
+```mcfunction
+function reapermc:crankshaft/lib/entity_hit_matching/load
+```
+
+`@function event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__`
+
+```mcfunction
+function reapermc:crankshaft/lib/entity_hit_matching/tick
 ```
 
 `@function event_handler_basic4:reapermc/wicked_expressions/safe_load/scoreboard_setup`
@@ -60,40 +86,13 @@ function event_handler_basic4:reapermc/wicked_expressions/safe_load/flush_variab
 scoreboard objectives add reapermc.wicked_expressions dummy
 ```
 
-`@function event_handler_basic4:reapermc/wicked_expressions/safe_load/flush_variable/bool`
-
-```mcfunction
-scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
-scoreboard players reset $event_handler_basic4#bool$1 reapermc.wicked_expressions
-scoreboard players reset $event_handler_basic4#bool$2 reapermc.wicked_expressions
-scoreboard players reset $event_handler_basic4#bool$3 reapermc.wicked_expressions
-```
-
-`@function event_handler_basic4:reapermc/wicked_expressions/safe_load/flush_variable/int`
-
-```mcfunction
-scoreboard players reset $event_handler_basic4#int$0 reapermc.wicked_expressions
-```
-
-`@function event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_load/__payload__`
-
-```mcfunction
-function reapermc:crankshaft/lib/entity_hit_matching/load
-```
-
-`@function event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_tick/__payload__`
-
-```mcfunction
-function reapermc:crankshaft/lib/entity_hit_matching/tick
-```
-
 `@function event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_player_attack_entity/__payload__`
 
 ```mcfunction
 say 'I GOT HIT'
-particle flame ~ ~ ~ 0 0 0 1 250 force
-execute as @e[tag=reapermc.crankshaft.event_handler.on_player_attack_entity.attacker] run say 'ATTACKER'
-execute as @e[tag=reapermc.crankshaft.event_handler.on_player_attack_entity.child] run say 'DIRECT'
+particle flame ~ ~ ~ 0 0 0 1 25 force
+execute as @a[tag=reapermc.crankshaft.event_handler.on_player_attack_entity.attacker, limit=1] run say 'ATTACKER'
+execute as @e[tag=reapermc.crankshaft.event_handler.on_player_attack_entity.child, limit=1] run say 'DIRECT'
 ```
 
 `@function event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_entity_attack_player/__payload__`
@@ -101,11 +100,18 @@ execute as @e[tag=reapermc.crankshaft.event_handler.on_player_attack_entity.chil
 ```mcfunction
 say 'I GOT HIT'
 give @s diamond 1
-execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.attacker] run say 'ATTACKER'
-execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.child] run say 'DIRECT'
+execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.attacker, limit=1] run say 'ATTACKER'
+execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.child, limit=1] run say 'DIRECT'
 ```
 
 ### reapermc
+
+`@function reapermc:crankshaft/event_handler/builtin/on_load/__trigger__`
+
+```mcfunction
+function #reapermc:crankshaft/event_handler/builtin/on_load/__bypass_fork_tag__
+function #reapermc:crankshaft/event_handler/builtin/on_load/__fork__
+```
 
 `@function reapermc:crankshaft/lib/entity_hit_matching/load`
 
@@ -123,6 +129,13 @@ scoreboard objectives add reapermc.crankshaft.lib.ehm.id.7 dummy
 scoreboard objectives add reapermc.crankshaft.lib.ehm.id.8 dummy
 ```
 
+`@function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__`
+
+```mcfunction
+function #reapermc:crankshaft/event_handler/builtin/on_tick/__bypass_fork_tag__
+function #reapermc:crankshaft/event_handler/builtin/on_tick/__fork__
+```
+
 `@function reapermc:crankshaft/lib/entity_hit_matching/tick`
 
 ```mcfunction
@@ -132,13 +145,13 @@ execute as @e unless score @s reapermc.crankshaft.lib.ehm.id = @s reapermc.crank
 `@function reapermc:crankshaft/event_handler/builtin/on_load/__handler__/main`
 
 ```mcfunction
-function #reapermc:crankshaft/event_handler/builtin/on_load/__fork__
+function reapermc:crankshaft/event_handler/builtin/on_load/__trigger__
 ```
 
 `@function reapermc:crankshaft/event_handler/builtin/on_tick/__handler__/main`
 
 ```mcfunction
-function #reapermc:crankshaft/event_handler/builtin/on_tick/__fork__
+function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__
 ```
 
 `@function reapermc:crankshaft/lib/entity_hit_matching/id/assign`
@@ -375,9 +388,16 @@ execute on origin run tag @s add reapermc.crankshaft.event_handler.on_player_att
 `@function reapermc:crankshaft/event_handler/builtin/on_player_attack_entity/__handler__/nested_0`
 
 ```mcfunction
-execute store success score $event_handler_basic4#bool$2 reapermc.wicked_expressions run data get entity @s Owner
-execute if score $event_handler_basic4#bool$2 reapermc.wicked_expressions matches 1 run function reapermc:crankshaft/event_handler/builtin/on_player_attack_entity/__handler__/nested_1
-execute unless score $event_handler_basic4#bool$2 reapermc.wicked_expressions matches 1 run tag @s add reapermc.crankshaft.event_handler.on_player_attack_entity.attacker
+execute store success score $event_handler_basic4#bool$1 reapermc.wicked_expressions run data get entity @s Owner
+execute if score $event_handler_basic4#bool$1 reapermc.wicked_expressions matches 1 run function reapermc:crankshaft/event_handler/builtin/on_player_attack_entity/__handler__/nested_1
+execute unless score $event_handler_basic4#bool$1 reapermc.wicked_expressions matches 1 run tag @s add reapermc.crankshaft.event_handler.on_player_attack_entity.attacker
+```
+
+`@function reapermc:crankshaft/event_handler/builtin/on_player_attack_entity/__trigger__`
+
+```mcfunction
+function #reapermc:crankshaft/event_handler/builtin/on_player_attack_entity/__bypass_fork_tag__
+function #reapermc:crankshaft/event_handler/builtin/on_player_attack_entity/__fork__
 ```
 
 `@function reapermc:crankshaft/event_handler/builtin/on_entity_attack_player/__handler__/nested_1`
@@ -390,27 +410,34 @@ execute on origin run tag @s add reapermc.crankshaft.event_handler.on_entity_att
 `@function reapermc:crankshaft/event_handler/builtin/on_entity_attack_player/__handler__/nested_0`
 
 ```mcfunction
-execute store success score $event_handler_basic4#bool$3 reapermc.wicked_expressions run data get entity @s Owner
-execute if score $event_handler_basic4#bool$3 reapermc.wicked_expressions matches 1 run function reapermc:crankshaft/event_handler/builtin/on_entity_attack_player/__handler__/nested_1
-execute unless score $event_handler_basic4#bool$3 reapermc.wicked_expressions matches 1 run tag @s add reapermc.crankshaft.event_handler.on_entity_attack_player.attacker
+execute store success score $event_handler_basic4#bool$2 reapermc.wicked_expressions run data get entity @s Owner
+execute if score $event_handler_basic4#bool$2 reapermc.wicked_expressions matches 1 run function reapermc:crankshaft/event_handler/builtin/on_entity_attack_player/__handler__/nested_1
+execute unless score $event_handler_basic4#bool$2 reapermc.wicked_expressions matches 1 run tag @s add reapermc.crankshaft.event_handler.on_entity_attack_player.attacker
+```
+
+`@function reapermc:crankshaft/event_handler/builtin/on_entity_attack_player/__trigger__`
+
+```mcfunction
+function #reapermc:crankshaft/event_handler/builtin/on_entity_attack_player/__bypass_fork_tag__
+function #reapermc:crankshaft/event_handler/builtin/on_entity_attack_player/__fork__
 ```
 
 `@function reapermc:crankshaft/event_handler/builtin/on_player_attack_entity/__handler__/entrypoint`
 
 ```mcfunction
 execute as @e if score @s reapermc.crankshaft.lib.ehm.id = $direct reapermc.crankshaft.lib.ehm.id run function reapermc:crankshaft/event_handler/builtin/on_player_attack_entity/__handler__/nested_0
-function #reapermc:crankshaft/event_handler/builtin/on_player_attack_entity/__fork__
-execute as @e[tag=reapermc.crankshaft.event_handler.on_player_attack_entity.attacker] run tag @s remove reapermc.crankshaft.event_handler.on_player_attack_entity.attacker
-execute as @e[tag=reapermc.crankshaft.event_handler.on_player_attack_entity.child] run tag @s remove reapermc.crankshaft.event_handler.on_player_attack_entity.child
+function reapermc:crankshaft/event_handler/builtin/on_player_attack_entity/__trigger__
+execute as @a[tag=reapermc.crankshaft.event_handler.on_player_attack_entity.attacker, limit=1] run tag @s remove reapermc.crankshaft.event_handler.on_player_attack_entity.attacker
+execute as @e[tag=reapermc.crankshaft.event_handler.on_player_attack_entity.child, limit=1] run tag @s remove reapermc.crankshaft.event_handler.on_player_attack_entity.child
 ```
 
 `@function reapermc:crankshaft/event_handler/builtin/on_entity_attack_player/__handler__/entrypoint`
 
 ```mcfunction
 execute as @e if score @s reapermc.crankshaft.lib.ehm.id = $direct reapermc.crankshaft.lib.ehm.id run function reapermc:crankshaft/event_handler/builtin/on_entity_attack_player/__handler__/nested_0
-function #reapermc:crankshaft/event_handler/builtin/on_entity_attack_player/__fork__
-execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.attacker] run tag @s remove reapermc.crankshaft.event_handler.on_entity_attack_player.attacker
-execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.child] run tag @s remove reapermc.crankshaft.event_handler.on_entity_attack_player.child
+function reapermc:crankshaft/event_handler/builtin/on_entity_attack_player/__trigger__
+execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.attacker, limit=1] run tag @s remove reapermc.crankshaft.event_handler.on_entity_attack_player.attacker
+execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.child, limit=1] run tag @s remove reapermc.crankshaft.event_handler.on_entity_attack_player.child
 ```
 
 `@function_tag reapermc:crankshaft/lib/entity_hit_matching/player_is_hurt_by_target`
@@ -445,12 +472,32 @@ execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.chil
 }
 ```
 
+`@function_tag reapermc:crankshaft/event_handler/builtin/on_load/__bypass_fork_tag__`
+
+```json
+{
+  "values": [
+    "event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_load/__bypass_fork__"
+  ]
+}
+```
+
 `@function_tag reapermc:crankshaft/event_handler/builtin/on_tick/__fork__`
 
 ```json
 {
   "values": [
     "event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_tick/__payload__"
+  ]
+}
+```
+
+`@function_tag reapermc:crankshaft/event_handler/builtin/on_tick/__bypass_fork_tag__`
+
+```json
+{
+  "values": [
+    "event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__"
   ]
 }
 ```
