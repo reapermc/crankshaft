@@ -4,7 +4,7 @@ from ./on_player_tick import on_player_tick
 
 
 def handler(event):
-    @Listener(on_player_tick)
+    @Listener(on_player_tick, bypass_fork=True)
     def player_tick():
         if is_airborne:
             event.trigger()

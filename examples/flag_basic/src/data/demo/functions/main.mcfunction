@@ -1,8 +1,5 @@
 from crankshaft:flags import is_player, is_burning
 
-
-
-
 if is_player:
     say TRUE
 else:

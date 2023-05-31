@@ -5,12 +5,13 @@ from ./on_player_tick import on_player_tick
 
 
 def handler(event):
-    @Listener(on_player_tick)
+    @Listener(on_player_tick, bypass_fork=True)
     def player_tick():
         shoot_tracker = Scoreboard(f"{Config.SCOREBOARD_ROOT}.event_handler.{event.event_id}", 'used:bow')['@s']
 
         if shoot_tracker >= 1:
-            shoot_tracker = 0
-            event.trigger()
+            execute function event.path('nest_0'):
+                shoot_tracker = 0
+                event.trigger()
 
 on_player_shoot_bow = Event(handler=handler, event_id='on_player_shoot_bow')

@@ -11,8 +11,8 @@ def handler(event):
     has_owner = StaticVar(Bool)
     attacker_tag = f"{Config.TAG_ROOT}.event_handler.{event.event_id}.attacker"
     child_tag = f"{Config.TAG_ROOT}.event_handler.{event.event_id}.child"
-    attacker = selector(f"@e[tag={attacker_tag}]")
-    child = selector(f"@e[tag={child_tag}]")
+    attacker = selector(f"@e[tag={attacker_tag}, limit=1]")
+    child = selector(f"@e[tag={child_tag}, limit=1]")
     entrypoint = event.path('entrypoint')
 
     append_player_trigger(entrypoint)

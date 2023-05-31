@@ -5,7 +5,7 @@ from ./on_player_tick import on_player_tick
 
 
 def handler(event):
-    @Listener(on_player_tick)
+    @Listener(on_player_tick, bypass_fork=True)
     def player_tick():
         join_tracker = Scoreboard(f"{Config.SCOREBOARD_ROOT}.{event.event_id}", 'custom:leave_game')['@s']
 

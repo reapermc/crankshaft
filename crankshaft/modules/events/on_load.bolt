@@ -2,7 +2,7 @@ from ../event_handler import Event
 
 
 def handler(event):
-    merge function_tag minecraft:load {"values": [event.path('main')]}
+    merge function_tag minecraft:load {"replace": false, "values": [event.path('main')]}
 
     function event.path('main'):
         event.trigger()

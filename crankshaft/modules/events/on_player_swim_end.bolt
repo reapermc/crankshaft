@@ -8,7 +8,7 @@ from ../flags/is_swimming import is_swimming
 def handler(event):
     event_fired_tag = f"{Config.TAG_ROOT}.event_handler.{event.event_id}"
 
-    @Listener(on_player_tick)
+    @Listener(on_player_tick, bypass_fork=True)
     def player_tick():
         if not is_swimming:
             if entity @s[tag=event_fired_tag] function event.path('nest_0'):

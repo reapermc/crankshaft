@@ -3,7 +3,7 @@ from ./on_tick import on_tick
 
 
 def handler(event):
-    @Listener(on_tick)
+    @Listener(on_tick, bypass_fork=True)
     def tick():
         as @a at @s:
             event.trigger()

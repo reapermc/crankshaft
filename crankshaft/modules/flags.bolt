@@ -2,6 +2,7 @@
 
 from ./flags/is_baby import is_baby
 from ./flags/is_airborne import is_airborne
+from ./flags/is_on_ground import is_on_ground
 from ./flags/is_burning import is_burning
 from ./flags/is_player import is_player
 from ./flags/is_sneaking import is_sneaking

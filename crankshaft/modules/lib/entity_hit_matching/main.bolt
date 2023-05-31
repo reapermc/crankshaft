@@ -44,7 +44,7 @@ merge entity_type_tag f"{ROOT_DIR}/excluded" {
 }
 
 
-@Listener(on_load)
+@Listener(on_load, bypass_fork=True)
 def load():
 	execute function f"{ROOT_DIR}/load":
 		# This objective tracks IDs, along with variables and constants
@@ -63,7 +63,7 @@ def load():
 		scoreboard objectives add f"{ROOT_GENERIC}.id.8" dummy
 #
 
-@Listener(on_tick)
+@Listener(on_tick, bypass_fork=True)
 def tick():
 	execute function f"{ROOT_DIR}/tick":
 		# Assigns IDs to the entities that need them

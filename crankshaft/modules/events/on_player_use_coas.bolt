@@ -1,0 +1,16 @@
+from wicked_expressions:api import Scoreboard
+from ../event_handler import Event, Listener
+from ./on_player_tick import on_player_tick
+from ../config import Config
+
+
+def handler(event):
+    @Listener(on_player_tick, bypass_fork=True)
+    def player_tick():
+        used_coas = Scoreboard(f"{Config.SCOREBOARD_ROOT}.event_handler.{event.event_id}", 'used:carrot_on_a_stick')['@s']
+
+        if used_coas > 0:
+            used_coas = 0
+            event.trigger()
+
+on_player_use_coas = Event(handler=handler, event_id='on_player_use_coas')

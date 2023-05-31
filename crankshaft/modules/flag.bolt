@@ -13,10 +13,12 @@ class Flag:
 
     invert: bool = field(kw_only=True, default=False)
     initialized: bool = field(kw_only=True, default=False)
-    gate: ClassVar[ExpressionNode] = StaticVar(Bool)
-    active: bool = field(init=False, default=False)
+    active: bool = field(default=False)
+    # gate: ClassVar[ExpressionNode] = StaticVar(Bool)
 
     def __post_init__(self):
+        self.gate = StaticVar(Bool)
+
         local_dir = f"{Config.ROOT_LOCAL}/flag/builtin/{self.flag_id}"
         global_dir = f"{Config.ROOT}/flag/builtin/{self.flag_id}"
 
@@ -39,7 +41,7 @@ class Flag:
                 yield True
 
     def __not__(self):
-        return self.__class__(body=self.body, flag_id=self.flag_id, invert=not self.invert, initialized=self.initialized)
+        return self.__class__(body=self.body, flag_id=self.flag_id, invert=not self.invert, initialized=self.initialized, active=self.active)
 
     @contextmanager
     def set_condition(self):
@@ -68,13 +70,13 @@ class Flag:
 class CustomFlag:
     body: Callable = field(kw_only=True, repr=False)
 
-    gate: ClassVar[ExpressionNode] = StaticVar(Bool)
-    active: bool = field(init=False, default=False)
     invert: bool = field(kw_only=True, default=False)
     initialized: bool = field(kw_only=True, default=False)
+    active: bool = field(default=False)
     next_id: ClassVar[int] = 0
 
     def __post_init__(self):
+        self.gate = StaticVar(Bool)
         self.flag_id = f"{self._get_next_id()}__{ctx.project_id}"
 
         local_dir = f"{Config.ROOT_LOCAL}/flag/custom/{self.flag_id}"
@@ -98,7 +100,7 @@ class CustomFlag:
                 yield True
 
     def __not__(self):
-        return self.__class__(body=self.body, invert=not self.invert, initialized=self.initialized)
+        return self.__class__(body=self.body, invert=not self.invert, initialized=self.initialized, active=self.active)
 
     @contextmanager
     def set_condition(self):
