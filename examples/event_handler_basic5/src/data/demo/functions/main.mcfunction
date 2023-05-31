@@ -3,7 +3,6 @@ from crankshaft:events import on_player_attack_entity, on_tick
 from crankshaft:flags import is_airborne
 from wicked_expressions:api import StaticVar
 from wicked_expressions:nbtlib import Bool, Short
-import random
 
 
 def run_particle_emitter(blue=False):
@@ -18,10 +17,10 @@ def summon_tnt():
     # cluster
     for n in range(120):
         rot_offset = 3 * n
-        y_offset = random.uniform(1.4, 2.0)
+        y_offset = 1.4
         
         rotated ~rot_offset ~:
-            summon tnt ^0.1 ^y_offset ^ {Fuse: Short(random.randint(80, 100)), Motion: [0.0d, 0.0d, 0.0d]}
+            summon tnt ^0.1 ^y_offset ^ {Fuse: 80s, Motion: [0.0d, 0.0d, 0.0d]}
 
     # initial blast
     summon tnt ~ ~1 ~
