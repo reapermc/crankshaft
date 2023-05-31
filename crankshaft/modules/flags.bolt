@@ -10,3 +10,4 @@ from ./flags/is_sprinting import is_sprinting
 from ./flags/is_swimming import is_swimming
 from ./flags/is_gliding import is_gliding
 from ./flags/is_charging_bow import is_charging_bow
+from ./flags/is_in_ground import is_in_ground

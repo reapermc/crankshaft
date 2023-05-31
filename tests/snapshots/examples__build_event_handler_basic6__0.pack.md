@@ -75,6 +75,7 @@ scoreboard players reset $event_handler_basic6#bool$0 reapermc.wicked_expression
 scoreboard players reset $event_handler_basic6#bool$0 reapermc.wicked_expressions
 scoreboard players reset $event_handler_basic6#bool$0 reapermc.wicked_expressions
 scoreboard players reset $event_handler_basic6#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic6#bool$0 reapermc.wicked_expressions
 ```
 
 `@function event_handler_basic6:reapermc/wicked_expressions/safe_load/scoreboard_setup`
