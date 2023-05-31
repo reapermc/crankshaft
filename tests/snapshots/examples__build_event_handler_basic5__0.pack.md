@@ -200,6 +200,7 @@ scoreboard players reset $event_handler_basic5#bool$0 reapermc.wicked_expression
 scoreboard players reset $event_handler_basic5#bool$0 reapermc.wicked_expressions
 scoreboard players reset $event_handler_basic5#bool$0 reapermc.wicked_expressions
 scoreboard players reset $event_handler_basic5#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic5#bool$0 reapermc.wicked_expressions
 scoreboard players reset $event_handler_basic5#bool$2 reapermc.wicked_expressions
 scoreboard players reset $event_handler_basic5#bool$1 reapermc.wicked_expressions
 ```

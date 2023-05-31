@@ -63,6 +63,7 @@ scoreboard players reset $flag_basic#bool$0 reapermc.wicked_expressions
 scoreboard players reset $flag_basic#bool$0 reapermc.wicked_expressions
 scoreboard players reset $flag_basic#bool$0 reapermc.wicked_expressions
 scoreboard players reset $flag_basic#bool$0 reapermc.wicked_expressions
+scoreboard players reset $flag_basic#bool$0 reapermc.wicked_expressions
 ```
 
 `@function flag_basic:reapermc/wicked_expressions/safe_load/scoreboard_setup`
