@@ -1415,14 +1415,14 @@ test = ["pytest (>=6.0.0)"]
 
 [[package]]
 name = "wicked-expressions"
-version = "0.6.3"
+version = "0.6.4"
 description = "Extension of bolt-expressions written in Bolt."
 category = "main"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "wicked_expressions-0.6.3-py3-none-any.whl", hash = "sha256:cc02251381233b2d28bef10f031d7e71615c18f5cc7ab0b1be1c19f29db7c565"},
-    {file = "wicked_expressions-0.6.3.tar.gz", hash = "sha256:66edc9479a52c4f96c18d326a770254b0ce85f4ca014f552d4c41a89d95744c0"},
+    {file = "wicked_expressions-0.6.4-py3-none-any.whl", hash = "sha256:08e350c5abcc50074d6b8feaf6fd63f4986a5d6733fb84b55d123afe2988cb37"},
+    {file = "wicked_expressions-0.6.4.tar.gz", hash = "sha256:44bbd01f99431acdddab92c0e029c8bf6869a60ebc4f6803c706b8f9ae55c1da"},
 ]
 
 [package.dependencies]
