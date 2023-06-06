@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.0 (2023-05-31)
+### Feature
+
+* Add is_in_ground flag ([`c6f03e9`](https://github.com/reapermc/crankshaft/commit/c6f03e96530df1e250709de791f88c7a7fff0236))
+
 ## v0.2.0 (2023-05-31)
 ### Feature
 
