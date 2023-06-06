@@ -12,7 +12,6 @@ class Flag:
     flag_id: str = field(kw_only=True)
 
     invert: bool = field(kw_only=True, default=False)
-    initialized: bool = field(kw_only=True, default=False)
     active: bool = field(default=False)
     # gate: ClassVar[ExpressionNode] = StaticVar(Bool)
 
@@ -29,9 +28,7 @@ class Flag:
     def __branch__(self):
         self.activate()
 
-        if not self.initialized:
-            self.check_condition()
-            self.initialized = True
+        self.check_condition()
 
         if not self.invert:
             if self.gate == 1:
@@ -41,7 +38,7 @@ class Flag:
                 yield True
 
     def __not__(self):
-        return self.__class__(body=self.body, flag_id=self.flag_id, invert=not self.invert, initialized=self.initialized, active=self.active)
+        return self.__class__(body=self.body, flag_id=self.flag_id, invert=not self.invert, active=self.active)
 
     @contextmanager
     def set_condition(self):
@@ -71,7 +68,6 @@ class CustomFlag:
     body: Callable = field(kw_only=True, repr=False)
 
     invert: bool = field(kw_only=True, default=False)
-    initialized: bool = field(kw_only=True, default=False)
     active: bool = field(default=False)
     next_id: ClassVar[int] = 0
 
@@ -88,9 +84,7 @@ class CustomFlag:
     def __branch__(self):
         self.activate()
 
-        if not self.initialized:
-            self.check_condition()
-            self.initialized = True
+        self.check_condition()
 
         if not self.invert:
             if self.gate == 1:
@@ -100,7 +94,7 @@ class CustomFlag:
                 yield True
 
     def __not__(self):
-        return self.__class__(body=self.body, invert=not self.invert, initialized=self.initialized, active=self.active)
+        return self.__class__(body=self.body, invert=not self.invert, active=self.active)
 
     @contextmanager
     def set_condition(self):

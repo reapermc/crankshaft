@@ -95,8 +95,11 @@ execute as @a at @s run function reapermc:crankshaft/event_handler/builtin/on_pl
 ```mcfunction
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $flag_basic2#bool$0 reapermc.wicked_expressions matches 1 run say TRUE
+function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $flag_basic2#bool$0 reapermc.wicked_expressions matches 0 run say FALSE
+function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $flag_basic2#bool$0 reapermc.wicked_expressions matches 1 run say TRUE
+function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $flag_basic2#bool$0 reapermc.wicked_expressions matches 0 run say FALSE
 ```
 
