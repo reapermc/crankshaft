@@ -82,9 +82,13 @@ scoreboard objectives add reapermc.crankshaft.event_handler.on_player_shoot_bow 
 scoreboard players remove @s reapermc.crankshaft.flag.is_charging_bow 1
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 1 if entity @s[tag=!reapermc.crankshaft.event_handler.on_player_charge_bow_start] run function reapermc:crankshaft/event_handler/builtin/on_player_charge_bow_start/__handler__/nest_0
+function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 0 run tag @s remove reapermc.crankshaft.event_handler.on_player_charge_bow_start
+function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 1 run function reapermc:crankshaft/event_handler/builtin/on_player_charge_bow/__trigger__
+function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 0 if entity @s[tag=reapermc.crankshaft.event_handler.on_player_charge_bow_end] run function reapermc:crankshaft/event_handler/builtin/on_player_charge_bow_end/__handler__/nest_0
+function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 1 run tag @s add reapermc.crankshaft.event_handler.on_player_charge_bow_end
 execute if score @s reapermc.crankshaft.event_handler.on_player_shoot_bow matches 1.. run function reapermc:crankshaft/event_handler/builtin/on_player_shoot_bow/__handler__/nest_0
 ```

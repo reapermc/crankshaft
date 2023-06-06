@@ -103,8 +103,11 @@ execute as @a at @s run function reapermc:crankshaft/event_handler/builtin/on_pl
 ```mcfunction
 function reapermc:crankshaft/flag/builtin/is_sneaking/__condition__
 execute if score $event_handler_basic6#bool$0 reapermc.wicked_expressions matches 1 if entity @s[tag=!reapermc.crankshaft.event_handler.on_player_sneak_start] run function reapermc:crankshaft/event_handler/builtin/on_player_sneak_start/__handler__/nest_0
+function reapermc:crankshaft/flag/builtin/is_sneaking/__condition__
 execute if score $event_handler_basic6#bool$0 reapermc.wicked_expressions matches 0 run tag @s remove reapermc.crankshaft.event_handler.on_player_sneak_start
+function reapermc:crankshaft/flag/builtin/is_airborne/__condition__
 execute if score $event_handler_basic6#bool$0 reapermc.wicked_expressions matches 1 run tag @s add reapermc.crankshaft.event_handler.on_player_land
+function reapermc:crankshaft/flag/builtin/is_airborne/__condition__
 execute if score $event_handler_basic6#bool$0 reapermc.wicked_expressions matches 0 if entity @s[tag=reapermc.crankshaft.event_handler.on_player_land] run function reapermc:crankshaft/event_handler/builtin/on_player_land/__handler__/main
 ```
 

@@ -20,9 +20,11 @@
 ```mcfunction
 function reapermc:crankshaft/flag/builtin/is_player/__condition__
 execute if score $flag_basic#bool$0 reapermc.wicked_expressions matches 1 run say TRUE
+function reapermc:crankshaft/flag/builtin/is_player/__condition__
 execute if score $flag_basic#bool$0 reapermc.wicked_expressions matches 0 run say FALSE
 function reapermc:crankshaft/flag/builtin/is_burning/__condition__
 execute if score $flag_basic#bool$0 reapermc.wicked_expressions matches 0 run say you are not on fire
+function reapermc:crankshaft/flag/builtin/is_burning/__condition__
 execute if score $flag_basic#bool$0 reapermc.wicked_expressions matches 1 run say actually... you are on fire
 ```
 
