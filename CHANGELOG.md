@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.1 (2023-06-06)
+### Fix
+
+* Flag condition check is only ever done once ([`b20b686`](https://github.com/reapermc/crankshaft/commit/b20b686117099584f04eb0861f54cfd1b24abe2a))
+
 ## v0.3.0 (2023-05-31)
 ### Feature
 
