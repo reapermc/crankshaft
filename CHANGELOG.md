@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.2 (2023-06-06)
+### Fix
+
+* Event on_player_use_coas was not included in events module ([`b7b3abd`](https://github.com/reapermc/crankshaft/commit/b7b3abd15daf5a96203f61f401628f7be9ed385c))
+
 ## v0.3.1 (2023-06-06)
 ### Fix
 
