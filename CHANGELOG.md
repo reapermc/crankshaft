@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.3 (2023-06-06)
+### Fix
+
+* CustomEvent trigger() doesnt accept parameters ([`276d3f6`](https://github.com/reapermc/crankshaft/commit/276d3f6acebad767f166d91660db913b3b2bab96))
+
 ## v0.3.2 (2023-06-06)
 ### Fix
 
