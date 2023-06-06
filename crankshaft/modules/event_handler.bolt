@@ -78,9 +78,10 @@ class CustomEvent:
         self.handler_dir = f"{local_dir}/__handler__"
         self.payload_path = f"{local_dir}/__payload__"
 
-    def trigger(self):
+    def trigger(self, *params):
         """Triggers the event on runtime."""
 
+        self.payload_params = params
         function self.payload_path
 
     def activate(self):
