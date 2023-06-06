@@ -37,17 +37,15 @@ from ./events/on_player_airborne import on_player_airborne
 from ./events/on_player_airborne_end import on_player_airborne_end
 
 # used item
-
 from ./events/on_player_shoot_bow import on_player_shoot_bow
 from ./events/on_player_charge_bow_start import on_player_charge_bow_start
 from ./events/on_player_charge_bow import on_player_charge_bow
 from ./events/on_player_charge_bow_end import on_player_charge_bow_end
 
-
 # misc
 from ./events/on_player_inventory_change import on_player_inventory_change
 from ./events/on_player_attack_entity import on_player_attack_entity
 from ./events/on_entity_attack_player import on_entity_attack_player
-
+from ./events/on_player_use_coas import on_player_use_coas
 
 
