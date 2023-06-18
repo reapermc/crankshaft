@@ -132,6 +132,7 @@ function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "flag_basic3:reapermc/crankshaft/event_handler/builtin/on_tick/__payload__"
   ]

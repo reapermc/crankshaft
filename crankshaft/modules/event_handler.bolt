@@ -53,14 +53,14 @@ class Event:
         if bypass_fork:
             # hacky fix for multipack compatibility
             # redirects the payload making it only run once globally
-            merge function_tag self.bypass_fork_tag_path {"values": [self.bypass_fork_path]}
+            merge function_tag self.bypass_fork_tag_path {"replace": false, "values": [self.bypass_fork_path]}
             path = self.bypass_fork_path
 
         append function path:
             payload_ref(*self.payload_params)
 
     def _fork_to_payload(self):
-        merge function_tag self.fork_path {"values": [self.payload_path]}
+        merge function_tag self.fork_path {"replace": false, "values": [self.payload_path]}
 
 @dataclass
 class CustomEvent:

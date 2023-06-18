@@ -142,6 +142,7 @@ function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "flag_basic2:reapermc/crankshaft/event_handler/builtin/on_player_tick/__bypass_fork__"
   ]
@@ -152,6 +153,7 @@ function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "flag_basic2:reapermc/crankshaft/event_handler/builtin/on_tick/__payload__"
   ]
@@ -162,6 +164,7 @@ function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "flag_basic2:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__"
   ]
@@ -172,6 +175,7 @@ function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "flag_basic2:reapermc/crankshaft/event_handler/builtin/on_player_tick/__payload__"
   ]

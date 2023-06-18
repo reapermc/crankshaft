@@ -466,6 +466,7 @@ execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.chil
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_load/__payload__"
   ]
@@ -476,6 +477,7 @@ execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.chil
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_load/__bypass_fork__"
   ]
@@ -486,6 +488,7 @@ execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.chil
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_tick/__payload__"
   ]
@@ -496,6 +499,7 @@ execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.chil
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__"
   ]
@@ -506,6 +510,7 @@ execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.chil
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_player_attack_entity/__payload__"
   ]
@@ -516,6 +521,7 @@ execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.chil
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_entity_attack_player/__payload__"
   ]

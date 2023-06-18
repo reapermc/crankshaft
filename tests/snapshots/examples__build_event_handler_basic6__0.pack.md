@@ -215,6 +215,7 @@ function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic6:reapermc/crankshaft/event_handler/builtin/on_tick/__payload__"
   ]
@@ -225,6 +226,7 @@ function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic6:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__"
   ]
@@ -235,6 +237,7 @@ function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic6:reapermc/crankshaft/event_handler/builtin/on_player_tick/__payload__"
   ]
@@ -245,6 +248,7 @@ function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic6:reapermc/crankshaft/event_handler/builtin/on_player_tick/__bypass_fork__"
   ]
@@ -255,6 +259,7 @@ function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic6:reapermc/crankshaft/event_handler/builtin/on_player_sneak_start/__payload__"
   ]
@@ -265,6 +270,7 @@ function reapermc:crankshaft/event_handler/builtin/on_tick/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic6:reapermc/crankshaft/event_handler/builtin/on_player_land/__payload__"
   ]
