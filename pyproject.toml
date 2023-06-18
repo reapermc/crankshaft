@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "crankshaft"
-version = "0.3.3"
+version = "0.3.4"
 description = "Flow control library for the Bolt scripting language."
 authors = ["ArcticYeti <arcticyeti1@gmail.com>"]
 license = "MIT"
