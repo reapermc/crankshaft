@@ -68,8 +68,10 @@ scoreboard players reset $event_handler_basic#bool$0 reapermc.wicked_expressions
 `@function event_handler_basic:reapermc/crankshaft/event_handler/builtin/on_load/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 say hello
 summon creeper ~ ~ ~
+# ENSURE FUNC EXISTS
 say wtf
 help pls work
 ```
@@ -77,18 +79,21 @@ help pls work
 `@function event_handler_basic:reapermc/crankshaft/event_handler/builtin/on_tick/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 say hello this is a tick
 ```
 
 `@function event_handler_basic:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 execute as @a at @s run function reapermc:crankshaft/event_handler/builtin/on_player_tick/__trigger__
 ```
 
 `@function event_handler_basic:reapermc/crankshaft/event_handler/builtin/on_player_tick/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 execute if data entity @s SelectedItem run function event_handler_basic:reapermc/crankshaft/event_handler/custom/0__event_handler_basic/__payload__
 execute if data entity @s Inventory[{Slot: -106b}] run function event_handler_basic:reapermc/crankshaft/event_handler/custom/0__event_handler_basic/__payload__
 ```

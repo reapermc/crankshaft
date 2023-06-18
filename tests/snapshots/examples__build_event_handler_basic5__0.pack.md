@@ -208,12 +208,14 @@ scoreboard players reset $event_handler_basic5#bool$1 reapermc.wicked_expression
 `@function event_handler_basic5:reapermc/crankshaft/event_handler/builtin/on_load/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 function reapermc:crankshaft/lib/entity_hit_matching/load
 ```
 
 `@function event_handler_basic5:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 function reapermc:crankshaft/lib/entity_hit_matching/tick
 ```
 
@@ -358,6 +360,7 @@ summon tnt ~ ~1 ~
 `@function event_handler_basic5:reapermc/crankshaft/event_handler/builtin/on_player_attack_entity/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 scoreboard players set $event_handler_basic5#bool$2 reapermc.wicked_expressions 0
 execute as @e[tag=reapermc.crankshaft.event_handler.on_player_attack_entity.child, limit=1] if entity @s[type=arrow] run scoreboard players set $event_handler_basic5#bool$2 reapermc.wicked_expressions 1
 scoreboard players operation $temp reapermc.wicked_expressions = $event_handler_basic5#bool$2 reapermc.wicked_expressions
@@ -367,6 +370,7 @@ execute if score $temp reapermc.wicked_expressions matches 1 run function event_
 `@function event_handler_basic5:reapermc/crankshaft/event_handler/builtin/on_tick/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 execute as @e[type=arrow, nbt={inGround: 1b}] at @s run function demo:main/nested_execute_0
 ```
 

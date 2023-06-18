@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Callable, ClassVar
+from lightning_rod:api import add_comment
 
 from ./config import Config
 
@@ -57,6 +58,7 @@ class Event:
             path = self.bypass_fork_path
 
         append function path:
+            add_comment('ENSURE FUNC EXISTS')
             payload_ref(*self.payload_params)
 
     def _fork_to_payload(self):

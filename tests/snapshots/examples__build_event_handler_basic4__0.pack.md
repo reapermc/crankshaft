@@ -71,12 +71,14 @@ scoreboard players reset $event_handler_basic4#bool$2 reapermc.wicked_expression
 `@function event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_load/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 function reapermc:crankshaft/lib/entity_hit_matching/load
 ```
 
 `@function event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 function reapermc:crankshaft/lib/entity_hit_matching/tick
 ```
 
@@ -89,6 +91,7 @@ scoreboard objectives add reapermc.wicked_expressions dummy
 `@function event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_player_attack_entity/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 say 'I GOT HIT'
 particle flame ~ ~ ~ 0 0 0 1 25 force
 execute as @a[tag=reapermc.crankshaft.event_handler.on_player_attack_entity.attacker, limit=1] run say 'ATTACKER'
@@ -98,6 +101,7 @@ execute as @e[tag=reapermc.crankshaft.event_handler.on_player_attack_entity.chil
 `@function event_handler_basic4:reapermc/crankshaft/event_handler/builtin/on_entity_attack_player/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 say 'I GOT HIT'
 give @s diamond 1
 execute as @e[tag=reapermc.crankshaft.event_handler.on_entity_attack_player.attacker, limit=1] run say 'ATTACKER'

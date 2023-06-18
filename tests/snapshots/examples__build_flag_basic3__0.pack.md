@@ -92,6 +92,7 @@ scoreboard objectives add reapermc.wicked_expressions dummy
 `@function flag_basic3:reapermc/crankshaft/event_handler/builtin/on_tick/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 execute as @e[type=arrow] run function demo:main/nested_execute_0
 ```
 
