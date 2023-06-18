@@ -182,6 +182,7 @@ function reapermc:crankshaft/event_handler/builtin/on_load/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_tick/__payload__"
   ]
@@ -192,6 +193,7 @@ function reapermc:crankshaft/event_handler/builtin/on_load/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__"
   ]
@@ -202,6 +204,7 @@ function reapermc:crankshaft/event_handler/builtin/on_load/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_player_tick/__payload__"
   ]
@@ -212,6 +215,7 @@ function reapermc:crankshaft/event_handler/builtin/on_load/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_player_tick/__bypass_fork__"
   ]
@@ -222,6 +226,7 @@ function reapermc:crankshaft/event_handler/builtin/on_load/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_player_join/__payload__"
   ]
@@ -232,6 +237,7 @@ function reapermc:crankshaft/event_handler/builtin/on_load/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_load/__payload__"
   ]
@@ -242,6 +248,7 @@ function reapermc:crankshaft/event_handler/builtin/on_load/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_load/__bypass_fork__"
   ]
@@ -252,6 +259,7 @@ function reapermc:crankshaft/event_handler/builtin/on_load/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_player_join/__bypass_fork__"
   ]
@@ -262,6 +270,7 @@ function reapermc:crankshaft/event_handler/builtin/on_load/__trigger__
 
 ```json
 {
+  "replace": false,
   "values": [
     "event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_player_load/__payload__"
   ]

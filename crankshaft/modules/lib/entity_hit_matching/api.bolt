@@ -3,8 +3,8 @@
 
 def append_target_trigger(path):
     from ./main import PLAYER_HURT_TARGET
-    merge function_tag PLAYER_HURT_TARGET {"values": [path]}
+    merge function_tag PLAYER_HURT_TARGET {"replace": false, "values": [path]}
 
 def append_player_trigger(path):
     from ./main import TARGET_HURT_PLAYER
-    merge function_tag TARGET_HURT_PLAYER {"values": [path]}
+    merge function_tag TARGET_HURT_PLAYER {"replace": false, "values": [path]}
