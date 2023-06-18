@@ -76,42 +76,49 @@ scoreboard objectives add reapermc.wicked_expressions dummy
 `@function event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 execute as @a at @s run function reapermc:crankshaft/event_handler/builtin/on_player_tick/__trigger__
 ```
 
 `@function event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_player_tick/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 execute if score @s reapermc.crankshaft.on_player_join matches 1.. run function reapermc:crankshaft/event_handler/builtin/on_player_join/__handler__/main
 ```
 
 `@function event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_player_join/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 say only runs on join
 ```
 
 `@function event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_load/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 execute as @a at @s run function reapermc:crankshaft/event_handler/builtin/on_player_load/__trigger__
 ```
 
 `@function event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_player_join/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 function reapermc:crankshaft/event_handler/builtin/on_player_load/__trigger__
 ```
 
 `@function event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_player_load/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 say runs on both join and reload
 ```
 
 `@function event_handler_basic2:reapermc/crankshaft/event_handler/builtin/on_player_tick/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 execute if data entity @s SelectedItem run function event_handler_basic2:reapermc/crankshaft/event_handler/custom/0__event_handler_basic2/__payload__
 execute if data entity @s Inventory[{Slot: -106b}] run function event_handler_basic2:reapermc/crankshaft/event_handler/custom/0__event_handler_basic2/__payload__
 ```

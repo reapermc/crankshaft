@@ -79,47 +79,57 @@ scoreboard objectives add reapermc.crankshaft.event_handler.on_player_shoot_bow 
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/on_player_tick/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 scoreboard players remove @s reapermc.crankshaft.flag.is_charging_bow 1
+# ENSURE FUNC EXISTS
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 1 if entity @s[tag=!reapermc.crankshaft.event_handler.on_player_charge_bow_start] run function reapermc:crankshaft/event_handler/builtin/on_player_charge_bow_start/__handler__/nest_0
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 0 run tag @s remove reapermc.crankshaft.event_handler.on_player_charge_bow_start
+# ENSURE FUNC EXISTS
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 1 run function reapermc:crankshaft/event_handler/builtin/on_player_charge_bow/__trigger__
+# ENSURE FUNC EXISTS
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 0 if entity @s[tag=reapermc.crankshaft.event_handler.on_player_charge_bow_end] run function reapermc:crankshaft/event_handler/builtin/on_player_charge_bow_end/__handler__/nest_0
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 1 run tag @s add reapermc.crankshaft.event_handler.on_player_charge_bow_end
+# ENSURE FUNC EXISTS
 execute if score @s reapermc.crankshaft.event_handler.on_player_shoot_bow matches 1.. run function reapermc:crankshaft/event_handler/builtin/on_player_shoot_bow/__handler__/nest_0
 ```
 
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 execute as @a at @s run function reapermc:crankshaft/event_handler/builtin/on_player_tick/__trigger__
 ```
 
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/on_player_charge_bow_start/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 tellraw @s "EVENT player_charge_bow_start"
 ```
 
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/on_player_charge_bow/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 tellraw @s "EVENT player_charge_bow"
 ```
 
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/on_player_charge_bow_end/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 tellraw @s "EVENT player_charge_bow_end"
 ```
 
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/on_player_shoot_bow/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 tellraw @s "EVENT player_shot_bow"
 ```
 

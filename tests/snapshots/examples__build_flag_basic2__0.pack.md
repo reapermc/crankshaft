@@ -81,18 +81,21 @@ scoreboard objectives add reapermc.wicked_expressions dummy
 `@function flag_basic2:reapermc/crankshaft/event_handler/builtin/on_player_tick/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 scoreboard players remove @s reapermc.crankshaft.flag.is_charging_bow 1
 ```
 
 `@function flag_basic2:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 execute as @a at @s run function reapermc:crankshaft/event_handler/builtin/on_player_tick/__trigger__
 ```
 
 `@function flag_basic2:reapermc/crankshaft/event_handler/builtin/on_player_tick/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $flag_basic2#bool$0 reapermc.wicked_expressions matches 1 run say TRUE
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__

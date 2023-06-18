@@ -79,12 +79,14 @@ scoreboard objectives add reapermc.wicked_expressions dummy
 `@function flag_basic4:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 execute as @a at @s run function reapermc:crankshaft/event_handler/builtin/on_player_tick/__trigger__
 ```
 
 `@function flag_basic4:reapermc/crankshaft/event_handler/builtin/on_player_tick/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 function reapermc:crankshaft/flag/builtin/is_sneaking/__condition__
 execute if score $flag_basic4#bool$0 reapermc.wicked_expressions matches 1 run say ++sneaking
 ```
@@ -92,6 +94,7 @@ execute if score $flag_basic4#bool$0 reapermc.wicked_expressions matches 1 run s
 `@function flag_basic4:reapermc/crankshaft/event_handler/builtin/on_player_tick/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 function reapermc:crankshaft/flag/builtin/is_sneaking/__condition__
 execute if score $flag_basic4#bool$0 reapermc.wicked_expressions matches 1 if entity @s[tag=!reapermc.crankshaft.event_handler.on_player_sneak_start] run function reapermc:crankshaft/event_handler/builtin/on_player_sneak_start/__handler__/nest_0
 function reapermc:crankshaft/flag/builtin/is_sneaking/__condition__
@@ -101,6 +104,7 @@ execute if score $flag_basic4#bool$0 reapermc.wicked_expressions matches 0 run t
 `@function flag_basic4:reapermc/crankshaft/event_handler/builtin/on_player_sneak_start/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 say sneaking!
 ```
 

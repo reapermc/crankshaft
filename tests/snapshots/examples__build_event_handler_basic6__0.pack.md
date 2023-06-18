@@ -95,16 +95,19 @@ execute if entity @s[type=!player] run data modify entity @s ActiveEffects appen
 `@function event_handler_basic6:reapermc/crankshaft/event_handler/builtin/on_tick/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 execute as @a at @s run function reapermc:crankshaft/event_handler/builtin/on_player_tick/__trigger__
 ```
 
 `@function event_handler_basic6:reapermc/crankshaft/event_handler/builtin/on_player_tick/__bypass_fork__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 function reapermc:crankshaft/flag/builtin/is_sneaking/__condition__
 execute if score $event_handler_basic6#bool$0 reapermc.wicked_expressions matches 1 if entity @s[tag=!reapermc.crankshaft.event_handler.on_player_sneak_start] run function reapermc:crankshaft/event_handler/builtin/on_player_sneak_start/__handler__/nest_0
 function reapermc:crankshaft/flag/builtin/is_sneaking/__condition__
 execute if score $event_handler_basic6#bool$0 reapermc.wicked_expressions matches 0 run tag @s remove reapermc.crankshaft.event_handler.on_player_sneak_start
+# ENSURE FUNC EXISTS
 function reapermc:crankshaft/flag/builtin/is_airborne/__condition__
 execute if score $event_handler_basic6#bool$0 reapermc.wicked_expressions matches 1 run tag @s add reapermc.crankshaft.event_handler.on_player_land
 function reapermc:crankshaft/flag/builtin/is_airborne/__condition__
@@ -114,12 +117,14 @@ execute if score $event_handler_basic6#bool$0 reapermc.wicked_expressions matche
 `@function event_handler_basic6:reapermc/crankshaft/event_handler/builtin/on_player_sneak_start/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 execute if entity @s[tag=!test.double_jump_used] run function demo:main/nested_execute_0
 ```
 
 `@function event_handler_basic6:reapermc/crankshaft/event_handler/builtin/on_player_land/__payload__`
 
 ```mcfunction
+# ENSURE FUNC EXISTS
 tag @s remove test.double_jump_used
 ```
 
