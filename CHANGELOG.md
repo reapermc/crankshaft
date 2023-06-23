@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.4 (2023-06-18)
+### Fix
+
+* What a horrible day it is ([`80ac534`](https://github.com/reapermc/crankshaft/commit/80ac5340e0aee0951676126235249fb8a41571e8))
+* Multipack shared events sometimes dont create a function ([`4718ba6`](https://github.com/reapermc/crankshaft/commit/4718ba6b4b8eed8038712f1e0e3cf0031ba599a5))
+* No replace flag in merge function_tag-s ([`295b6fe`](https://github.com/reapermc/crankshaft/commit/295b6fea9b3bf21890147892f7e205e9d5685a22))
+
 ## v0.3.3 (2023-06-06)
 ### Fix
 
