@@ -1,47 +1,19 @@
-from crankshaft:api import Listener, CustomEvent
-from crankshaft:events import on_load, on_tick, on_player_tick
+from crankshaft:api import Event, Entrypoint, Listener
+from crankshaft:events import on_player_tick
 
-
-@Listener(on_load)
-def load():
-    say hello
-    summon creeper ~ ~ ~
-
-
-@Listener(on_load)
-def load():
-    say wtf
-    help pls work
-
-
-@Listener(on_tick)
-def tick():
-    say hello this is a tick
-
-
-
-# custom event definition example
 
 def handler(event):
-    @Listener(on_player_tick)
-    def tick():
-        # mainhand
-        if data entity @s SelectedItem:
-            event.trigger()
-        # offhand
-        if data entity @s Inventory[{Slot: -106b}]:
-            event.trigger()
+    unless data entity @s SelectedItem:
+        event.trigger()
 
-on_player_holding_item = CustomEvent(handler=handler)
+on_player_mainhand_empty = Event('on_player_mainhand_empty')
+on_player_mainhand_empty.attach_handler(handler, on_player_tick, Entrypoint.EVENT)
 
 
 
-# listening to the custom event
-
-@Listener(on_player_holding_item)
-def player_holding_item():
-    say Im holding an item!
-
+@Listener(on_player_mainhand_empty)
+def _():
+    say hi!
 
 
 

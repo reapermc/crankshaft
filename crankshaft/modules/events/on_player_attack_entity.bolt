@@ -1,18 +1,20 @@
 from wicked_expressions:api import StaticVar, this
 from wicked_expressions:nbtlib import Bool
 from lightning_rod:api import tag, untag
-from ../event_handler import Event
+from ../event_handler import BuiltinEvent
 from ../lib/entity_hit_matching/api import append_target_trigger
-from ../utils import selector
 from ../config import Config
+from ../utils import selector
 
 
 def handler(event):
     has_owner = StaticVar(Bool)
-    attacker_tag = f"{Config.TAG_ROOT}.event_handler.{event.event_id}.attacker"
-    child_tag = f"{Config.TAG_ROOT}.event_handler.{event.event_id}.child"
+    victim_tag = f"{Config.TAG_ROOT}.event.{event.id}.victim"
+    attacker_tag = f"{Config.TAG_ROOT}.event.{event.id}.attacker"
+    direct_tag = f"{Config.TAG_ROOT}.event.{event.id}.direct"
+    victim = selector(f"@e[tag={victim_tag}, limit=1]")
     attacker = selector(f"@a[tag={attacker_tag}, limit=1]")
-    child = selector(f"@e[tag={child_tag}, limit=1]")
+    direct = selector(f"@e[tag={direct_tag}, limit=1]")
     entrypoint = event.path('entrypoint')
 
     append_target_trigger(entrypoint)
@@ -22,21 +24,28 @@ def handler(event):
                 this.Owner.get()
 
             if has_owner == 1:
-                execute function event.path('nested_1'):
-                    tag(child_tag)
+                tag(direct_tag)
 
-                    on origin:
-                        tag(attacker_tag)
+                on origin:
+                    tag(attacker_tag)
             else:
                 tag(attacker_tag)
 
-        event.trigger(attacker, child)
+        tag(victim_tag)
+
+        as attacker:
+            event.trigger(victim, direct)
 
         # cleanup 
+        as victim:
+            untag(victim_tag)
+
         as attacker:
             untag(attacker_tag)
         
-        as child:
-            untag(child_tag)
+        as direct:
+            untag(direct_tag)
 
-on_player_attack_entity = Event(handler=handler, event_id='on_player_attack_entity')
+
+on_player_attack_entity = BuiltinEvent('on_player_attack_entity')
+on_player_attack_entity.attach_handler(handler)

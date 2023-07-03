@@ -1,0 +1,19 @@
+from wicked_expressions:api import Scoreboard
+from ../event_handler import BuiltinEvent, Entrypoint
+from ./on_player_tick import on_player_tick
+from ../config import Config
+
+
+def handler(event):
+    used_wfoas = Scoreboard(f"{Config.SCOREBOARD_ROOT}.event.{event.id}", 'used:warped_fungus_on_a_stick')['@s']
+
+    if not used_wfoas.exists():
+        used_wfoas = 0
+
+    if used_wfoas > 0:
+        used_wfoas = 0
+        event.trigger()
+
+
+on_player_use_wfoas = BuiltinEvent('on_player_use_wfoas')
+on_player_use_wfoas.attach_handler(handler, on_player_tick, Entrypoint.EVENT)

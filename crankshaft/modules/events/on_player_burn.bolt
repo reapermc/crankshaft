@@ -1,12 +1,11 @@
-from ../event_handler import Event, Listener
+from ../event_handler import BuiltinEvent, Entrypoint
 from ../flags/is_burning import is_burning
 from ./on_player_tick import on_player_tick
 
 
 def handler(event):
-    @Listener(on_player_tick, bypass_fork=True)
-    def player_tick():
-        if is_burning:
-            event.trigger()
+    if is_burning:
+        event.trigger()
 
-on_player_burn = Event(handler=handler, event_id='on_player_burn')
+on_player_burn = BuiltinEvent('on_player_burn')
+on_player_burn.attach_handler(handler, on_player_tick, Entrypoint.EVENT)

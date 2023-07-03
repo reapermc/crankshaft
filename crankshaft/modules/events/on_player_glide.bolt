@@ -1,12 +1,12 @@
-from ../event_handler import Event, Listener
+from ../event_handler import BuiltinEvent, Entrypoint
 from ../flags/is_gliding import is_gliding
 from ./on_player_tick import on_player_tick
 
 
 def handler(event):
-    @Listener(on_player_tick, bypass_fork=True)
-    def player_tick():
-        if is_gliding:
-            event.trigger()
+    if is_gliding:
+        event.trigger()
 
-on_player_glide = Event(handler=handler, event_id='on_player_glide')
+
+on_player_glide = BuiltinEvent('on_player_glide')
+on_player_glide.attach_handler(handler, on_player_tick, Entrypoint.EVENT)

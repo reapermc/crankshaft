@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "crankshaft"
 version = "0.3.4"
-description = "Flow control library for the Bolt scripting language."
+description = "Bolt datapack flow control library."
 authors = ["ArcticYeti <arcticyeti1@gmail.com>"]
 license = "MIT"
 
@@ -10,13 +10,19 @@ readme = "README.md"
 
 keywords = [
   "beet",
+  "mecha",
   "bolt",
+  "python",
   "minecraft",
   "datapack",
   "minecraft-commands",
   "mcfunction",
+  "crankshaft",
   "library",
   "reapermc",
+  "flow-control",
+  "event",
+  "event-handler",
 ]
 
 include = ["crankshaft/py.typed"]

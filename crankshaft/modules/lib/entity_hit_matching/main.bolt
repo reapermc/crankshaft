@@ -1,7 +1,4 @@
 from wicked_expressions:api import this
-from ../../event_handler import Listener
-from ../../events/on_tick import on_tick
-from ../../events/on_load import on_load
 from ../../config import Config
 
 ROOT_DIR = f"{Config.ROOT}/lib/entity_hit_matching"
@@ -44,30 +41,28 @@ merge entity_type_tag f"{ROOT_DIR}/excluded" {
 }
 
 
-@Listener(on_load, bypass_fork=True)
-def load():
-	execute function f"{ROOT_DIR}/load":
-		# This objective tracks IDs, along with variables and constants
-		scoreboard objectives add f"{ROOT_GENERIC}.id" dummy
-		scoreboard players set #3 f"{ROOT_GENERIC}.id" 3
+merge function_tag minecraft:load {"replace": false, "values": [f"{ROOT_DIR}/load"]} 
+function f"{ROOT_DIR}/load":
+    # This objective tracks IDs, along with variables and constants
+    scoreboard objectives add f"{ROOT_GENERIC}.id" dummy
+    scoreboard players set #3 f"{ROOT_GENERIC}.id" 3
 
-		# These objectives track the individual bits of IDs
-		scoreboard objectives add f"{ROOT_GENERIC}.id.0" dummy
-		scoreboard objectives add f"{ROOT_GENERIC}.id.1" dummy
-		scoreboard objectives add f"{ROOT_GENERIC}.id.2" dummy
-		scoreboard objectives add f"{ROOT_GENERIC}.id.3" dummy
-		scoreboard objectives add f"{ROOT_GENERIC}.id.4" dummy
-		scoreboard objectives add f"{ROOT_GENERIC}.id.5" dummy
-		scoreboard objectives add f"{ROOT_GENERIC}.id.6" dummy
-		scoreboard objectives add f"{ROOT_GENERIC}.id.7" dummy
-		scoreboard objectives add f"{ROOT_GENERIC}.id.8" dummy
+    # These objectives track the individual bits of IDs
+    scoreboard objectives add f"{ROOT_GENERIC}.id.0" dummy
+    scoreboard objectives add f"{ROOT_GENERIC}.id.1" dummy
+    scoreboard objectives add f"{ROOT_GENERIC}.id.2" dummy
+    scoreboard objectives add f"{ROOT_GENERIC}.id.3" dummy
+    scoreboard objectives add f"{ROOT_GENERIC}.id.4" dummy
+    scoreboard objectives add f"{ROOT_GENERIC}.id.5" dummy
+    scoreboard objectives add f"{ROOT_GENERIC}.id.6" dummy
+    scoreboard objectives add f"{ROOT_GENERIC}.id.7" dummy
+    scoreboard objectives add f"{ROOT_GENERIC}.id.8" dummy
 #
 
-@Listener(on_tick, bypass_fork=True)
-def tick():
-	execute function f"{ROOT_DIR}/tick":
-		# Assigns IDs to the entities that need them
-		execute as @e unless score @s f"{ROOT_GENERIC}.id" = @s f"{ROOT_GENERIC}.id" run function f"{ROOT_DIR}/id/filter"
+merge function_tag minecraft:tick {"replace": false, "values": [f"{ROOT_DIR}/tick"]} 
+function f"{ROOT_DIR}/tick":
+    # Assigns IDs to the entities that need them
+    execute as @e unless score @s f"{ROOT_GENERIC}.id" = @s f"{ROOT_GENERIC}.id" run function f"{ROOT_DIR}/id/filter"
 #
 
 function f"{ROOT_DIR}/id/assign":

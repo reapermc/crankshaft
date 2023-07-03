@@ -1,21 +1,20 @@
 from wicked_expressions:api import Scoreboard 
 from lightning_rod:api import revoke_advancement
-from ../event_handler import Listener
 from ../flag import Flag
 from ../config import Config
-from ../events/on_player_tick import on_player_tick
 
 
 def body(flag):
     is_charging = Scoreboard(f"{Config.SCOREBOARD_ROOT}.flag.{flag.flag_id}")['@s']
     advancement_path = flag.path('advancement')
     reward_path = flag.path('advancement_reward')
+    p_tick_path = flag.path('p_tick')
 
-    @Listener(on_player_tick, bypass_fork=True)
-    def player_tick():
-        nonlocal is_charging
-
-        is_charging -= 1
+    merge function_tag minecraft:tick {"replace": false, "values": [p_tick_path]}
+    function p_tick_path:
+        as @a:
+            if is_charging > 0:
+                is_charging -= 1
 
     advancement advancement_path {
         "criteria": {
@@ -37,7 +36,7 @@ def body(flag):
 
     function reward_path:
         revoke_advancement(advancement_path)
-        is_charging = 2
+        is_charging = 1
     
     with flag.set_condition():
         if score var is_charging matches 1

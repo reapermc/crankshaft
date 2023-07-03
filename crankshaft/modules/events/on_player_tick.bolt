@@ -1,11 +1,11 @@
-from ../event_handler import Event, Listener
+from ../event_handler import BuiltinEvent, Entrypoint
 from ./on_tick import on_tick
 
 
 def handler(event):
-    @Listener(on_tick, bypass_fork=True)
-    def tick():
-        as @a at @s:
-            event.trigger()
+    as @a at @s:
+        event.trigger()
 
-on_player_tick = Event(handler=handler, event_id='on_player_tick')
+
+on_player_tick = BuiltinEvent('on_player_tick')
+on_player_tick.attach_handler(handler, on_tick, Entrypoint.EVENT)
