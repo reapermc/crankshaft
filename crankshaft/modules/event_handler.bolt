@@ -1,121 +1,113 @@
 from dataclasses import dataclass, field
-from typing import Callable, ClassVar
-from lightning_rod:api import add_comment
+from typing import ClassVar, Callable, Any
 
 from ./config import Config
 
+# would use an enum here, but bolt doesn't support them
+class Entrypoint:
+    FUNCTION_TAG = 'function_tag'
+    EVENT = 'event'
 
 @dataclass
-class Event:
-    handler: Callable = field(kw_only=True, repr=False)
-    event_id: str = field(kw_only=True)
+class BuiltinEvent:
+    id: str
 
-    active: bool = field(init=False, default=False)
-    payload_params: list = field(init=False, default_factory=list)
+    is_active: bool = field(init=False, default=False)
+    handler_index: int = field(init=False, repr=False, default=0)
+    payload_index: int = field(init=False, repr=False, default=0)
+    attached_handlers: list[tuple] = field(init=False, repr=False, default_factory=list)
+    parent_events: list[Callable] = field(init=False, repr=False, default_factory=list)
+    payload_params: Any = field(init=False, repr=False, default=None)
+
+    LOCAL_PATH: ClassVar[str] = f"{Config.ROOT_LOCAL}/event_handler/builtin"
+    GLOBAL_PATH: ClassVar[str] = f"{Config.ROOT}/event_handler/builtin"
 
     def __post_init__(self):
-        local_dir = f"{Config.ROOT_LOCAL}/event_handler/builtin/{self.event_id}"
-        global_dir = f"{Config.ROOT}/event_handler/builtin/{self.event_id}"
+        self.endpoint_path = f"{self.GLOBAL_PATH}/endpoint/{self.id}"
 
-        self.handler_dir = f"{global_dir}/__handler__"
-        self.payload_path = f"{local_dir}/__payload__"
-        self.fork_path = f"{global_dir}/__fork__"
-        self.bypass_fork_path = f"{local_dir}/__bypass_fork__"
-        self.bypass_fork_tag_path = f"{global_dir}/__bypass_fork_tag__"
-        self.trigger_path = f"{global_dir}/__trigger__"
+        self._initialize_endpoint()
+
+    def attach_handler(self, handler: Callable, entrypoint: Any = None, entrypoint_type: str = None):
+        handler_path = self._generate_handler_path()
+        handler_data = (handler, handler_path)
+        self.attached_handlers.append(handler_data)
+
+        # this is needed so potential entrypoint
+        # function_tag doesn't brick itself
+        function handler_path:
+            ...
+
+        if entrypoint_type == Entrypoint.FUNCTION_TAG:
+            merge function_tag entrypoint {"replace": false, "values": [handler_path]}
+        elif entrypoint_type == Entrypoint.EVENT:
+            # entrypoint.endpoint_path directly
+            # hooks into the target parent event
+            merge function_tag entrypoint.endpoint_path {"replace": false, "values": [handler_path]}
+            self.parent_events.append(entrypoint)         
+
+    def attach_payload(self, payload: Callable):
+        payload_path = self._generate_payload_path()
+
+        merge function_tag self.endpoint_path {"replace": false, "values": [payload_path]}
+
+        append function payload_path:
+            payload(*self.payload_params)
 
     def trigger(self, *params):
-        """Triggers the event on runtime."""
-
         self.payload_params = params
-        
-        execute function self.trigger_path:
-            function f"#{self.bypass_fork_tag_path}"       # bypass_fork multipack compatibility
-            function f"#{self.fork_path}"
+        function f"#{self.endpoint_path}"
 
     def activate(self):
-        """Activates and deploys the handler into the datapack."""
+        self._activate_parent_events()
+        self._deploy_handlers()
+        self.is_active = True
 
-        if self.active:
-            return
+    def path(self, subpath: str):
+        return f"{self.GLOBAL_PATH}/handler/{self.id}/{subpath}"
 
-        self.handler(self)
-        self._fork_to_payload()
-        self.active = True
+    def _activate_parent_events(self):
+        for event in self.parent_events:
+            if event.is_active:
+                continue
 
-    def path(self, subpath: str) -> str:
-        """Generates a function path inside the event working directory."""
+            event.activate()
 
-        return f"{self.handler_dir}/{subpath}"
+    def _deploy_handlers(self):
+        for handler, handler_path in self.attached_handlers:
+            append function handler_path:
+                handler(self)
 
-    def attach_payload(self, payload_ref: Callable, bypass_fork=False):
-        path = self.payload_path
+    def _generate_handler_path(self):
+        base_path = f"{self.GLOBAL_PATH}/handler/{self.id}"
+        index = self.handler_index
+        self.handler_index += 1
 
-        if bypass_fork:
-            # hacky fix for multipack compatibility
-            # redirects the payload making it only run once globally
-            merge function_tag self.bypass_fork_tag_path {"replace": false, "values": [self.bypass_fork_path]}
-            path = self.bypass_fork_path
+        return f"{base_path}/{index}"
 
-        append function path:
-            add_comment('ENSURE FUNC EXISTS')
-            payload_ref(*self.payload_params)
+    def _generate_payload_path(self):
+        base_path = f"{self.LOCAL_PATH}/payload/{self.id}"
+        index = self.payload_index
+        self.payload_index += 1
 
-    def _fork_to_payload(self):
-        merge function_tag self.fork_path {"replace": false, "values": [self.payload_path]}
+        return f"{base_path}/{index}"
+
+    def _initialize_endpoint(self):
+        merge function_tag self.endpoint_path {"replace": false, "values": []}
 
 @dataclass
-class CustomEvent:
-    handler: Callable = field(kw_only=True, repr=False)
+class Event(BuiltinEvent):
+    # user defined events only run off the local namespace
+    # so we simply inherit and set GLOBAL_PATH to a local one
 
-    active: bool = field(init=False, default=False)
-    payload_params: list = field(init=False, default_factory=list)
-    next_id: ClassVar[int] = 0
-
-    def __post_init__(self):
-        self.event_id = f"{self._get_next_id()}__{ctx.project_id}"
-
-        local_dir = f"{Config.ROOT_LOCAL}/event_handler/custom/{self.event_id}"
-
-        self.handler_dir = f"{local_dir}/__handler__"
-        self.payload_path = f"{local_dir}/__payload__"
-
-    def trigger(self, *params):
-        """Triggers the event on runtime."""
-
-        self.payload_params = params
-        function self.payload_path
-
-    def activate(self):
-        """Activates and deploys the handler into the datapack."""
-
-        self.handler(self)
-        self.active = True
-
-    def path(self, subpath: str) -> str:
-        """Generates a function path inside the event working directory."""
-
-        return f"{self.handler_dir}/{subpath}"
-
-    def attach_payload(self, payload_ref: Callable):
-        append function self.payload_path:
-            payload_ref(*self.payload_params)
-
-    @classmethod
-    def _get_next_id(cls) -> int:
-        index = cls.next_id
-        cls.next_id += 1
-        return index
+    LOCAL_PATH: ClassVar[str] = f"{Config.ROOT_LOCAL}/event_handler/user_defined"
+    GLOBAL_PATH: ClassVar[str] = f"{Config.ROOT_LOCAL}/event_handler/user_defined"
 
 @dataclass
 class Listener:
-    event: Event
-    bypass_fork: bool = field(kw_only=True, default=False)
+    event: BuiltinEvent | Event
 
-    def __call__(self, callback):
-        self.event.activate()
+    def __call__(self, payload: Callable):
+        if not self.event.is_active:
+            self.event.activate()
 
-        if isinstance(self.event, Event):
-            self.event.attach_payload(callback, bypass_fork=self.bypass_fork)
-        else:
-            self.event.attach_payload(callback)
+        self.event.attach_payload(payload)

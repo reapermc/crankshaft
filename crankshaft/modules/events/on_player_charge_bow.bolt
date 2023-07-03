@@ -1,11 +1,12 @@
-from ../event_handler import Event, Listener
+from ../event_handler import BuiltinEvent, Entrypoint
 from ./on_player_tick import on_player_tick
 from ../flags/is_charging_bow import is_charging_bow
 
-def handler(event):
-    @Listener(on_player_tick, bypass_fork=True)
-    def player_tick():
-        if is_charging_bow:
-            event.trigger()
 
-on_player_charge_bow = Event(handler=handler, event_id='on_player_charge_bow')
+def handler(event):
+    if is_charging_bow:
+        event.trigger()
+
+
+on_player_charge_bow = BuiltinEvent('on_player_charge_bow')
+on_player_charge_bow.attach_handler(handler, on_player_tick, Entrypoint.EVENT)

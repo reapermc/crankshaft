@@ -1,10 +1,9 @@
-from ../event_handler import Event
+from ../event_handler import BuiltinEvent, Entrypoint
 
 
 def handler(event):
-    merge function_tag minecraft:tick {"replace": false, "values": [event.path('main')]}
+    event.trigger()
 
-    function event.path('main'):
-        event.trigger()
 
-on_tick = Event(handler=handler, event_id='on_tick')
+on_tick = BuiltinEvent('on_tick')
+on_tick.attach_handler(handler, 'minecraft:tick', Entrypoint.FUNCTION_TAG)
