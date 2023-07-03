@@ -2,6 +2,15 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.0 (2023-07-03)
+### Feature
+
+* Revamp event handler completely ([`e36513a`](https://github.com/reapermc/crankshaft/commit/e36513af1487325f07b518464036d89465bd3031))
+
+### Documentation
+
+* Update readme ([`5e02cad`](https://github.com/reapermc/crankshaft/commit/5e02cad91e599b855d0ef922a7a476ca8d9e68cb))
+
 ## v0.3.4 (2023-06-18)
 ### Fix
 
