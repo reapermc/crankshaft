@@ -325,7 +325,9 @@
 ```json
 {
   "replace": false,
-  "values": []
+  "values": [
+    "event_handler_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_player_charge_bow_end/0"
+  ]
 }
 ```
 
@@ -545,15 +547,18 @@ execute as @a at @s run function #reapermc:crankshaft/event_handler/builtin/endp
 
 ```mcfunction
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
-execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 1 run function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow/0/nested_4
+execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 1 run function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow/0/nested_6
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 0 run scoreboard players set @s Config.SCOREBOARD_ROOT.event.on_player_charge_bow 0
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow_end/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow_end/0`
 
 ```mcfunction
-
+function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
+execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 0 run function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow_end/nested_0
+function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
+execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 1 run function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow_end/nested_2
 ```
 
 `@function reapermc:crankshaft/event_handler/builtin/handler/on_player_shoot_bow/0`
@@ -610,7 +615,28 @@ scoreboard players set @s reapermc.crankshaft.flag.is_charging_bow 1
 execute store success score $event_handler_basic3#bool$0 reapermc.wicked_expressions if score @s reapermc.crankshaft.flag.is_charging_bow matches 1
 ```
 
-`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow/0/nested_4`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow_end/nested_1`
+
+```mcfunction
+tag @s remove reapermc.crankshaft.event.on_player_charge_bow_end
+function #reapermc:crankshaft/event_handler/builtin/endpoint/on_player_charge_bow_end
+scoreboard players set @s Config.SCOREBOARD_ROOT.event.on_player_charge_bow_end 0
+```
+
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow_end/nested_0`
+
+```mcfunction
+execute if entity @s[tag=reapermc.crankshaft.event.on_player_charge_bow_end] run function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow_end/nested_1
+```
+
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow_end/nested_2`
+
+```mcfunction
+tag @s add reapermc.crankshaft.event.on_player_charge_bow_end
+scoreboard players add @s Config.SCOREBOARD_ROOT.event.on_player_charge_bow_end 1
+```
+
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow/0/nested_6`
 
 ```mcfunction
 scoreboard players add @s Config.SCOREBOARD_ROOT.event.on_player_charge_bow 1
@@ -686,6 +712,8 @@ scoreboard players reset $event_handler_basic3#bool$0 reapermc.wicked_expression
 scoreboard players reset $event_handler_basic3#bool$0 reapermc.wicked_expressions
 scoreboard players reset $event_handler_basic3#bool$0 reapermc.wicked_expressions
 scoreboard players reset $event_handler_basic3#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic3#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic3#bool$0 reapermc.wicked_expressions
 ```
 
 `@function event_handler_basic3:reapermc/wicked_expressions/safe_load/scoreboard_setup`
@@ -695,6 +723,7 @@ scoreboard objectives add reapermc.wicked_expressions dummy
 scoreboard objectives add Config.SCOREBOARD_ROOT.event.on_player_shoot_bow dummy
 scoreboard objectives add reapermc.crankshaft.event.on_player_shoot_bow used:bow
 scoreboard objectives add reapermc.crankshaft.flag.is_charging_bow dummy
+scoreboard objectives add Config.SCOREBOARD_ROOT.event.on_player_charge_bow_end dummy
 scoreboard objectives add Config.SCOREBOARD_ROOT.event.on_player_charge_bow dummy
 ```
 
@@ -702,6 +731,12 @@ scoreboard objectives add Config.SCOREBOARD_ROOT.event.on_player_charge_bow dumm
 
 ```mcfunction
 tellraw @s ["* ", {"score": {"name": "@s", "objective": "Config.SCOREBOARD_ROOT.event.on_player_shoot_bow"}}]
+```
+
+`@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_player_charge_bow_end/0`
+
+```mcfunction
+tellraw @s ["# ", {"score": {"name": "@s", "objective": "Config.SCOREBOARD_ROOT.event.on_player_charge_bow_end"}}]
 ```
 
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_player_charge_bow/0`
