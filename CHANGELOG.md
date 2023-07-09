@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.0 (2023-07-09)
+### Feature
+
+* Add charge_time parameter to on_player_shoot_bow event ([`f992b4a`](https://github.com/reapermc/crankshaft/commit/f992b4aa176ae821ef744d763c4b03bf4aefa8f7))
+
 ## v0.4.0 (2023-07-03)
 ### Feature
 
