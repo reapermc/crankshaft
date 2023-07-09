@@ -1,3 +1,4 @@
+from wicked_expressions:api import Scoreboard
 from lightning_rod:api import tag, untag
 from ../event_handler import BuiltinEvent, Entrypoint
 from ../config import Config
@@ -6,14 +7,19 @@ from ./on_player_tick import on_player_tick
 
 
 def handler(event):
+    charge_time = Scoreboard(f"Config.SCOREBOARD_ROOT.event.{event.id}")['@s']
     event_fired_tag = f"{Config.TAG_ROOT}.event.{event.id}"
 
     if not is_charging_bow:
-        if entity @s[tag=event_fired_tag] function event.path('nested_0'):
-            untag(event_fired_tag)
-            event.trigger()
+        execute function event.path('nested_0'):
+            if entity @s[tag=event_fired_tag] function event.path('nested_1'):
+                untag(event_fired_tag)
+                event.trigger(charge_time)
+                charge_time = 0
     else:
-        tag(event_fired_tag)
+        execute function event.path('nested_2'):
+            tag(event_fired_tag)
+            charge_time += 1
 
 
 on_player_charge_bow_end = BuiltinEvent('on_player_charge_bow_end')
