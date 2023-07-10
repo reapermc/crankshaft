@@ -7,7 +7,7 @@ from ./on_player_tick import on_player_tick
 
 
 def handler(event):
-    charge_time = Scoreboard(f"{Config.SCOREBOARD_ROOT}.event.{event.id}")['@s']
+    charge_time = Scoreboard(f"{Config.SCOREBOARD_ROOT}.event.{event.id}.charge_time")['@s']
     shoot_tracker = Scoreboard(f"{Config.SCOREBOARD_ROOT}.event.{event.id}", 'used:bow')['@s']
 
     if is_charging_bow:

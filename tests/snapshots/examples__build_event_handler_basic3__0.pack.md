@@ -565,9 +565,9 @@ execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matche
 
 ```mcfunction
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
-execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 1 run scoreboard players add @s reapermc.crankshaft.event.on_player_shoot_bow 1
+execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 1 run scoreboard players add @s reapermc.crankshaft.event.on_player_shoot_bow.charge_time 1
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
-execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 0 run scoreboard players set @s reapermc.crankshaft.event.on_player_shoot_bow 0
+execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 0 run scoreboard players set @s reapermc.crankshaft.event.on_player_shoot_bow.charge_time 0
 execute if score @s reapermc.crankshaft.event.on_player_shoot_bow matches 1.. run function reapermc:crankshaft/event_handler/builtin/handler/on_player_shoot_bow/0/nested_3
 ```
 
@@ -720,7 +720,8 @@ scoreboard players reset $event_handler_basic3#bool$0 reapermc.wicked_expression
 
 ```mcfunction
 scoreboard objectives add reapermc.wicked_expressions dummy
-scoreboard objectives add reapermc.crankshaft.event.on_player_shoot_bow dummy
+scoreboard objectives add reapermc.crankshaft.event.on_player_shoot_bow.charge_time dummy
+scoreboard objectives add reapermc.crankshaft.event.on_player_shoot_bow used:bow
 scoreboard objectives add reapermc.crankshaft.flag.is_charging_bow dummy
 scoreboard objectives add reapermc.crankshaft.event.on_player_charge_bow_end dummy
 scoreboard objectives add reapermc.crankshaft.event.on_player_charge_bow dummy
@@ -729,7 +730,7 @@ scoreboard objectives add reapermc.crankshaft.event.on_player_charge_bow dummy
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_player_shoot_bow/0`
 
 ```mcfunction
-tellraw @s ["* ", {"score": {"name": "@s", "objective": "reapermc.crankshaft.event.on_player_shoot_bow"}}]
+tellraw @s ["* ", {"score": {"name": "@s", "objective": "reapermc.crankshaft.event.on_player_shoot_bow.charge_time"}}]
 ```
 
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_player_charge_bow_end/0`
