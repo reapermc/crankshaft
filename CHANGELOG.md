@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.1 (2023-07-10)
+### Fix
+
+* Event scoreboards fstrings missing curly braces ([`f75b4a7`](https://github.com/reapermc/crankshaft/commit/f75b4a7f47691e1ac27b2b80868fa5267acb4a8e))
+
 ## v0.7.0 (2023-07-09)
 ### Feature
 
