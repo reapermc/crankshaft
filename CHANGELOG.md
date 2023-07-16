@@ -2,6 +2,15 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.0 (2023-07-16)
+### Feature
+
+* Add ir_time parameter to on_player_airborne & on_player_airborne_end event ([`a800805`](https://github.com/reapermc/crankshaft/commit/a800805d10dc62dc1eec556e10f036840f0a9e8c))
+
+### Fix
+
+* Last commit is rushed ([`0ccd531`](https://github.com/reapermc/crankshaft/commit/0ccd531528d89071a743fa583f042428565aac2e))
+
 ## v0.7.2 (2023-07-10)
 ### Fix
 
