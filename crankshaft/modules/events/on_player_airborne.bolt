@@ -1,3 +1,4 @@
+from wicked_expressions:api import Scoreboard
 from ../event_handler import BuiltinEvent, Entrypoint
 from ../flags/is_airborne import is_airborne
 from ./on_player_tick import on_player_tick

@@ -1,3 +1,4 @@
+from wicked_expressions:api import Scoreboard
 from lightning_rod:api import tag, untag
 from ../event_handler import BuiltinEvent, Entrypoint
 from ./on_player_tick import on_player_tick
