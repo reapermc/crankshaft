@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.2 (2023-07-10)
+### Fix
+
+* Scoreboard name conflict in on_player_shoot_bow event ([`53105cd`](https://github.com/reapermc/crankshaft/commit/53105cd35b8106ca755048704a6e210325ac7a22))
+
 ## v0.7.1 (2023-07-10)
 ### Fix
 
