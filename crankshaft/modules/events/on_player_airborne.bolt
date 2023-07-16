@@ -1,12 +1,16 @@
 from ../event_handler import BuiltinEvent, Entrypoint
 from ../flags/is_airborne import is_airborne
 from ./on_player_tick import on_player_tick
-
+from ../config import Config
 
 def handler(event):
-    if is_airborne:
-        event.trigger()
+    air_time = Scoreboard(f"{Config.SCOREBOARD_ROOT}.event.{event.id}.air_time")['@s']
 
+    if is_airborne:
+        air_time += 1
+        event.trigger(air_time)
+    else:
+        air_time = 0
 
 on_player_airborne = BuiltinEvent('on_player_airborne')
 on_player_airborne.attach_handler(handler, on_player_tick, Entrypoint.EVENT)
