@@ -1,7 +1,6 @@
 from lightning_rod:api import revoke_advancement
 from ../event_handler import BuiltinEvent
 
-
 def handler(event):
     advancement_path = event.path('advancement')
     reward_path = event.path('advancement_reward')
@@ -17,11 +16,9 @@ def handler(event):
         }
     }
 
-
     function reward_path:
         revoke_advancement(advancement_path)
         event.trigger()
-
 
 on_player_inventory_change = BuiltinEvent('on_player_inventory_change')
 on_player_inventory_change.attach_handler(handler)

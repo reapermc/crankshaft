@@ -1,4 +1,4 @@
-from wicked_expressions:api import Scoreboard
+from wicked_expressions:api import Scoreboard, StaticVar, Int
 from ../event_handler import BuiltinEvent, Entrypoint
 from ../flags/is_airborne import is_airborne
 from ./on_player_tick import on_player_tick
@@ -6,10 +6,12 @@ from ../config import Config
 
 def handler(event):
     air_time = Scoreboard(f"{Config.SCOREBOARD_ROOT}.event.{event.id}.air_time")['@s']
+    output = StaticVar(Int)
 
     if is_airborne:
         air_time += 1
-        event.trigger(air_time)
+        output = air_time
+        event.trigger(output)
     else:
         air_time = 0
 

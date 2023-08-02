@@ -7,7 +7,7 @@
 ```json
 {
   "pack": {
-    "pack_format": 12,
+    "pack_format": 15,
     "description": ""
   }
 }
@@ -19,13 +19,6 @@
 
 ```mcfunction
 
-```
-
-`@function demo:main/nested_execute_0`
-
-```mcfunction
-function reapermc:crankshaft/flag/builtin/is_in_ground/__condition__
-execute if score $flag_basic3#bool$0 reapermc.wicked_expressions matches 1 run function flag_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_tick/0/nested_0
 ```
 
 ### minecraft
@@ -90,10 +83,17 @@ kill @s
 scoreboard objectives add reapermc.wicked_expressions dummy
 ```
 
+`@function flag_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_tick/0/nested_execute_0`
+
+```mcfunction
+function reapermc:crankshaft/flag/builtin/is_in_ground/__condition__
+execute if score $flag_basic3#bool$0 reapermc.wicked_expressions matches 1 run function flag_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_tick/0/nested_0
+```
+
 `@function flag_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_tick/0`
 
 ```mcfunction
-execute as @e[type=arrow] run function demo:main/nested_execute_0
+execute as @e[type=arrow] run function flag_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_tick/0/nested_execute_0
 ```
 
 ### reapermc
