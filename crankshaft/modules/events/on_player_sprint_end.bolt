@@ -4,7 +4,6 @@ from ./on_player_tick import on_player_tick
 from ../config import Config
 from ../flags/is_sprinting import is_sprinting 
 
-
 def handler(event):
     event_fired_tag = f"{Config.TAG_ROOT}.event.{event.id}"
 
@@ -14,7 +13,6 @@ def handler(event):
             event.trigger()
     else:
         tag(event_fired_tag)
-
 
 on_player_sprint_end = BuiltinEvent('on_player_sprint_end')
 on_player_sprint_end.attach_handler(handler, on_player_tick, Entrypoint.EVENT)

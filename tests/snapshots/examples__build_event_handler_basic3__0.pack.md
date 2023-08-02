@@ -7,7 +7,7 @@
 ```json
 {
   "pack": {
-    "pack_format": 12,
+    "pack_format": 15,
     "description": ""
   }
 }
@@ -593,6 +593,7 @@ execute if score @s reapermc.crankshaft.event.on_player_shoot_bow matches 1.. ru
 
 ```mcfunction
 scoreboard players set @s reapermc.crankshaft.event.on_player_shoot_bow 0
+scoreboard players operation $event_handler_basic3#int$0 reapermc.wicked_expressions = @s reapermc.crankshaft.event.on_player_shoot_bow.charge_time
 function #reapermc:crankshaft/event_handler/builtin/endpoint/on_player_shoot_bow
 ```
 
@@ -619,6 +620,7 @@ execute store success score $event_handler_basic3#bool$0 reapermc.wicked_express
 
 ```mcfunction
 tag @s remove reapermc.crankshaft.event.on_player_charge_bow_end
+scoreboard players operation $event_handler_basic3#int$1 reapermc.wicked_expressions = @s reapermc.crankshaft.event.on_player_charge_bow_end
 function #reapermc:crankshaft/event_handler/builtin/endpoint/on_player_charge_bow_end
 scoreboard players set @s reapermc.crankshaft.event.on_player_charge_bow_end 0
 ```
@@ -640,6 +642,7 @@ scoreboard players add @s reapermc.crankshaft.event.on_player_charge_bow_end 1
 
 ```mcfunction
 scoreboard players add @s reapermc.crankshaft.event.on_player_charge_bow 1
+scoreboard players operation $event_handler_basic3#int$2 reapermc.wicked_expressions = @s reapermc.crankshaft.event.on_player_charge_bow
 function #reapermc:crankshaft/event_handler/builtin/endpoint/on_player_charge_bow
 ```
 
@@ -698,6 +701,7 @@ function #reapermc:crankshaft/event_handler/builtin/endpoint/on_player_charge_bo
 ```mcfunction
 function event_handler_basic3:reapermc/wicked_expressions/safe_load/flush_variable/bool
 function event_handler_basic3:reapermc/wicked_expressions/safe_load/scoreboard_setup
+function event_handler_basic3:reapermc/wicked_expressions/safe_load/flush_variable/int
 ```
 
 `@function event_handler_basic3:reapermc/wicked_expressions/safe_load/flush_variable/bool`
@@ -727,20 +731,28 @@ scoreboard objectives add reapermc.crankshaft.event.on_player_charge_bow_end dum
 scoreboard objectives add reapermc.crankshaft.event.on_player_charge_bow dummy
 ```
 
+`@function event_handler_basic3:reapermc/wicked_expressions/safe_load/flush_variable/int`
+
+```mcfunction
+scoreboard players reset $event_handler_basic3#int$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic3#int$1 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic3#int$2 reapermc.wicked_expressions
+```
+
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_player_shoot_bow/0`
 
 ```mcfunction
-tellraw @s ["* ", {"score": {"name": "@s", "objective": "reapermc.crankshaft.event.on_player_shoot_bow.charge_time"}}]
+tellraw @s ["* ", {"score": {"name": "$event_handler_basic3#int$0", "objective": "reapermc.wicked_expressions"}}]
 ```
 
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_player_charge_bow_end/0`
 
 ```mcfunction
-tellraw @s ["# ", {"score": {"name": "@s", "objective": "reapermc.crankshaft.event.on_player_charge_bow_end"}}]
+tellraw @s ["# ", {"score": {"name": "$event_handler_basic3#int$1", "objective": "reapermc.wicked_expressions"}}]
 ```
 
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_player_charge_bow/0`
 
 ```mcfunction
-tellraw @s {"score": {"name": "@s", "objective": "reapermc.crankshaft.event.on_player_charge_bow"}}
+tellraw @s {"score": {"name": "$event_handler_basic3#int$2", "objective": "reapermc.wicked_expressions"}}
 ```

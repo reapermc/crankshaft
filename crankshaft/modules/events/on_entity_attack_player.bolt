@@ -6,7 +6,6 @@ from ../lib/entity_hit_matching/api import append_player_trigger
 from ../config import Config
 from ../utils import selector
 
-
 def handler(event):
     has_owner = StaticVar(Bool)
     victim_tag = f"{Config.TAG_ROOT}.event.{event.id}.victim"
@@ -45,7 +44,6 @@ def handler(event):
         
         as direct:
             untag(direct_tag)
-
 
 on_entity_attack_player = BuiltinEvent('on_entity_attack_player')
 on_entity_attack_player.attach_handler(handler)

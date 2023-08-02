@@ -3,14 +3,12 @@ from ./on_load import on_load
 from ./on_player_join import on_player_join
 from ../config import Config
 
-
 def load_handler(event):
     as @a at @s:
         event.trigger()
 
 def join_handler(event):
     event.trigger()
-
 
 on_player_load = BuiltinEvent('on_player_load')
 on_player_load.attach_handler(join_handler, on_player_join, Entrypoint.EVENT)

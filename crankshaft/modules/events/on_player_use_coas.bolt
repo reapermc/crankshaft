@@ -3,7 +3,6 @@ from ../event_handler import BuiltinEvent, Entrypoint
 from ./on_player_tick import on_player_tick
 from ../config import Config
 
-
 def handler(event):
     used_coas = Scoreboard(f"{Config.SCOREBOARD_ROOT}.event.{event.id}", 'used:carrot_on_a_stick')['@s']
 
@@ -13,7 +12,6 @@ def handler(event):
     if used_coas > 0:
         used_coas = 0
         event.trigger()
-
 
 on_player_use_coas = BuiltinEvent('on_player_use_coas')
 on_player_use_coas.attach_handler(handler, on_player_tick, Entrypoint.EVENT)
