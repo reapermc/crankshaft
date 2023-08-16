@@ -6,7 +6,7 @@
 
 ## Introduction
 
-**Minecraft version: `1.19.4`**
+**Minecraft version: `1.20.1`**
 
 This library implements various flow control APIs, which excel at speeding up prototyping and creating datapacks.
 
