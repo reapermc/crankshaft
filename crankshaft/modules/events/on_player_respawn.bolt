@@ -1,0 +1,16 @@
+from wicked_expressions:api import Scoreboard
+from ../event_handler import BuiltinEvent, Entrypoint
+from ./on_tick import on_tick
+
+def handler(event):
+    death_tracker = Scoreboard(f"pvpx.event.{event.id}", 'deathCount')['@s']
+
+    # unlike @e, @a does not target dead players
+    # so we use @e to check if the player respawned
+    as @e[type=player]:
+        if death_tracker >= 1:
+            death_tracker = 0
+            event.trigger()
+
+on_player_respawn = BuiltinEvent('on_player_respawn')
+on_player_respawn.attach_handler(handler, on_tick, Entrypoint.EVENT)

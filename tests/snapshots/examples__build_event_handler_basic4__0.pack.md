@@ -21,78 +21,6 @@
 
 ```
 
-### minecraft
-
-`@function_tag minecraft:load`
-
-```json
-{
-  "values": [
-    "flag_basic2:reapermc/wicked_expressions/safe_load",
-    "reapermc:crankshaft/event_handler/builtin/handler/on_load/0"
-  ]
-}
-```
-
-`@function_tag minecraft:tick`
-
-```json
-{
-  "replace": false,
-  "values": [
-    "reapermc:crankshaft/event_handler/builtin/handler/on_tick/0",
-    "reapermc:crankshaft/flag/builtin/is_charging_bow/__root__/p_tick"
-  ]
-}
-```
-
-### flag_basic2
-
-`@function flag_basic2:reapermc/wicked_expressions/safe_load`
-
-```mcfunction
-function flag_basic2:reapermc/wicked_expressions/safe_load/flush_variable/bool
-function flag_basic2:reapermc/wicked_expressions/safe_load/scoreboard_setup
-```
-
-`@function flag_basic2:reapermc/wicked_expressions/safe_load/flush_variable/bool`
-
-```mcfunction
-scoreboard players reset $flag_basic2#bool$0 reapermc.wicked_expressions
-scoreboard players reset $flag_basic2#bool$0 reapermc.wicked_expressions
-scoreboard players reset $flag_basic2#bool$0 reapermc.wicked_expressions
-scoreboard players reset $flag_basic2#bool$0 reapermc.wicked_expressions
-scoreboard players reset $flag_basic2#bool$0 reapermc.wicked_expressions
-scoreboard players reset $flag_basic2#bool$0 reapermc.wicked_expressions
-scoreboard players reset $flag_basic2#bool$0 reapermc.wicked_expressions
-scoreboard players reset $flag_basic2#bool$0 reapermc.wicked_expressions
-scoreboard players reset $flag_basic2#bool$0 reapermc.wicked_expressions
-scoreboard players reset $flag_basic2#bool$0 reapermc.wicked_expressions
-scoreboard players reset $flag_basic2#bool$0 reapermc.wicked_expressions
-scoreboard players reset $flag_basic2#bool$0 reapermc.wicked_expressions
-scoreboard players reset $flag_basic2#bool$0 reapermc.wicked_expressions
-```
-
-`@function flag_basic2:reapermc/wicked_expressions/safe_load/scoreboard_setup`
-
-```mcfunction
-scoreboard objectives add reapermc.wicked_expressions dummy
-scoreboard objectives add reapermc.crankshaft.flag.is_charging_bow dummy
-```
-
-`@function flag_basic2:reapermc/crankshaft/event_handler/builtin/payload/on_player_tick/0`
-
-```mcfunction
-function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
-execute if score $flag_basic2#bool$0 reapermc.wicked_expressions matches 1 run say TRUE
-function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
-execute if score $flag_basic2#bool$0 reapermc.wicked_expressions matches 0 run say FALSE
-function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
-execute if score $flag_basic2#bool$0 reapermc.wicked_expressions matches 1 run say TRUE
-function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
-execute if score $flag_basic2#bool$0 reapermc.wicked_expressions matches 0 run say FALSE
-```
-
 ### reapermc
 
 `@function_tag reapermc:crankshaft/event_handler/builtin/endpoint/on_load`
@@ -151,8 +79,7 @@ execute if score $flag_basic2#bool$0 reapermc.wicked_expressions matches 0 run s
     "reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow/0",
     "reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow_end/0",
     "reapermc:crankshaft/event_handler/builtin/handler/on_player_shoot_bow/0",
-    "reapermc:crankshaft/event_handler/builtin/handler/on_player_death/0",
-    "flag_basic2:reapermc/crankshaft/event_handler/builtin/payload/on_player_tick/0"
+    "reapermc:crankshaft/event_handler/builtin/handler/on_player_death/0"
   ]
 }
 ```
@@ -443,7 +370,9 @@ execute if score $flag_basic2#bool$0 reapermc.wicked_expressions matches 0 run s
 ```json
 {
   "replace": false,
-  "values": []
+  "values": [
+    "event_handler_basic4:reapermc/crankshaft/event_handler/builtin/payload/on_player_death/0"
+  ]
 }
 ```
 
@@ -452,7 +381,9 @@ execute if score $flag_basic2#bool$0 reapermc.wicked_expressions matches 0 run s
 ```json
 {
   "replace": false,
-  "values": []
+  "values": [
+    "event_handler_basic4:reapermc/crankshaft/event_handler/builtin/payload/on_player_respawn/0"
+  ]
 }
 ```
 
@@ -666,55 +597,94 @@ execute as @a at @s run function #reapermc:crankshaft/event_handler/builtin/endp
 
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_death/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_death/0`
 
 ```mcfunction
-
+execute if score @s pvpx.event.on_player_death matches 1.. run function reapermc:crankshaft/event_handler/builtin/handler/on_player_death/0/nested_0
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_respawn/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_respawn/0`
 
 ```mcfunction
-
+execute as @e[type=player] if score @s pvpx.event.on_player_respawn matches 1.. run function reapermc:crankshaft/event_handler/builtin/handler/on_player_respawn/0/nested_1
 ```
 
-`@function reapermc:crankshaft/flag/builtin/is_charging_bow/__root__/p_tick`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_death/0/nested_0`
 
 ```mcfunction
-execute as @a unless score @s reapermc.crankshaft.flag.is_charging_bow matches ..0 run scoreboard players remove @s reapermc.crankshaft.flag.is_charging_bow 1
+scoreboard players set @s pvpx.event.on_player_death 0
+function #reapermc:crankshaft/event_handler/builtin/endpoint/on_player_death
 ```
 
-`@function reapermc:crankshaft/flag/builtin/is_charging_bow/__root__/advancement_reward`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_respawn/0/nested_1`
 
 ```mcfunction
-advancement revoke @s only reapermc:crankshaft/flag/builtin/is_charging_bow/__root__/advancement
-scoreboard players set @s reapermc.crankshaft.flag.is_charging_bow 1
+scoreboard players set @s pvpx.event.on_player_respawn 0
+function #reapermc:crankshaft/event_handler/builtin/endpoint/on_player_respawn
 ```
 
-`@function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__`
+### minecraft
 
-```mcfunction
-execute store success score $flag_basic2#bool$0 reapermc.wicked_expressions if score @s reapermc.crankshaft.flag.is_charging_bow matches 1
-```
-
-`@advancement reapermc:crankshaft/flag/builtin/is_charging_bow/__root__/advancement`
+`@function_tag minecraft:load`
 
 ```json
 {
-  "criteria": {
-    "requirement": {
-      "trigger": "minecraft:using_item",
-      "conditions": {
-        "item": {
-          "items": [
-            "minecraft:bow"
-          ]
-        }
-      }
-    }
-  },
-  "rewards": {
-    "function": "reapermc:crankshaft/flag/builtin/is_charging_bow/__root__/advancement_reward"
-  }
+  "replace": false,
+  "values": [
+    "reapermc:crankshaft/event_handler/builtin/handler/on_load/0",
+    "event_handler_basic4:reapermc/wicked_expressions/safe_load"
+  ]
 }
+```
+
+`@function_tag minecraft:tick`
+
+```json
+{
+  "replace": false,
+  "values": [
+    "reapermc:crankshaft/event_handler/builtin/handler/on_tick/0"
+  ]
+}
+```
+
+### event_handler_basic4
+
+`@function event_handler_basic4:reapermc/wicked_expressions/safe_load`
+
+```mcfunction
+function event_handler_basic4:reapermc/wicked_expressions/safe_load/flush_variable/bool
+function event_handler_basic4:reapermc/wicked_expressions/safe_load/scoreboard_setup
+```
+
+`@function event_handler_basic4:reapermc/wicked_expressions/safe_load/flush_variable/bool`
+
+```mcfunction
+scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
+scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expressions
+```
+
+`@function event_handler_basic4:reapermc/wicked_expressions/safe_load/scoreboard_setup`
+
+```mcfunction
+scoreboard objectives add pvpx.event.on_player_death deathCount
+scoreboard objectives add reapermc.wicked_expressions dummy
+scoreboard objectives add pvpx.event.on_player_respawn deathCount
+```
+
+`@function event_handler_basic4:reapermc/crankshaft/event_handler/builtin/payload/on_player_death/0`
+
+```mcfunction
+say died
+```
+
+`@function event_handler_basic4:reapermc/crankshaft/event_handler/builtin/payload/on_player_respawn/0`
+
+```mcfunction
+say respawned
 ```

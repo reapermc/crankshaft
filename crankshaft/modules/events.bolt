@@ -34,4 +34,5 @@ from ./events/on_player_shoot_bow import on_player_shoot_bow
 from ./events/on_player_inventory_change import on_player_inventory_change
 from ./events/on_player_attack_entity import on_player_attack_entity
 from ./events/on_entity_attack_player import on_entity_attack_player
-
+from ./events/on_player_death import on_player_death
+from ./events/on_player_respawn import on_player_respawn

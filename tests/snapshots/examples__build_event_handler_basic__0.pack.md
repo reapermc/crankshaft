@@ -40,7 +40,8 @@
 {
   "replace": false,
   "values": [
-    "reapermc:crankshaft/event_handler/builtin/handler/on_player_tick/0"
+    "reapermc:crankshaft/event_handler/builtin/handler/on_player_tick/0",
+    "reapermc:crankshaft/event_handler/builtin/handler/on_player_respawn/0"
   ]
 }
 ```
@@ -78,6 +79,7 @@
     "reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow/0",
     "reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow_end/0",
     "reapermc:crankshaft/event_handler/builtin/handler/on_player_shoot_bow/0",
+    "reapermc:crankshaft/event_handler/builtin/handler/on_player_death/0",
     "event_handler_basic:reapermc/crankshaft/event_handler/user_defined/handler/on_player_mainhand_empty/0"
   ]
 }
@@ -364,6 +366,24 @@
 }
 ```
 
+`@function_tag reapermc:crankshaft/event_handler/builtin/endpoint/on_player_death`
+
+```json
+{
+  "replace": false,
+  "values": []
+}
+```
+
+`@function_tag reapermc:crankshaft/event_handler/builtin/endpoint/on_player_respawn`
+
+```json
+{
+  "replace": false,
+  "values": []
+}
+```
+
 `@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_load/0`
 
 ```mcfunction
@@ -569,6 +589,18 @@ execute as @a at @s run function #reapermc:crankshaft/event_handler/builtin/endp
 ```
 
 `@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_entity_attack_player/0`
+
+```mcfunction
+
+```
+
+`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_death/0`
+
+```mcfunction
+
+```
+
+`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_respawn/0`
 
 ```mcfunction
 
