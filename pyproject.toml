@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "crankshaft"
-version = "0.9.0"
+version = "0.9.1"
 description = "Bolt datapack flow control library."
 authors = ["ArcticYeti <arcticyeti1@gmail.com>"]
 license = "MIT"
