@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import ClassVar, Callable, Any
 
+from lightning_rod:api import add_comment
+
 from ./config import Config
 
 # would use an enum here, but bolt doesn't support them
@@ -33,9 +35,11 @@ class BuiltinEvent:
         self.attached_handlers.append(handler_data)
 
         # this is needed so potential entrypoint
-        # function_tag doesn't brick itself
+        # function tag doesn't brick itself
         function handler_path:
-            ...
+            # this comment prevents "delete empty files"
+            # plugins from bricking function tag
+            add_comment('ignore-me')
 
         if entrypoint_type == Entrypoint.FUNCTION_TAG:
             merge function_tag entrypoint {"replace": false, "values": [handler_path]}
@@ -51,6 +55,10 @@ class BuiltinEvent:
         merge function_tag self.endpoint_path {"replace": false, "values": [payload_path]}
 
         append function payload_path:
+            # this comment prevents "delete empty files"
+            # plugins from bricking function tag
+            add_comment('ignore-me')
+
             payload(*self.payload_params)
 
     def trigger(self, *params):

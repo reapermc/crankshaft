@@ -389,183 +389,186 @@
 }
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_load/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_load/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
 `@function reapermc:crankshaft/event_handler/builtin/handler/on_tick/0`
 
 ```mcfunction
+# ignore-me
 function #reapermc:crankshaft/event_handler/builtin/endpoint/on_tick
 ```
 
 `@function reapermc:crankshaft/event_handler/builtin/handler/on_player_tick/0`
 
 ```mcfunction
+# ignore-me
 execute as @a at @s run function #reapermc:crankshaft/event_handler/builtin/endpoint/on_player_tick
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_join/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_join/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_load/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_load/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_load/1`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_load/1`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_jump/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_jump/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_land/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_land/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_sneak_start/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_sneak_start/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_sneak/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_sneak/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_sneak_end/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_sneak_end/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_sprint_start/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_sprint_start/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_sprint/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_sprint/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_sprint_end/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_sprint_end/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_glide_start/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_glide_start/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_glide/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_glide/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_glide_end/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_glide_end/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_swim_start/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_swim_start/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_swim/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_swim/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_swim_end/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_swim_end/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_burn_start/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_burn_start/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_burn/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_burn/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_burn_end/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_burn_end/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_airborne_start/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_airborne_start/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_airborne/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_airborne/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_airborne_end/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_airborne_end/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_use_coas/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_use_coas/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_use_wfoas/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_use_wfoas/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow_start/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow_start/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
 `@function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow/0`
 
 ```mcfunction
+# ignore-me
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 1 run function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow/0/nested_6
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
@@ -575,6 +578,7 @@ execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matche
 `@function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow_end/0`
 
 ```mcfunction
+# ignore-me
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 0 run function reapermc:crankshaft/event_handler/builtin/handler/on_player_charge_bow_end/nested_0
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
@@ -584,6 +588,7 @@ execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matche
 `@function reapermc:crankshaft/event_handler/builtin/handler/on_player_shoot_bow/0`
 
 ```mcfunction
+# ignore-me
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
 execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matches 1 run scoreboard players add @s reapermc.crankshaft.event.on_player_shoot_bow.charge_time 1
 function reapermc:crankshaft/flag/builtin/is_charging_bow/__condition__
@@ -591,34 +596,34 @@ execute if score $event_handler_basic3#bool$0 reapermc.wicked_expressions matche
 execute if score @s reapermc.crankshaft.event.on_player_shoot_bow matches 1.. run function reapermc:crankshaft/event_handler/builtin/handler/on_player_shoot_bow/0/nested_3
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_inventory_change/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_inventory_change/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_attack_entity/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_attack_entity/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_entity_attack_player/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_entity_attack_player/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_death/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_death/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
-`@function(strip_final_newline) reapermc:crankshaft/event_handler/builtin/handler/on_player_respawn/0`
+`@function reapermc:crankshaft/event_handler/builtin/handler/on_player_respawn/0`
 
 ```mcfunction
-
+# ignore-me
 ```
 
 `@function reapermc:crankshaft/event_handler/builtin/handler/on_player_shoot_bow/0/nested_3`
@@ -774,17 +779,20 @@ scoreboard players reset $event_handler_basic3#int$2 reapermc.wicked_expressions
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_player_shoot_bow/0`
 
 ```mcfunction
+# ignore-me
 tellraw @s ["* ", {"score": {"name": "$event_handler_basic3#int$0", "objective": "reapermc.wicked_expressions"}}]
 ```
 
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_player_charge_bow_end/0`
 
 ```mcfunction
+# ignore-me
 tellraw @s ["# ", {"score": {"name": "$event_handler_basic3#int$1", "objective": "reapermc.wicked_expressions"}}]
 ```
 
 `@function event_handler_basic3:reapermc/crankshaft/event_handler/builtin/payload/on_player_charge_bow/0`
 
 ```mcfunction
+# ignore-me
 tellraw @s {"score": {"name": "$event_handler_basic3#int$2", "objective": "reapermc.wicked_expressions"}}
 ```
