@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.0 (2023-08-27)
+
+### Feature
+
+* Add on_player_death and on_player_respawn events ([`e52a5a2`](https://github.com/reapermc/crankshaft/commit/e52a5a27c7e9bdc7b1a13763210421ac461f9f73))
+
 ## v0.8.1 (2023-08-02)
 
 ### Fix
