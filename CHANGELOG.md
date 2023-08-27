@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.1 (2023-08-02)
+
+### Fix
+
+* Changed certain event outputs to a static variable ([`5806fc8`](https://github.com/reapermc/crankshaft/commit/5806fc88d4f5a3dbdeed83f1d30b33fb5a31179e))
+
 ## v0.8.0 (2023-07-16)
 ### Feature
 
