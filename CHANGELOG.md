@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.1 (2023-08-27)
+
+### Fix
+
+* Wrong objective namespace for events ([`520cf6a`](https://github.com/reapermc/crankshaft/commit/520cf6a6c0e98f0b4b06d3cd9aa72c17227a480a))
+
 ## v0.9.0 (2023-08-27)
 
 ### Feature
