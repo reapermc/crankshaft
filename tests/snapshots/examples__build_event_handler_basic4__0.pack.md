@@ -600,26 +600,26 @@ execute as @a at @s run function #reapermc:crankshaft/event_handler/builtin/endp
 `@function reapermc:crankshaft/event_handler/builtin/handler/on_player_death/0`
 
 ```mcfunction
-execute if score @s pvpx.event.on_player_death matches 1.. run function reapermc:crankshaft/event_handler/builtin/handler/on_player_death/0/nested_0
+execute if score @s reapermc.crankshaft.event.on_player_death matches 1.. run function reapermc:crankshaft/event_handler/builtin/handler/on_player_death/0/nested_0
 ```
 
 `@function reapermc:crankshaft/event_handler/builtin/handler/on_player_respawn/0`
 
 ```mcfunction
-execute as @e[type=player] if score @s pvpx.event.on_player_respawn matches 1.. run function reapermc:crankshaft/event_handler/builtin/handler/on_player_respawn/0/nested_1
+execute as @e[type=player] if score @s reapermc.crankshaft.event.on_player_respawn matches 1.. run function reapermc:crankshaft/event_handler/builtin/handler/on_player_respawn/0/nested_1
 ```
 
 `@function reapermc:crankshaft/event_handler/builtin/handler/on_player_death/0/nested_0`
 
 ```mcfunction
-scoreboard players set @s pvpx.event.on_player_death 0
+scoreboard players set @s reapermc.crankshaft.event.on_player_death 0
 function #reapermc:crankshaft/event_handler/builtin/endpoint/on_player_death
 ```
 
 `@function reapermc:crankshaft/event_handler/builtin/handler/on_player_respawn/0/nested_1`
 
 ```mcfunction
-scoreboard players set @s pvpx.event.on_player_respawn 0
+scoreboard players set @s reapermc.crankshaft.event.on_player_respawn 0
 function #reapermc:crankshaft/event_handler/builtin/endpoint/on_player_respawn
 ```
 
@@ -672,9 +672,9 @@ scoreboard players reset $event_handler_basic4#bool$0 reapermc.wicked_expression
 `@function event_handler_basic4:reapermc/wicked_expressions/safe_load/scoreboard_setup`
 
 ```mcfunction
-scoreboard objectives add pvpx.event.on_player_death deathCount
+scoreboard objectives add reapermc.crankshaft.event.on_player_death deathCount
 scoreboard objectives add reapermc.wicked_expressions dummy
-scoreboard objectives add pvpx.event.on_player_respawn deathCount
+scoreboard objectives add reapermc.crankshaft.event.on_player_respawn deathCount
 ```
 
 `@function event_handler_basic4:reapermc/crankshaft/event_handler/builtin/payload/on_player_death/0`
