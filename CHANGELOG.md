@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.2 (2023-08-27)
+
+### Fix
+
+* 'remove empty files' plugins break events ([`eeedecf`](https://github.com/reapermc/crankshaft/commit/eeedecf61f0a600508efef9eeee3e1d40d09ae48))
+
 ## v0.9.1 (2023-08-27)
 
 ### Fix
