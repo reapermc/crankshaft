@@ -1,121 +1,161 @@
 from dataclasses import dataclass, field
-from typing import ClassVar, Callable, Any
-
-from lightning_rod:api import add_comment
-
+from typing import ClassVar, Type, Callable, Any
+from ./utils import decorator_factory, logger, pascal_to_snake_case
 from ./config import Config
-
-# would use an enum here, but bolt doesn't support them
-class Entrypoint:
-    FUNCTION_TAG = 'function_tag'
-    EVENT = 'event'
+import inspect
 
 @dataclass
 class BuiltinEvent:
-    id: str
+    event_id: ClassVar[str] = ''
+    deployed: ClassVar[bool] = False
+    path: ClassVar
 
-    is_active: bool = field(init=False, default=False)
-    handler_index: int = field(init=False, repr=False, default=0)
-    payload_index: int = field(init=False, repr=False, default=0)
-    attached_handlers: list[tuple] = field(init=False, repr=False, default_factory=list)
-    parent_events: list[Callable] = field(init=False, repr=False, default_factory=list)
-    payload_params: Any = field(init=False, repr=False, default=None)
+    def __init_subclass__(cls, **kwargs):
+        """Runs at the end of class definition."""
 
-    LOCAL_PATH: ClassVar[str] = f"{Config.ROOT_LOCAL}/event_handler/builtin"
-    GLOBAL_PATH: ClassVar[str] = f"{Config.ROOT}/event_handler/builtin"
+        # this is done so that '@supports_events'
+        # is not necessary for event definitions 
+        cls = supports_events(cls)
+
+        cls._patch_class_defaults()
+        cls._register_event()
+        super().__init_subclass__(**kwargs)
 
     def __post_init__(self):
-        self.endpoint_path = f"{self.GLOBAL_PATH}/endpoint/{self.id}"
+        """Runs after the event is deployed using the '.deploy()' method."""
+        self._deploy_handler()
 
-        self._initialize_endpoint()
+    @classmethod
+    def deploy(cls):
+        event_instance = cls()
+        DEPLOYED_EVENTS.append(event_instance)
+        cls.deployed = True
 
-    def attach_handler(self, handler: Callable, entrypoint: Any = None, entrypoint_type: str = None):
-        handler_path = self._generate_handler_path()
-        handler_data = (handler, handler_path)
-        self.attached_handlers.append(handler_data)
+    def add_local_payload(self, payload: Callable, method_first_arg: Any = None):
+        merge function_tag self.path['local_payload_fork'] {"values": [self.path['local_payload']]}
+        append function self.path['local_payload']:
+            if method_first_arg == None:
+                payload()
+            else:
+                payload(method_first_arg)
 
-        # this is needed so potential entrypoint
-        # function tag doesn't brick itself
-        function handler_path:
-            # this comment prevents "delete empty files"
-            # plugins from bricking function tag
-            add_comment('ignore-me')
+    def add_global_payload(self, payload: Callable, method_first_arg: Any = None):
+        append function temp:temp:
+            if method_first_arg == None:
+                payload()
+            else:
+                payload(method_first_arg)
 
-        if entrypoint_type == Entrypoint.FUNCTION_TAG:
-            merge function_tag entrypoint {"replace": false, "values": [handler_path]}
-        elif entrypoint_type == Entrypoint.EVENT:
-            # entrypoint.endpoint_path directly
-            # hooks into the target parent event
-            merge function_tag entrypoint.endpoint_path {"replace": false, "values": [handler_path]}
-            self.parent_events.append(entrypoint)         
+    def generate_path(self, subpath: str):
+        return f"{self.path['handler_dir']}/{subpath}"
 
-    def attach_payload(self, payload: Callable):
-        payload_path = self._generate_payload_path()
+    def trigger(self):
+        execute function self.path['on_trigger']:
+            function f"#{self.path['local_payload_fork']}"
 
-        merge function_tag self.endpoint_path {"replace": false, "values": [payload_path]}
+    def _deploy_handler(self):
+        if hasattr(self, '__event_init__') and callable(self.__event_init__):
+            self.__event_init__()
 
-        append function payload_path:
-            # this comment prevents "delete empty files"
-            # plugins from bricking function tag
-            add_comment('ignore-me')
+    @classmethod
+    def _patch_class_defaults(cls):
+        cls.event_id = pascal_to_snake_case(cls.__name__)
 
-            payload(*self.payload_params)
+        LOCAL_PATH = f"{Config.GLOBAL_DIR}/builtin_event/{cls.event_id}"
+        GLOBAL_PATH = f"{Config.GLOBAL_DIR}/builtin_event/{cls.event_id}"
+        cls.path = {
+            'on_trigger': f"{GLOBAL_PATH}/on_trigger",
+            'handler_dir': f"{GLOBAL_PATH}/handler_dir",
+            'local_payload': f"{LOCAL_PATH}/local_payload",
+            'local_payload_fork': f"{GLOBAL_PATH}/local_payload_fork",
+            'global_payload': f"{GLOBAL_PATH}/global_payload",
+        }
 
-    def trigger(self, *params):
-        self.payload_params = params
-        function f"#{self.endpoint_path}"
+    @classmethod
+    def _register_event(cls):
+        REGISTERED_EVENTS[cls.event_id] = cls
 
-    def activate(self):
-        self._activate_parent_events()
-        self._deploy_handlers()
-        self.is_active = True
+REGISTERED_EVENTS: dict[str, Type[BuiltinEvent]] = {}
+DEPLOYED_EVENTS: list[BuiltinEvent] = []
 
-    def path(self, subpath: str):
-        return f"{self.GLOBAL_PATH}/handler/{self.id}/{subpath}"
+def _get_registered_event_class_by_id(event_id: str) -> Type[BuiltinEvent]:
+    event_class = REGISTERED_EVENTS.get(event_id)
 
-    def _activate_parent_events(self):
-        for event in self.parent_events:
-            if event.is_active:
-                continue
+    if event_class == None:
+        logger.error(f"Unknown event id '{event_id}'")
+        exit()
 
-            event.activate()
+    return event_class
 
-    def _deploy_handlers(self):
-        for handler, handler_path in self.attached_handlers:
-            append function handler_path:
-                handler(self)
+def _get_deployed_event_by_id(event_id: str) -> BuiltinEvent:
+    for event in DEPLOYED_EVENTS:
+        if event.event_id == event_id:
+            return event
 
-    def _generate_handler_path(self):
-        base_path = f"{self.GLOBAL_PATH}/handler/{self.id}"
-        index = self.handler_index
-        self.handler_index += 1
+def _initialize_listener(
+    event_id: str,
+    payload: Callable,
+    method_first_arg: Any = None,
+    is_global_payload: bool = False
+):
+    event_class = _get_registered_event_class_by_id(event_id)
+    if not event_class.deployed:
+        event_class.deploy()
 
-        return f"{base_path}/{index}"
+    event = _get_deployed_event_by_id(event_id)
 
-    def _generate_payload_path(self):
-        base_path = f"{self.LOCAL_PATH}/payload/{self.id}"
-        index = self.payload_index
-        self.payload_index += 1
+    if is_global_payload:
+        event.add_global_payload(payload, method_first_arg=method_first_arg)
+    else:
+        event.add_local_payload(payload, method_first_arg=method_first_arg)
 
-        return f"{base_path}/{index}"
+@decorator_factory
+def event_listener(func, *args, **kwargs):
+    """Decorate a function or method to turn it into an event listener."""
+    event_id = func.__name__
+    func_is_method = '.' in func.__qualname__
 
-    def _initialize_endpoint(self):
-        merge function_tag self.endpoint_path {"replace": false, "values": []}
+    if func_is_method:
+        func._is_instance_event_listener = True
+        return func
 
-@dataclass
-class Event(BuiltinEvent):
-    # user defined events only run off the local namespace
-    # so we simply inherit and set GLOBAL_PATH to a local one
+    _initialize_listener(event_id=event_id, payload=func)
 
-    LOCAL_PATH: ClassVar[str] = f"{Config.ROOT_LOCAL}/event_handler/user_defined"
-    GLOBAL_PATH: ClassVar[str] = f"{Config.ROOT_LOCAL}/event_handler/user_defined"
+@decorator_factory
+def class_event_listener(func, *args, **kwargs):
+    """Decorate a method to turn it into a class event listener."""
+    event_id = func.__name__
+    func._is_class_event_listener = True
+    return func
 
-@dataclass
-class Listener:
-    event: BuiltinEvent | Event
+def supports_events(cls):
+    """Decorate a class to enable support for '@event_listener' on bound methods."""
 
-    def __call__(self, payload: Callable):
-        if not self.event.is_active:
-            self.event.activate()
+    def modified_init(self, *args, **kwargs):
+        for listener in instance_listeners:
+            _initialize_listener(event_id=listener.__name__, payload=member, method_first_arg=self)
+        original_init(self, *args, **kwargs)
 
-        self.event.attach_payload(payload)
+    is_builtin_case = issubclass(cls, BuiltinEvent)
+
+    instance_listeners = []
+    class_listeners = []
+
+    for _, member in inspect.getmembers(cls):
+        if not inspect.isfunction(member):
+            continue
+        if hasattr(member, '_is_instance_event_listener'):
+            instance_listeners.append(member)
+        elif hasattr(member, '_is_class_event_listener'):
+            class_listeners.append(member)
+
+    if class_listeners:
+        for listener in class_listeners:
+            _initialize_listener(event_id=listener.__name__, payload=listener, method_first_arg=cls)
+    if instance_listeners:
+        # wraps '__init__' with code that wakes up
+        # all instance event listeners on class init
+        original_init = cls.__init__
+        cls.__init__ = modified_init
+
+    return cls

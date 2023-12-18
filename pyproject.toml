@@ -28,7 +28,7 @@ keywords = [
 include = ["crankshaft/py.typed"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.12"
 beet = ">=0.84.0"
 mecha = ">=0.67.0"
 bolt = ">=0.31.0"

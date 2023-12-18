@@ -1,22 +1,18 @@
-from crankshaft:api import Event, Entrypoint, Listener
-from crankshaft:events import on_player_tick
+from crankshaft:api import event_listener, supports_events, class_event_listener
 
+@event_listener
+def load():
+    say hello!
 
-def handler(event):
-    unless data entity @s SelectedItem:
-        event.trigger()
+# @supports_events
+# class A:
+#     @class_event_listener
+#     def load(cls):
+#         say foo! <class>
 
-on_player_mainhand_empty = Event('on_player_mainhand_empty')
-on_player_mainhand_empty.attach_handler(handler, on_player_tick, Entrypoint.EVENT)
+#     @event_listener
+#     def tick(self):
+#         help
 
-
-
-@Listener(on_player_mainhand_empty)
-def _():
-    say hi!
-
-
-
-
-
-
+# a = A()
+# a = A()
