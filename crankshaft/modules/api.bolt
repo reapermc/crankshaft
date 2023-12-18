@@ -1,3 +1,10 @@
-from ./defer import defer
-from ./event_handler import BuiltinEvent, Event, Entrypoint, Listener
-from ./flag import Flag, CustomFlag
+# these 2 are necessary for preloading
+import ./events as _
+# import ./flags as _
+
+from ./event_handler import event_listener, class_event_listener, supports_events
+# from ./flag_handler import flag, Flag
+
+
+
+

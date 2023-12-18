@@ -1,10 +1,23 @@
 import logging
-from mecha import Mecha
+import re
 from ./config import Config
 
-mc = ctx.inject(Mecha)
 logger = logging.getLogger(Config.LIBRARY_NAME)
 
+def pascal_to_snake_case(text: str) -> str:
+    pattern = re.compile(r'(?<!^)(?=[A-Z])')
+    out = pattern.sub('_', text).lower()
+    if out[0] == '_':
+        out = out[1:]
+    return out
 
-def selector(value):
-    return mc.parse(value, using="selector")
+def decorator_factory(decorator_func):
+    """Turns decorated function into a decorator itself."""
+    def wrapper(*args, **kwargs):
+        if args and callable(args[0]):
+            return decorator_func(args[0])
+        else:
+            def inner_wrapper(func):
+                return decorator_func(func, *args, **kwargs)
+            return inner_wrapper
+    return wrapper
