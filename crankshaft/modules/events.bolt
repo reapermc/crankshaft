@@ -1,4 +1,4 @@
-from ./event_handler import BuiltinEvent, event_listener
+from ./event_handler import BuiltinEvent, event
 
 class Load(BuiltinEvent):
     def __event_init__(self):
@@ -16,8 +16,8 @@ class Tick(BuiltinEvent):
         function path:
             self.trigger()
 
-class PlayerTick(BuiltinEvent):
-    @event_listener
-    def load(self):
-        print('loaaaaaaaaaaaad')
-        say looooooooaaaaaaaaaaaaadddddd
+# class PlayerTick(BuiltinEvent):
+#     @event
+#     def load(self):
+#         print('loaaaaaaaaaaaad')
+#         say looooooooaaaaaaaaaaaaadddddd

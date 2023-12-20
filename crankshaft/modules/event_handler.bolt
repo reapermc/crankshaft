@@ -1,8 +1,12 @@
 from dataclasses import dataclass, field
 from typing import ClassVar, Type, Callable, Any
-from ./utils import decorator_factory, logger, pascal_to_snake_case
+from ./utils import decorator_factory, logger, pascal_to_snake_case, copy_reverse_clear
 from ./config import Config
 import inspect
+import types
+
+registered_events: dict[str, Type] = {}
+deployed_events: list = []
 
 @dataclass
 class BuiltinEvent:
@@ -28,7 +32,7 @@ class BuiltinEvent:
     @classmethod
     def deploy(cls):
         event_instance = cls()
-        DEPLOYED_EVENTS.append(event_instance)
+        deployed_events.append(event_instance)
         cls.deployed = True
 
     def add_local_payload(self, payload: Callable, method_first_arg: Any = None):
@@ -40,7 +44,7 @@ class BuiltinEvent:
                 payload(method_first_arg)
 
     def add_global_payload(self, payload: Callable, method_first_arg: Any = None):
-        append function temp:temp:
+        append function self.path['global_payload']:
             if method_first_arg == None:
                 payload()
             else:
@@ -61,7 +65,7 @@ class BuiltinEvent:
     def _patch_class_defaults(cls):
         cls.event_id = pascal_to_snake_case(cls.__name__)
 
-        LOCAL_PATH = f"{Config.GLOBAL_DIR}/builtin_event/{cls.event_id}"
+        LOCAL_PATH = f"{Config.LOCAL_DIR}/builtin_event/{cls.event_id}"
         GLOBAL_PATH = f"{Config.GLOBAL_DIR}/builtin_event/{cls.event_id}"
         cls.path = {
             'on_trigger': f"{GLOBAL_PATH}/on_trigger",
@@ -73,13 +77,15 @@ class BuiltinEvent:
 
     @classmethod
     def _register_event(cls):
-        REGISTERED_EVENTS[cls.event_id] = cls
+        registered_events[cls.event_id] = cls
 
-REGISTERED_EVENTS: dict[str, Type[BuiltinEvent]] = {}
-DEPLOYED_EVENTS: list[BuiltinEvent] = []
+@dataclass
+class ClassDefinitionMethodQueue:
+    instance_listeners: ClassVar[list[Callable]] = []
+    class_listeners: ClassVar[list[Callable]] = []
 
 def _get_registered_event_class_by_id(event_id: str) -> Type[BuiltinEvent]:
-    event_class = REGISTERED_EVENTS.get(event_id)
+    event_class = registered_events.get(event_id)
 
     if event_class == None:
         logger.error(f"Unknown event id '{event_id}'")
@@ -88,7 +94,7 @@ def _get_registered_event_class_by_id(event_id: str) -> Type[BuiltinEvent]:
     return event_class
 
 def _get_deployed_event_by_id(event_id: str) -> BuiltinEvent:
-    for event in DEPLOYED_EVENTS:
+    for event in deployed_events:
         if event.event_id == event_id:
             return event
 
@@ -110,52 +116,67 @@ def _initialize_listener(
         event.add_local_payload(payload, method_first_arg=method_first_arg)
 
 @decorator_factory
-def event_listener(func, *args, **kwargs):
-    """Decorate a function or method to turn it into an event listener."""
+def event(func, *args, **kwargs):
     event_id = func.__name__
     func_is_method = '.' in func.__qualname__
 
     if func_is_method:
-        func._is_instance_event_listener = True
+        ClassDefinitionMethodQueue.instance_listeners.append(func)
         return func
 
-    _initialize_listener(event_id=event_id, payload=func)
+    event_class = _get_registered_event_class_by_id(event_id)
+    if not event_class.deployed:
+        event_class.deploy()
+
+    event = _get_deployed_event_by_id(event_id)
+    event.add_local_payload(func)
 
 @decorator_factory
-def class_event_listener(func, *args, **kwargs):
-    """Decorate a method to turn it into a class event listener."""
+def class_event(func, *args, **kwargs):
     event_id = func.__name__
-    func._is_class_event_listener = True
+
+    ClassDefinitionMethodQueue.class_listeners.append(func)
     return func
 
 def supports_events(cls):
     """Decorate a class to enable support for '@event_listener' on bound methods."""
 
-    def modified_init(self, *args, **kwargs):
-        for listener in instance_listeners:
-            _initialize_listener(event_id=listener.__name__, payload=member, method_first_arg=self)
-        original_init(self, *args, **kwargs)
+    # def append_init(old_init: Callable, cls: Type, func: Callable, is_payload_class_method: bool):
+    def prepend_init(cls: Type, method: Callable):
+        old_init = cls.__init__
 
+        def new_init(self, *args, **kwargs):
+            event_id = method.__name__
+            event_class = _get_registered_event_class_by_id(event_id)
+
+            if not event_class.deployed:
+                event_class.deploy()
+
+            event = _get_deployed_event_by_id(event_id)
+
+            event.add_local_payload(method, method_first_arg=self)
+            # if is_payload_class_method:
+            # event.add_local_payload(method, method_first_arg=cls)
+            # else:
+            #     event.add_local_payload(payload, method_first_arg=self)
+            old_init(self, *args, **kwargs)
+
+        cls.__init__ = new_init
+
+    # TODO: this will be used for event definition behavior
     is_builtin_case = issubclass(cls, BuiltinEvent)
 
-    instance_listeners = []
-    class_listeners = []
+    instance_listeners = copy_reverse_clear(ClassDefinitionMethodQueue.instance_listeners)
+    class_listeners = copy_reverse_clear(ClassDefinitionMethodQueue.class_listeners)
+    
+    for method in instance_listeners:
+        new_method_name = f"_event_listener_{id(method)}"
+        setattr(cls, new_method_name, method)
+        prepend_init(cls, method)
 
-    for _, member in inspect.getmembers(cls):
-        if not inspect.isfunction(member):
-            continue
-        if hasattr(member, '_is_instance_event_listener'):
-            instance_listeners.append(member)
-        elif hasattr(member, '_is_class_event_listener'):
-            class_listeners.append(member)
-
-    if class_listeners:
-        for listener in class_listeners:
-            _initialize_listener(event_id=listener.__name__, payload=listener, method_first_arg=cls)
-    if instance_listeners:
-        # wraps '__init__' with code that wakes up
-        # all instance event listeners on class init
-        original_init = cls.__init__
-        cls.__init__ = modified_init
+        # if hasattr(method, '_is_instance_event_listener'):
+            # cls.__init__ = modify_init(cls.__init__, cls, payload=method, is_payload_class_method=True)
+        # elif hasattr(method, '_is_class_event_listener'):
+            # cls.__init__ = modify_init(cls.__init__, cls, payload=method, is_payload_class_method=False)
 
     return cls
