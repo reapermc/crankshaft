@@ -1,6 +1,6 @@
-from crankshaft:api import event_listener, supports_events, class_event_listener
+from crankshaft:api import event
 
-@event_listener
+@event
 def load():
     say hello!
 

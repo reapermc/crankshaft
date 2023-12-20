@@ -21,3 +21,9 @@ def decorator_factory(decorator_func):
                 return decorator_func(func, *args, **kwargs)
             return inner_wrapper
     return wrapper
+
+def copy_reverse_clear(list_object: list) -> list:
+    new_list = list_object.copy()
+    new_list.reverse()
+    list_object.clear()
+    return new_list
