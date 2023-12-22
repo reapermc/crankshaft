@@ -27,3 +27,8 @@ def copy_reverse_clear(list_object: list) -> list:
     new_list.reverse()
     list_object.clear()
     return new_list
+
+def copy_clear(list_object: list) -> list:
+    new_list = list_object.copy()
+    list_object.clear()
+    return new_list

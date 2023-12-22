@@ -16,5 +16,5 @@ class A:
         print('<instance_event> load 2!')
 
 a = A()
-a = A()
+# a = A()
 # a = A()
