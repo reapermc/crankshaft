@@ -35,20 +35,20 @@ class BuiltinEvent:
         deployed_events.append(event_instance)
         cls.deployed = True
 
-    def add_local_payload(self, payload: Callable, method_first_arg: Any = None):
+    def add_local_payload(self, func: Callable, method_first_arg: Any = None):
         merge function_tag self.path['local_payload_fork'] {"values": [self.path['local_payload']]}
         append function self.path['local_payload']:
             if method_first_arg == None:
-                payload()
+                func()
             else:
-                payload(method_first_arg)
+                func(method_first_arg)
 
-    def add_global_payload(self, payload: Callable, method_first_arg: Any = None):
+    def add_global_payload(self, func: Callable, method_first_arg: Any = None):
         append function self.path['global_payload']:
             if method_first_arg == None:
-                payload()
+                func()
             else:
-                payload(method_first_arg)
+                func(method_first_arg)
 
     def generate_path(self, subpath: str):
         return f"{self.path['handler_dir']}/{subpath}"
@@ -83,6 +83,7 @@ class BuiltinEvent:
 class ClassDefinitionMethodQueue:
     instance_listeners: ClassVar[list[Callable]] = []
     class_listeners: ClassVar[list[Callable]] = []
+    lazy_listeners: ClassVar[list[Callable]] = []
 
 def _get_registered_event_class_by_id(event_id: str) -> Type[BuiltinEvent]:
     event_class = registered_events.get(event_id)
@@ -130,6 +131,7 @@ def event(func, *args, **kwargs):
 
     event = _get_deployed_event_by_id(event_id)
     event.add_local_payload(func)
+    return func
 
 @decorator_factory
 def class_event(func, *args, **kwargs):
@@ -138,10 +140,16 @@ def class_event(func, *args, **kwargs):
     ClassDefinitionMethodQueue.class_listeners.append(func)
     return func
 
+@decorator_factory
+def lazy_event(func, *args, **kwargs):
+    event_id = func.__name__
+
+    ClassDefinitionMethodQueue.lazy_listeners.append(func)
+    return func
+
 def supports_events(cls):
     """Decorate a class to enable support for '@event_listener' on bound methods."""
 
-    # def append_init(old_init: Callable, cls: Type, func: Callable, is_payload_class_method: bool):
     def prepend_init(cls: Type, method: Callable):
         old_init = cls.__init__
 
@@ -155,10 +163,6 @@ def supports_events(cls):
             event = _get_deployed_event_by_id(event_id)
 
             event.add_local_payload(method, method_first_arg=self)
-            # if is_payload_class_method:
-            # event.add_local_payload(method, method_first_arg=cls)
-            # else:
-            #     event.add_local_payload(payload, method_first_arg=self)
             old_init(self, *args, **kwargs)
 
         cls.__init__ = new_init
@@ -168,15 +172,33 @@ def supports_events(cls):
 
     instance_listeners = copy_reverse_clear(ClassDefinitionMethodQueue.instance_listeners)
     class_listeners = copy_reverse_clear(ClassDefinitionMethodQueue.class_listeners)
-    
+    lazy_listeners = copy_reverse_clear(ClassDefinitionMethodQueue.lazy_listeners)
+
     for method in instance_listeners:
-        new_method_name = f"_event_listener_{id(method)}"
-        setattr(cls, new_method_name, method)
+        setattr(cls, f"_crankshaft_event_listener_{id(method)}", method)
         prepend_init(cls, method)
 
-        # if hasattr(method, '_is_instance_event_listener'):
-            # cls.__init__ = modify_init(cls.__init__, cls, payload=method, is_payload_class_method=True)
-        # elif hasattr(method, '_is_class_event_listener'):
-            # cls.__init__ = modify_init(cls.__init__, cls, payload=method, is_payload_class_method=False)
+    for method in class_listeners:
+        event_id = method.__name__
+        event_class = _get_registered_event_class_by_id(event_id)
+
+        if not event_class.deployed:
+            event_class.deploy()
+
+        event = _get_deployed_event_by_id(event_id)
+        event.add_local_payload(method, method_first_arg=cls)
+
+    if lazy_listeners and not hasattr(cls, '_crankshaft_lazy_listeners'):
+        cls._crankshaft_lazy_listeners = []
+
+    for method in lazy_listeners:
+        # if method_id in cls._crankshaft_lazy_listeners:
+        setattr(cls, f"_crankshaft_lazy_listener_{id(method)}", method)
+        x = getattr(cls, f"_crankshaft_lazy_listener_{id(method)}")
+
+        del cls._crankshaft_lazy_listeners
+        prepend_init(cls, method)
+
+        # cls._crankshaft_awoken_lazy_listeners.append(method_id)
 
     return cls

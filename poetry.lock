@@ -13,13 +13,13 @@ files = [
 
 [[package]]
 name = "beet"
-version = "0.99.3"
+version = "0.100.0"
 description = "The Minecraft pack development kit"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "beet-0.99.3-py3-none-any.whl", hash = "sha256:160ccb6ea9ccfb5f315c3f23be0331e0db2f6856e7181cbabd5920c7b7c3da21"},
-    {file = "beet-0.99.3.tar.gz", hash = "sha256:8a6feda95f70a5505b28fe08e530437288f9e86bf81d3f1f866a90698c077db7"},
+    {file = "beet-0.100.0-py3-none-any.whl", hash = "sha256:fe690659d461b9210cd810c8f7851bf32a7b74ceacaaadf8ae48aad5108f4759"},
+    {file = "beet-0.100.0.tar.gz", hash = "sha256:1c7bd7a0583f64b07babfb66200028bd6e1974fa02806bd4e406809d91738bd3"},
 ]
 
 [package.dependencies]
@@ -72,18 +72,18 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "bolt"
-version = "0.42.0"
+version = "0.44.0"
 description = "Supercharge Minecraft commands with Python"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "bolt-0.42.0-py3-none-any.whl", hash = "sha256:0b0092bf3da877a9e774905be846e59eadedbafabf32823aba02f0f9a6001692"},
-    {file = "bolt-0.42.0.tar.gz", hash = "sha256:edf7a69a47b91fc835cc798c921d4cd4047c2f7e2507ae8b5eb481b49bf18946"},
+    {file = "bolt-0.44.0-py3-none-any.whl", hash = "sha256:7f8405bef1943a113c545386d61fbbe02272d221ed261cc28ca3dfdc03cecb7c"},
+    {file = "bolt-0.44.0.tar.gz", hash = "sha256:17fda5d2d90ff8f8308559295373ec681ea17527579c46fcf0e7ba9fc9c05cb4"},
 ]
 
 [package.dependencies]
-beet = ">=0.99.1"
-mecha = ">=0.84.0"
+beet = ">=0.100.0"
+mecha = ">=0.85.1"
 
 [[package]]
 name = "bolt-expressions"
@@ -710,17 +710,17 @@ files = [
 
 [[package]]
 name = "mecha"
-version = "0.84.0"
+version = "0.85.2"
 description = "A powerful Minecraft command library"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "mecha-0.84.0-py3-none-any.whl", hash = "sha256:03257a4c787b28c4a1aff0e3fe7cd237d5556b260d6a46be1aac849d001e8b2b"},
-    {file = "mecha-0.84.0.tar.gz", hash = "sha256:04413f589ecf0e841eacafd41cbb1118f2c066a317e05ba83042abdd44089594"},
+    {file = "mecha-0.85.2-py3-none-any.whl", hash = "sha256:172d4ebd94451960fd893b0e3e286a24619b550cc09f9114a44efd9e9aacbfd1"},
+    {file = "mecha-0.85.2.tar.gz", hash = "sha256:843bc4f20cb245ba6ef02a5622348ebf41c0460ba4f9e517c7deb611618f6327"},
 ]
 
 [package.dependencies]
-beet = ">=0.99.1"
+beet = ">=0.100.0"
 tokenstream = ">=1.7.0,<2.0.0"
 
 [[package]]
