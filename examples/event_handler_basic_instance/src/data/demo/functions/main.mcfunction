@@ -7,14 +7,14 @@ class A:
 
     @event
     def load(self):
-        say load 1!
-        print('load 1!')
+        say <instance_event> load 1!
+        print('<instance_event> load 1!')
 
     @event
     def load(self):
-        say load 2!
-        print('load 2!')
+        say <instance_event> load 2!
+        print('<instance_event> load 2!')
 
 a = A()
-# a = A()
+a = A()
 # a = A()
