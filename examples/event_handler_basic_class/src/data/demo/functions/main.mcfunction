@@ -10,11 +10,11 @@ class A:
         say <class_event> load 1!
         print('<class_event> load 1!')
 
-    @event
+    @class_event
     def load(self):
         say <class_event> load 2!
-        print('load 2!')
+        print('<class_event> load 2!')
 
-a = A()
-a = A()
+# a = A()
+# a = A()
 # a = A()

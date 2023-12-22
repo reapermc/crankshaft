@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from typing import ClassVar, Type, Callable, Any
-from ./utils import decorator_factory, logger, pascal_to_snake_case, copy_reverse_clear
+from ./utils import decorator_factory, logger, pascal_to_snake_case, copy_reverse_clear, copy_clear
 from ./config import Config
 import inspect
 import types
@@ -83,7 +83,7 @@ class BuiltinEvent:
 class ClassDefinitionMethodQueue:
     instance_listeners: ClassVar[list[Callable]] = []
     class_listeners: ClassVar[list[Callable]] = []
-    lazy_listeners: ClassVar[list[Callable]] = []
+    lazy_class_listeners: ClassVar[list[Callable]] = []
 
 def _get_registered_event_class_by_id(event_id: str) -> Type[BuiltinEvent]:
     event_class = registered_events.get(event_id)
@@ -141,16 +141,16 @@ def class_event(func, *args, **kwargs):
     return func
 
 @decorator_factory
-def lazy_event(func, *args, **kwargs):
+def lazy_class_event(func, *args, **kwargs):
     event_id = func.__name__
 
-    ClassDefinitionMethodQueue.lazy_listeners.append(func)
+    ClassDefinitionMethodQueue.lazy_class_listeners.append(func)
     return func
 
 def supports_events(cls):
     """Decorate a class to enable support for '@event_listener' on bound methods."""
 
-    def prepend_init(cls: Type, method: Callable):
+    def run_on_class_init(cls: Type, method: Callable):
         old_init = cls.__init__
 
         def new_init(self, *args, **kwargs):
@@ -167,18 +167,7 @@ def supports_events(cls):
 
         cls.__init__ = new_init
 
-    # TODO: this will be used for event definition behavior
-    is_builtin_case = issubclass(cls, BuiltinEvent)
-
-    instance_listeners = copy_reverse_clear(ClassDefinitionMethodQueue.instance_listeners)
-    class_listeners = copy_reverse_clear(ClassDefinitionMethodQueue.class_listeners)
-    lazy_listeners = copy_reverse_clear(ClassDefinitionMethodQueue.lazy_listeners)
-
-    for method in instance_listeners:
-        setattr(cls, f"_crankshaft_event_listener_{id(method)}", method)
-        prepend_init(cls, method)
-
-    for method in class_listeners:
+    def run_on_class_definition(cls: Type, method: Callable):
         event_id = method.__name__
         event_class = _get_registered_event_class_by_id(event_id)
 
@@ -188,17 +177,47 @@ def supports_events(cls):
         event = _get_deployed_event_by_id(event_id)
         event.add_local_payload(method, method_first_arg=cls)
 
-    if lazy_listeners and not hasattr(cls, '_crankshaft_lazy_listeners'):
-        cls._crankshaft_lazy_listeners = []
+    def run_on_class_init_once(cls: Type, method: Callable):
+        old_init = cls.__init__
 
-    for method in lazy_listeners:
-        # if method_id in cls._crankshaft_lazy_listeners:
-        setattr(cls, f"_crankshaft_lazy_listener_{id(method)}", method)
-        x = getattr(cls, f"_crankshaft_lazy_listener_{id(method)}")
+        def new_init(self, *args, **kwargs):
+            if cls._crankshaft_lazy_class_listener_count == 0:
+                return
 
-        del cls._crankshaft_lazy_listeners
-        prepend_init(cls, method)
+            event_id = method.__name__
+            event_class = _get_registered_event_class_by_id(event_id)
 
-        # cls._crankshaft_awoken_lazy_listeners.append(method_id)
+            if not event_class.deployed:
+                event_class.deploy()
+
+            event = _get_deployed_event_by_id(event_id)
+
+            event.add_local_payload(method, method_first_arg=self)
+            cls._crankshaft_lazy_class_listener_count -= 1
+
+            old_init(self, *args, **kwargs)
+
+        cls.__init__ = new_init
+
+    # TODO: this will be used for event definition behavior
+    is_builtin_case = issubclass(cls, BuiltinEvent)
+
+    instance_listeners = copy_reverse_clear(ClassDefinitionMethodQueue.instance_listeners)
+    class_listeners = copy_clear(ClassDefinitionMethodQueue.class_listeners)
+    lazy_class_listeners = copy_reverse_clear(ClassDefinitionMethodQueue.lazy_class_listeners)
+
+    for method in instance_listeners:
+        # setattr(cls, f"_crankshaft_event_listener_{id(method)}", method)
+        run_on_class_init(cls, method)
+
+    for method in class_listeners:
+        run_on_class_definition(cls, method)
+
+    if lazy_class_listeners and not hasattr(cls, '_crankshaft_lazy_class_listeners'):
+        cls._crankshaft_lazy_class_listener_count = len(lazy_class_listeners)
+
+    for method in lazy_class_listeners:
+        # setattr(cls, f"_crankshaft_lazy_class_listener_{id(method)}", method)
+        run_on_class_init_once(cls, method)
 
     return cls
