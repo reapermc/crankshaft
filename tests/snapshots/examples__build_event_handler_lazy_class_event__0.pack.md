@@ -66,7 +66,7 @@ function reapermc:crankshaft/builtin_event/load/on_trigger
 ```json
 {
   "values": [
-    "event_handler_basic:reapermc/crankshaft/builtin_event/load/local_payload"
+    "event_handler_lazy_class_event:reapermc/crankshaft/builtin_event/load/local_payload"
   ]
 }
 ```
@@ -83,10 +83,11 @@ function reapermc:crankshaft/builtin_event/load/on_trigger
 }
 ```
 
-### event_handler_basic
+### event_handler_lazy_class_event
 
-`@function event_handler_basic:reapermc/crankshaft/builtin_event/load/local_payload`
+`@function event_handler_lazy_class_event:reapermc/crankshaft/builtin_event/load/local_payload`
 
 ```mcfunction
-say hello!
+say <lazy_event> load 1!
+say <lazy_event> load 2!
 ```

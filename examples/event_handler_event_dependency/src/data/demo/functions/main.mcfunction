@@ -1,7 +1,18 @@
 from crankshaft:api import event
 
 @event
-def tick():
-    print('tick!')
-    say tick!
+def player_tick():
+    say hi! ;)
 
+@event
+def player_load():
+    tellraw @s "There you go! ^^"
+    give @s diamond
+
+@event
+def player_shot_bow():
+    tellraw @s "woosh!"
+
+@event
+def load():
+    say hi

@@ -1,24 +1,47 @@
-from ./event_handler import BuiltinEvent, event, supports_events
+from wicked_expressions:api import Scoreboard
+from ./event_handler import BuiltinEvent, event
+from ./cwd import get_cwd
 
 class Load(BuiltinEvent):
     def __event_init__(self):
-        path = self.generate_path('handler')
-
-        merge function_tag minecraft:load {"values": [path]}
-        function path:
-            self.trigger()
+        merge function_tag minecraft:load {"values": [get_cwd()]}
+        self.trigger()
 
 class Tick(BuiltinEvent):
     def __event_init__(self):
-        path = self.generate_path('handler')
+        merge function_tag minecraft:tick {"values": [get_cwd()]}
+        self.trigger()
 
-        merge function_tag minecraft:tick {"values": [path]}
-        function path:
-            self.trigger()
-
-@supports_events
 class PlayerTick(BuiltinEvent):
     @event
     def tick(self):
-        print('tickkkkkkkkkkkkkkk')
-        say tickkkkkkkkk
+        as @a at @s:
+            self.trigger()
+
+class PlayerJoin(BuiltinEvent):
+    @event
+    def player_tick(self):
+        join_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.join_tracker", 'custom:leave_game')['@s']
+
+        if join_tracker >= 1:
+            join_tracker = 0
+            self.trigger()
+
+class PlayerLoad(BuiltinEvent):
+    @event
+    def load(self):
+        as @a at @s:
+            self.trigger()
+    
+    @event
+    def player_join(self):
+        self.trigger()
+
+class PlayerShotBow(BuiltinEvent):
+    @event
+    def player_tick(self):
+        use_item_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.shot_bow", 'used:bow')['@s']
+
+        if use_item_tracker >= 1:
+            use_item_tracker = 0
+            self.trigger()
