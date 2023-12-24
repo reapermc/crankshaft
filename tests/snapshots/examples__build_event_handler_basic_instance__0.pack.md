@@ -7,7 +7,7 @@
 ```json
 {
   "pack": {
-    "pack_format": 18,
+    "pack_format": 26,
     "description": ""
   }
 }
@@ -23,13 +23,39 @@
 
 ### reapermc
 
+`@function reapermc:crankshaft/builtin_event/tick/subevent_runner`
+
+```mcfunction
+function reapermc:crankshaft/builtin_event/player_tick/subevent_entrypoint/tick
+```
+
+`@function reapermc:crankshaft/builtin_event/player_tick/subevent_runner`
+
+```mcfunction
+function reapermc:crankshaft/builtin_event/player_join/subevent_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_shot_bow/subevent_entrypoint/player_tick
+```
+
+`@function reapermc:crankshaft/builtin_event/player_join/subevent_runner`
+
+```mcfunction
+function reapermc:crankshaft/builtin_event/player_load/subevent_entrypoint/player_join
+```
+
+`@function reapermc:crankshaft/builtin_event/load/subevent_runner`
+
+```mcfunction
+function reapermc:crankshaft/builtin_event/player_load/subevent_entrypoint/load
+```
+
 `@function reapermc:crankshaft/builtin_event/load/on_trigger`
 
 ```mcfunction
 function #reapermc:crankshaft/builtin_event/load/local_payload_fork
+function reapermc:crankshaft/builtin_event/load/subevent_runner
 ```
 
-`@function reapermc:crankshaft/builtin_event/load/handler_dir/handler`
+`@function reapermc:crankshaft/builtin_event/load/handler/__event_init__`
 
 ```mcfunction
 function reapermc:crankshaft/builtin_event/load/on_trigger
@@ -52,7 +78,7 @@ function reapermc:crankshaft/builtin_event/load/on_trigger
 ```json
 {
   "values": [
-    "reapermc:crankshaft/builtin_event/load/handler_dir/handler"
+    "reapermc:crankshaft/builtin_event/load/handler/__event_init__"
   ]
 }
 ```
@@ -62,6 +88,6 @@ function reapermc:crankshaft/builtin_event/load/on_trigger
 `@function event_handler_basic_instance:reapermc/crankshaft/builtin_event/load/local_payload`
 
 ```mcfunction
-say load 1!
-say load 2!
+say <instance_event> load 1!
+say <instance_event> load 2!
 ```
