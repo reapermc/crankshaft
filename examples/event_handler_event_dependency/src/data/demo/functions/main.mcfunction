@@ -10,7 +10,7 @@ def player_load():
     give @s diamond
 
 @event
-def player_shot_bow():
+def player_shot_bow(charge_time):
     tellraw @s "woosh!"
 
 @event
