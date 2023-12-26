@@ -21,6 +21,47 @@
 
 ```
 
+### event_handler_basic_instance
+
+`@function event_handler_basic_instance:reapermc/wicked_expressions/loader/prio_0`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+scoreboard objectives add reapermc.crankshaft dummy
+```
+
+`@function event_handler_basic_instance:reapermc/wicked_expressions/loader/prio_1`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+```
+
+`@function event_handler_basic_instance:reapermc/wicked_expressions/loader/prio_2`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+```
+
+`@function event_handler_basic_instance:reapermc/wicked_expressions/loader`
+
+```mcfunction
+function event_handler_basic_instance:reapermc/wicked_expressions/loader/prio_0
+function event_handler_basic_instance:reapermc/wicked_expressions/loader/prio_1
+function event_handler_basic_instance:reapermc/wicked_expressions/loader/prio_2
+```
+
+### minecraft
+
+`@function_tag minecraft:load`
+
+```json
+{
+  "values": [
+    "event_handler_basic_instance:reapermc/wicked_expressions/loader"
+  ]
+}
+```
+
 ### reapermc
 
 `@function reapermc:crankshaft/builtin_event/tick/subevent_runner`
@@ -46,48 +87,4 @@ function reapermc:crankshaft/builtin_event/player_load/subevent_entrypoint/playe
 
 ```mcfunction
 function reapermc:crankshaft/builtin_event/player_load/subevent_entrypoint/load
-```
-
-`@function reapermc:crankshaft/builtin_event/load/on_trigger`
-
-```mcfunction
-function #reapermc:crankshaft/builtin_event/load/local_payload_fork
-function reapermc:crankshaft/builtin_event/load/subevent_runner
-```
-
-`@function reapermc:crankshaft/builtin_event/load/handler/__event_init__`
-
-```mcfunction
-function reapermc:crankshaft/builtin_event/load/on_trigger
-```
-
-`@function_tag reapermc:crankshaft/builtin_event/load/local_payload_fork`
-
-```json
-{
-  "values": [
-    "event_handler_basic_instance:reapermc/crankshaft/builtin_event/load/local_payload"
-  ]
-}
-```
-
-### minecraft
-
-`@function_tag minecraft:load`
-
-```json
-{
-  "values": [
-    "reapermc:crankshaft/builtin_event/load/handler/__event_init__"
-  ]
-}
-```
-
-### event_handler_basic_instance
-
-`@function event_handler_basic_instance:reapermc/crankshaft/builtin_event/load/local_payload`
-
-```mcfunction
-say <instance_event> load 1!
-say <instance_event> load 2!
 ```

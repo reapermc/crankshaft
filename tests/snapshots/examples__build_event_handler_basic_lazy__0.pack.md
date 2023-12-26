@@ -21,6 +21,55 @@
 
 ```
 
+### event_handler_basic_lazy
+
+`@function event_handler_basic_lazy:reapermc/wicked_expressions/loader/prio_0`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+scoreboard objectives add reapermc.crankshaft dummy
+```
+
+`@function event_handler_basic_lazy:reapermc/wicked_expressions/loader/prio_1`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+```
+
+`@function event_handler_basic_lazy:reapermc/wicked_expressions/loader/prio_2`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+```
+
+`@function event_handler_basic_lazy:reapermc/wicked_expressions/loader`
+
+```mcfunction
+function event_handler_basic_lazy:reapermc/wicked_expressions/loader/prio_0
+function event_handler_basic_lazy:reapermc/wicked_expressions/loader/prio_1
+function event_handler_basic_lazy:reapermc/wicked_expressions/loader/prio_2
+```
+
+`@function event_handler_basic_lazy:reapermc/crankshaft/builtin_event/load/local_payload`
+
+```mcfunction
+say <lazy_event> load 1!
+say <lazy_event> load 2!
+```
+
+### minecraft
+
+`@function_tag minecraft:load`
+
+```json
+{
+  "values": [
+    "event_handler_basic_lazy:reapermc/wicked_expressions/loader",
+    "reapermc:crankshaft/builtin_event/load/handler/__event_init__"
+  ]
+}
+```
+
 ### reapermc
 
 `@function reapermc:crankshaft/builtin_event/tick/subevent_runner`
@@ -69,25 +118,4 @@ function reapermc:crankshaft/builtin_event/load/on_trigger
     "event_handler_basic_lazy:reapermc/crankshaft/builtin_event/load/local_payload"
   ]
 }
-```
-
-### minecraft
-
-`@function_tag minecraft:load`
-
-```json
-{
-  "values": [
-    "reapermc:crankshaft/builtin_event/load/handler/__event_init__"
-  ]
-}
-```
-
-### event_handler_basic_lazy
-
-`@function event_handler_basic_lazy:reapermc/crankshaft/builtin_event/load/local_payload`
-
-```mcfunction
-say <lazy_event> load 1!
-say <lazy_event> load 2!
 ```

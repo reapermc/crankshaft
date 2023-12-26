@@ -1,0 +1,69 @@
+from wicked_expressions:api import Scoreboard
+from lightning_rod:api import revoke_advancement
+from ./flag_handler import BuiltinFlag
+from contextlib import contextmanager
+
+class IsAirborne(BuiltinFlag):
+    def __flag_init__(self):
+        predicate self.generate_path('check') {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+                "nbt": "{OnGround: 0b}"
+            }
+        }
+
+    @contextmanager
+    def __condition__(self):
+        if predicate self.generate_path('check'):
+            yield True
+
+    @contextmanager
+    def __not_condition__(self):
+        unless predicate self.generate_path('check'):
+            yield True
+
+class IsChargingBow(BuiltinFlag):
+    def __flag_init__(self):
+        self.is_charging = Scoreboard(f"{self.SCOREBOARD_ROOT}.is_charging")['@s']
+        advancement_path = self.generate_path('on_charge')
+        advancement_reward_path = self.generate_path('on_charge_reward')
+        tick_path = self.generate_path('tick')
+
+        merge function_tag minecraft:tick {"replace": false, "values": [tick_path]}
+        function tick_path:
+            as @a:
+                if self.is_charging > 0:
+                    self.is_charging -= 1
+
+        advancement advancement_path {
+            "criteria": {
+                "requirement": {
+                    "trigger": "minecraft:using_item",
+                    "conditions": {
+                        "item": {
+                            "items": [
+                                "minecraft:bow"
+                            ]
+                        }
+                    }
+                }
+            },
+            "rewards": {
+                "function": advancement_reward_path
+            }
+        }
+
+        function advancement_reward_path:
+            revoke_advancement(advancement_path)
+            self.is_charging = 1
+
+    @contextmanager
+    def __condition__(self):
+        unless score var self.is_charging matches 0:
+            yield True
+
+    @contextmanager
+    def __not_condition__(self):
+        if score var self.is_charging matches 0:
+            yield True

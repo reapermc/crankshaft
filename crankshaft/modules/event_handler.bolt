@@ -1,16 +1,15 @@
+from wicked_expressions:api import copy_args, ExprOnly, ScoreSource, DataSource, Scoreboard, Data
 from dataclasses import dataclass, field
 from typing import ClassVar, Type, Callable, Any
 from ./utils import decorator_factory, logger, pascal_to_snake_case, copy_reverse_clear, copy_clear
 from ./config import Config
 import inspect
-import types
 
 registered_events: dict[str, Type] = {}
 deployed_events: list = []
 
 @dataclass
 class BuiltinEvent:
-    event_id: ClassVar[str] = ''
     deployed: ClassVar[bool] = False
 
     def __init_subclass__(cls, **kwargs):
@@ -29,7 +28,7 @@ class BuiltinEvent:
         """Runs after the event is deployed using the '.deploy()' method."""
 
         if hasattr(self, '__event_init__') and callable(self.__event_init__):
-            function self.path['event_init']:
+            function self._path['event_init']:
                 self.__event_init__()
 
         # TODO: cleanup builtin event handling
@@ -49,16 +48,50 @@ class BuiltinEvent:
         cls.deployed = True
 
     def add_local_payload(self, func: Callable, method_first_arg: Any = None):
-        merge function_tag self.path['local_payload_fork'] {"values": [self.path['local_payload']]}
-        append function self.path['local_payload']:
+        merge function_tag self._path['local_payload_fork'] {"values": [self._path['local_payload']]}
+        append function self._path['local_payload']:
+            # is_method = method_first_arg != None
+            # self._validate_trigger_output_args(func, is_method)
+
+            # func = self._decorate_payload_copy_args(func)
+
             if method_first_arg == None:
-                func()
+                func(*self.trigger_args, **self.trigger_kwargs)
             else:
-                func(method_first_arg)
+                func(method_first_arg, *self.trigger_args, **self.trigger_kwargs)
+
+    def _decorate_payload_copy_args(self, func: Callable) -> Callable:
+        """This ensures args passed thru 'self.trigger()' are safe copies."""
+        params = inspect.signature(func).parameters
+        param_list = []
+        type_annotations = {}
+
+        for param in params:
+            param_list.append(param)
+
+        for arg in self.trigger_args:
+            param = param_list[0]
+            del param_list[0]
+
+            if isinstance(arg, ScoreSource):
+                type_annotations[param] = ExprOnly(Scoreboard)
+            elif isinstance(arg, DataSource):
+                type_annotations[param] = ExprOnly(Data)
+
+        for kwarg_value in self.trigger_kwargs.values():
+            param = param_list[0]
+            del param_list[0]
+
+            if isinstance(kwarg_value, ScoreSource):
+                type_annotations[param] = ExprOnly(Scoreboard)
+            elif isinstance(kwarg_value, DataSource):
+                type_annotations[param] = ExprOnly(Data)
+
+        return copy_args(**type_annotations)(func)
 
     @classmethod
     def queue_potential_subevent(cls, subevent_class: Type):
-        append function cls.path['subevent_runner']:
+        append function cls._path['subevent_runner']:
             function subevent_class._generate_subevent_entrypoint(cls)
 
     @classmethod
@@ -72,12 +105,15 @@ class BuiltinEvent:
     #     cls.dependencies.append(event_class)
 
     def generate_path(self, subpath: str):
-        return f"{self.path['handler']}/{subpath}"
+        return f"{self._path['handler']}/{subpath}"
 
-    def trigger(self):
-        execute function self.path['on_trigger']:
-            function f"#{self.path['local_payload_fork']}"
-            function self.path['subevent_runner']
+    def trigger(self, *args, **kwargs):
+        self.trigger_args = [*args] 
+        self.trigger_kwargs = {**kwargs}
+
+        execute function self._path['on_trigger']:
+            function f"#{self._path['local_payload_fork']}"
+            function self._path['subevent_runner']
 
     @classmethod
     def _patch_class_defaults(cls):
@@ -86,7 +122,9 @@ class BuiltinEvent:
         LOCAL_PATH = f"{Config.LOCAL_DIR}/builtin_event/{cls.event_id}"
         GLOBAL_PATH = f"{Config.GLOBAL_DIR}/builtin_event/{cls.event_id}"
 
-        cls.path = {
+        cls.trigger_args = []
+        cls.trigger_kwargs = {}
+        cls._path = {
             'on_trigger': f"{GLOBAL_PATH}/on_trigger",
             'handler': f"{GLOBAL_PATH}/handler",
             'event_init': f"{GLOBAL_PATH}/handler/__event_init__",
