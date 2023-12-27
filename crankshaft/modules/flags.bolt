@@ -33,7 +33,8 @@ class IsChargingBow(BuiltinFlag):
         merge function_tag minecraft:tick {"replace": false, "values": [tick_path]}
         function tick_path:
             as @a:
-                if self.is_charging > 0:
+                # if self.is_charging > 0:
+                if score var self.is_charging matches 1..:
                     self.is_charging -= 1
 
         advancement advancement_path {

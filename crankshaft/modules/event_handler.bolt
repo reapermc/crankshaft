@@ -50,10 +50,7 @@ class BuiltinEvent:
     def add_local_payload(self, func: Callable, method_first_arg: Any = None):
         merge function_tag self._path['local_payload_fork'] {"values": [self._path['local_payload']]}
         append function self._path['local_payload']:
-            # is_method = method_first_arg != None
-            # self._validate_trigger_output_args(func, is_method)
-
-            # func = self._decorate_payload_copy_args(func)
+            func = self._decorate_payload_copy_args(func)
 
             if method_first_arg == None:
                 func(*self.trigger_args, **self.trigger_kwargs)
@@ -95,10 +92,21 @@ class BuiltinEvent:
             function subevent_class._generate_subevent_entrypoint(cls)
 
     @classmethod
+    def queue_potential_early_subevent(cls, subevent_class: Type):
+        append function cls._path['early_subevent_runner']:
+            function subevent_class._generate_early_subevent_entrypoint(cls)
+
+    @classmethod
     def _generate_subevent_entrypoint(cls, dependency_event_class) -> str:
         subevent_id = pascal_to_snake_case(cls.__name__)
         dependency_event_id = dependency_event_class.event_id
         return f"{Config.GLOBAL_DIR}/builtin_event/{subevent_id}/subevent_entrypoint/{dependency_event_id}"
+
+    @classmethod
+    def _generate_early_subevent_entrypoint(cls, dependency_event_class) -> str:
+        subevent_id = pascal_to_snake_case(cls.__name__)
+        dependency_event_id = dependency_event_class.event_id
+        return f"{Config.GLOBAL_DIR}/builtin_event/{subevent_id}/early_subevent_entrypoint/{dependency_event_id}"
 
     # @classmethod
     # def add_dependency(cls, event_class):
@@ -108,10 +116,11 @@ class BuiltinEvent:
         return f"{self._path['handler']}/{subpath}"
 
     def trigger(self, *args, **kwargs):
-        self.trigger_args = [*args] 
+        self.trigger_args = [*args]
         self.trigger_kwargs = {**kwargs}
 
         execute function self._path['on_trigger']:
+            function self._path['early_subevent_runner']
             function f"#{self._path['local_payload_fork']}"
             function self._path['subevent_runner']
 
@@ -130,9 +139,11 @@ class BuiltinEvent:
             'event_init': f"{GLOBAL_PATH}/handler/__event_init__",
             'local_payload': f"{LOCAL_PATH}/local_payload",
             'local_payload_fork': f"{GLOBAL_PATH}/local_payload_fork",
+            'early_subevent_runner': f"{GLOBAL_PATH}/early_subevent_runner",
             'subevent_runner': f"{GLOBAL_PATH}/subevent_runner",
         }
         cls.SCOREBOARD_ROOT = f"{Config.SCOREBOARD_ROOT}.builtin_event.{cls.event_id}"
+        cls.TAG_ROOT = f"{Config.TAG_ROOT}.builtin_event.{cls.event_id}"
         # cls.dependencies = []
 
     @classmethod
@@ -144,6 +155,7 @@ class ClassDefinitionMethodQueue:
     instance_listeners: ClassVar[list[Callable]] = []
     class_listeners: ClassVar[list[Callable]] = []
     lazy_class_listeners: ClassVar[list[Callable]] = []
+    early_dep_listeners: ClassVar[list[Callable]] = []
 
 def _get_registered_event_class_by_id(event_id: str) -> Type[BuiltinEvent]:
     event_class = registered_events.get(event_id)
@@ -177,6 +189,15 @@ def event(func, *args, **kwargs):
     return func
 
 @decorator_factory
+def early_event(func, *args, **kwargs):
+    """
+    This should only be used for built in event dependencies.
+    """
+
+    ClassDefinitionMethodQueue.early_dep_listeners.append(func)
+    return func
+
+@decorator_factory
 def class_event(func, *args, **kwargs):
     event_id = func.__name__
 
@@ -197,10 +218,13 @@ def supports_events(cls):
         cls: Type,
         method: Callable,
         builtin: bool = False,
+        early_dep: bool = False,
     ):
         old_init = cls.__init__
 
         def new_init(self, *args, **kwargs):
+            old_init(self, *args, **kwargs)
+
             event_id = method.__name__
             event_class = _get_registered_event_class_by_id(event_id)
 
@@ -209,13 +233,17 @@ def supports_events(cls):
 
             event = _get_deployed_event_by_id(event_id)
 
-            if builtin:
-                function self._generate_subevent_entrypoint(event.__class__):
-                    method(self)
-            else:
+            if not builtin:
                 event.add_local_payload(method, method_first_arg=self)
+            else:
+                updated_method = event._decorate_payload_copy_args(method)
 
-            old_init(self, *args, **kwargs)
+                if not early_dep:
+                    function self._generate_subevent_entrypoint(event.__class__):
+                        updated_method(self, *event.trigger_args, **event.trigger_kwargs)
+                else:
+                    function self._generate_early_subevent_entrypoint(event.__class__):
+                        updated_method(self, *event.trigger_args, **event.trigger_kwargs)
 
         cls.__init__ = new_init
 
@@ -233,6 +261,8 @@ def supports_events(cls):
         old_init = cls.__init__
 
         def new_init(self, *args, **kwargs):
+            old_init(self, *args, **kwargs)
+
             if cls._crankshaft_lazy_class_listener_count == 0:
                 return
 
@@ -247,13 +277,13 @@ def supports_events(cls):
             event.add_local_payload(method, method_first_arg=self)
             cls._crankshaft_lazy_class_listener_count -= 1
 
-            old_init(self, *args, **kwargs)
-
         cls.__init__ = new_init
 
     is_builtin_definition_case = issubclass(cls, BuiltinEvent)
 
-    instance_listeners = copy_reverse_clear(ClassDefinitionMethodQueue.instance_listeners)
+    # instance_listeners = copy_reverse_clear(ClassDefinitionMethodQueue.instance_listeners)
+    instance_listeners = copy_clear(ClassDefinitionMethodQueue.instance_listeners)
+    early_dep_listeners = copy_clear(ClassDefinitionMethodQueue.early_dep_listeners)
     class_listeners = copy_clear(ClassDefinitionMethodQueue.class_listeners)
     lazy_class_listeners = copy_reverse_clear(ClassDefinitionMethodQueue.lazy_class_listeners)
 
@@ -262,14 +292,16 @@ def supports_events(cls):
             dependency_event_id = method.__name__
             dependency_event_class = _get_registered_event_class_by_id(dependency_event_id)
 
-            run_on_class_init(
-                cls,
-                method,
-                builtin=True,
-            )
-
+            run_on_class_init(cls, method, builtin=True)
             dependency_event_class.queue_potential_subevent(subevent_class=cls)
             # cls.add_dependency(dependency_event_class)
+
+        for method in early_dep_listeners:
+            _dependency_event_id = method.__name__
+            _dependency_event_class = _get_registered_event_class_by_id(_dependency_event_id)
+
+            run_on_class_init(cls, method, builtin=True, early_dep=True)
+            _dependency_event_class.queue_potential_early_subevent(subevent_class=cls)
 
         return cls
 

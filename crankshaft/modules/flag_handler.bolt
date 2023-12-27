@@ -86,7 +86,7 @@ def _get_deployed_flag_by_id(flag_id: str) -> BuiltinFlag:
         if flag.flag_id == flag_id:
             return flag
 
-# this is the best way to hack the flag syntax,
+# this is the easiest way to hack the flag syntax,
 # we do this because only the instance
 # lets us take advantage of '__getattribute__'
 flag = Flag()
