@@ -29,19 +29,16 @@
 help --- DO_NOT_DELETE ---
 scoreboard objectives add reapermc.crankshaft dummy
 scoreboard objectives add reapermc.crankshaft.builtin_event.player_join.join_tracker custom:leave_game
-scoreboard objectives add reapermc.wicked_expressions dummy
-scoreboard objectives add reapermc.crankshaft.builtin_flag.is_charging_bow.is_charging dummy
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_shot_bow.shot_bow used:bow
 scoreboard objectives add reapermc.crankshaft.builtin_event.player_shot_bow.charge_time dummy
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_shot_bow.shot_bow used:bow
+scoreboard objectives add reapermc.crankshaft.builtin_flag.is_charging_bow.is_charging dummy
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_charge_bow.charge_time dummy
 ```
 
 `@function event_handler_event_dependency:reapermc/wicked_expressions/loader/prio_1`
 
 ```mcfunction
 help --- DO_NOT_DELETE ---
-scoreboard players reset $event_handler_event_dependency#bool$0 reapermc.wicked_expressions
-scoreboard players reset $event_handler_event_dependency#bool$1 reapermc.wicked_expressions
-scoreboard players reset $event_handler_event_dependency#bool$2 reapermc.wicked_expressions
 ```
 
 `@function event_handler_event_dependency:reapermc/wicked_expressions/loader/prio_2`
@@ -74,6 +71,7 @@ give @s diamond
 `@function event_handler_event_dependency:reapermc/crankshaft/builtin_event/player_shot_bow/local_payload`
 
 ```mcfunction
+scoreboard players operation $event_handler_event_dependency#copy_args$1 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_shot_bow.charge_time
 tellraw @s "woosh!"
 ```
 
@@ -119,13 +117,10 @@ function reapermc:crankshaft/builtin_event/player_tick/subevent_entrypoint/tick
 
 ```mcfunction
 function reapermc:crankshaft/builtin_event/player_join/subevent_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_charge_bow/subevent_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_charge_bow_end/subevent_entrypoint/player_tick
 function reapermc:crankshaft/builtin_event/player_shot_bow/subevent_entrypoint/player_tick
-```
-
-`@function reapermc:crankshaft/builtin_event/player_join/subevent_runner`
-
-```mcfunction
-function reapermc:crankshaft/builtin_event/player_load/subevent_entrypoint/player_join
+function reapermc:crankshaft/builtin_event/player_jump/subevent_entrypoint/player_tick
 ```
 
 `@function reapermc:crankshaft/builtin_event/load/subevent_runner`
@@ -134,9 +129,29 @@ function reapermc:crankshaft/builtin_event/player_load/subevent_entrypoint/playe
 function reapermc:crankshaft/builtin_event/player_load/subevent_entrypoint/load
 ```
 
+`@function reapermc:crankshaft/builtin_event/player_join/subevent_runner`
+
+```mcfunction
+function reapermc:crankshaft/builtin_event/player_load/subevent_entrypoint/player_join
+```
+
+`@function reapermc:crankshaft/builtin_event/player_charge_bow/early_subevent_runner`
+
+```mcfunction
+function reapermc:crankshaft/builtin_event/player_charge_bow_start/early_subevent_entrypoint/player_charge_bow
+```
+
+`@function reapermc:crankshaft/builtin_event/player_charge_bow/subevent_runner`
+
+```mcfunction
+function reapermc:crankshaft/builtin_event/player_charge_bow_end/subevent_entrypoint/player_charge_bow
+function reapermc:crankshaft/builtin_event/player_shot_bow/subevent_entrypoint/player_charge_bow
+```
+
 `@function reapermc:crankshaft/builtin_event/tick/on_trigger`
 
 ```mcfunction
+function reapermc:crankshaft/builtin_event/tick/early_subevent_runner
 function #reapermc:crankshaft/builtin_event/tick/local_payload_fork
 function reapermc:crankshaft/builtin_event/tick/subevent_runner
 ```
@@ -144,6 +159,7 @@ function reapermc:crankshaft/builtin_event/tick/subevent_runner
 `@function reapermc:crankshaft/builtin_event/player_tick/on_trigger`
 
 ```mcfunction
+function reapermc:crankshaft/builtin_event/player_tick/early_subevent_runner
 function #reapermc:crankshaft/builtin_event/player_tick/local_payload_fork
 function reapermc:crankshaft/builtin_event/player_tick/subevent_runner
 ```
@@ -151,6 +167,7 @@ function reapermc:crankshaft/builtin_event/player_tick/subevent_runner
 `@function reapermc:crankshaft/builtin_event/load/on_trigger`
 
 ```mcfunction
+function reapermc:crankshaft/builtin_event/load/early_subevent_runner
 function #reapermc:crankshaft/builtin_event/load/local_payload_fork
 function reapermc:crankshaft/builtin_event/load/subevent_runner
 ```
@@ -158,6 +175,7 @@ function reapermc:crankshaft/builtin_event/load/subevent_runner
 `@function reapermc:crankshaft/builtin_event/player_load/on_trigger`
 
 ```mcfunction
+function reapermc:crankshaft/builtin_event/player_load/early_subevent_runner
 function #reapermc:crankshaft/builtin_event/player_load/local_payload_fork
 function reapermc:crankshaft/builtin_event/player_load/subevent_runner
 ```
@@ -165,28 +183,22 @@ function reapermc:crankshaft/builtin_event/player_load/subevent_runner
 `@function reapermc:crankshaft/builtin_event/player_join/on_trigger`
 
 ```mcfunction
+function reapermc:crankshaft/builtin_event/player_join/early_subevent_runner
 function #reapermc:crankshaft/builtin_event/player_join/local_payload_fork
 function reapermc:crankshaft/builtin_event/player_join/subevent_runner
 ```
 
-`@function reapermc:crankshaft/builtin_event/player_join/subevent_entrypoint/player_tick/we_comp_autonest/0t`
+`@function reapermc:crankshaft/builtin_event/player_join/subevent_entrypoint/player_tick/nested_execute_0`
 
 ```mcfunction
 scoreboard players set @s reapermc.crankshaft.builtin_event.player_join.join_tracker 0
 function reapermc:crankshaft/builtin_event/player_join/on_trigger
 ```
 
-`@function reapermc:crankshaft/builtin_flag/is_charging_bow/handler/tick/nested_execute_0`
-
-```mcfunction
-execute store success score $event_handler_event_dependency#bool$1 reapermc.wicked_expressions unless score @s reapermc.crankshaft.builtin_flag.is_charging_bow.is_charging matches ..0
-execute unless score $event_handler_event_dependency#bool$1 reapermc.wicked_expressions matches 0 run scoreboard players remove @s reapermc.crankshaft.builtin_flag.is_charging_bow.is_charging 1
-```
-
 `@function reapermc:crankshaft/builtin_flag/is_charging_bow/handler/tick`
 
 ```mcfunction
-execute as @a run function reapermc:crankshaft/builtin_flag/is_charging_bow/handler/tick/nested_execute_0
+execute as @a if score @s reapermc.crankshaft.builtin_flag.is_charging_bow.is_charging matches 1.. run scoreboard players remove @s reapermc.crankshaft.builtin_flag.is_charging_bow.is_charging 1
 ```
 
 `@function reapermc:crankshaft/builtin_flag/is_charging_bow/handler/on_charge_reward`
@@ -196,24 +208,40 @@ advancement revoke @s only reapermc:crankshaft/builtin_flag/is_charging_bow/hand
 scoreboard players set @s reapermc.crankshaft.builtin_flag.is_charging_bow.is_charging 1
 ```
 
-`@function reapermc:crankshaft/builtin_event/player_shot_bow/on_trigger`
+`@function reapermc:crankshaft/builtin_event/player_charge_bow/on_trigger`
 
 ```mcfunction
-function #reapermc:crankshaft/builtin_event/player_shot_bow/local_payload_fork
-function reapermc:crankshaft/builtin_event/player_shot_bow/subevent_runner
+function reapermc:crankshaft/builtin_event/player_charge_bow/early_subevent_runner
+function #reapermc:crankshaft/builtin_event/player_charge_bow/local_payload_fork
+function reapermc:crankshaft/builtin_event/player_charge_bow/subevent_runner
 ```
 
-`@function reapermc:crankshaft/builtin_event/player_shot_bow/subevent_entrypoint/player_tick/we_comp_autonest/2t`
+`@function reapermc:crankshaft/builtin_event/player_charge_bow/subevent_entrypoint/player_tick/nested_execute_0`
 
 ```mcfunction
-scoreboard players set @s reapermc.crankshaft.builtin_event.player_shot_bow.shot_bow 0
-function reapermc:crankshaft/builtin_event/player_shot_bow/on_trigger
+scoreboard players add @s reapermc.crankshaft.builtin_event.player_charge_bow.charge_time 1
+function reapermc:crankshaft/builtin_event/player_charge_bow/on_trigger
 ```
 
 `@function(strip_final_newline) reapermc:crankshaft/builtin_flag/is_charging_bow/handler/__flag_init__`
 
 ```mcfunction
 
+```
+
+`@function reapermc:crankshaft/builtin_event/player_shot_bow/on_trigger`
+
+```mcfunction
+function reapermc:crankshaft/builtin_event/player_shot_bow/early_subevent_runner
+function #reapermc:crankshaft/builtin_event/player_shot_bow/local_payload_fork
+function reapermc:crankshaft/builtin_event/player_shot_bow/subevent_runner
+```
+
+`@function reapermc:crankshaft/builtin_event/player_shot_bow/subevent_entrypoint/player_tick/nested_execute_0`
+
+```mcfunction
+scoreboard players set @s reapermc.crankshaft.builtin_event.player_shot_bow.shot_bow 0
+function reapermc:crankshaft/builtin_event/player_shot_bow/on_trigger
 ```
 
 `@function reapermc:crankshaft/builtin_event/tick/handler/__event_init__`
@@ -243,8 +271,7 @@ execute as @a at @s run function reapermc:crankshaft/builtin_event/player_load/o
 `@function reapermc:crankshaft/builtin_event/player_join/subevent_entrypoint/player_tick`
 
 ```mcfunction
-execute store success score $event_handler_event_dependency#bool$0 reapermc.wicked_expressions if score @s reapermc.crankshaft.builtin_event.player_join.join_tracker matches 1..
-execute unless score $event_handler_event_dependency#bool$0 reapermc.wicked_expressions matches 0 run function reapermc:crankshaft/builtin_event/player_join/subevent_entrypoint/player_tick/we_comp_autonest/0t
+execute if score @s reapermc.crankshaft.builtin_event.player_join.join_tracker matches 1.. run function reapermc:crankshaft/builtin_event/player_join/subevent_entrypoint/player_tick/nested_execute_0
 ```
 
 `@function reapermc:crankshaft/builtin_event/player_load/subevent_entrypoint/player_join`
@@ -253,13 +280,30 @@ execute unless score $event_handler_event_dependency#bool$0 reapermc.wicked_expr
 function reapermc:crankshaft/builtin_event/player_load/on_trigger
 ```
 
+`@function(strip_final_newline) reapermc:crankshaft/builtin_event/player_shot_bow/handler/__event_init__`
+
+```mcfunction
+
+```
+
+`@function reapermc:crankshaft/builtin_event/player_charge_bow/subevent_entrypoint/player_tick`
+
+```mcfunction
+execute unless score @s reapermc.crankshaft.builtin_flag.is_charging_bow.is_charging matches 0 run function reapermc:crankshaft/builtin_event/player_charge_bow/subevent_entrypoint/player_tick/nested_execute_0
+execute if score @s reapermc.crankshaft.builtin_flag.is_charging_bow.is_charging matches 0 run scoreboard players set @s reapermc.crankshaft.builtin_event.player_charge_bow.charge_time 0
+```
+
+`@function reapermc:crankshaft/builtin_event/player_shot_bow/subevent_entrypoint/player_charge_bow`
+
+```mcfunction
+scoreboard players operation $event_handler_event_dependency#copy_args$0 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_charge_bow.charge_time
+scoreboard players operation @s reapermc.crankshaft.builtin_event.player_shot_bow.charge_time = $event_handler_event_dependency#copy_args$0 reapermc.wicked_expressions
+```
+
 `@function reapermc:crankshaft/builtin_event/player_shot_bow/subevent_entrypoint/player_tick`
 
 ```mcfunction
-execute unless score @s reapermc.crankshaft.builtin_flag.is_charging_bow.is_charging matches 0 run scoreboard players add @s reapermc.crankshaft.builtin_event.player_shot_bow.charge_time 1
-execute if score @s reapermc.crankshaft.builtin_flag.is_charging_bow.is_charging matches 0 run scoreboard players set @s reapermc.crankshaft.builtin_event.player_shot_bow.charge_time 0
-execute store success score $event_handler_event_dependency#bool$2 reapermc.wicked_expressions if score @s reapermc.crankshaft.builtin_event.player_shot_bow.shot_bow matches 1..
-execute unless score $event_handler_event_dependency#bool$2 reapermc.wicked_expressions matches 0 run function reapermc:crankshaft/builtin_event/player_shot_bow/subevent_entrypoint/player_tick/we_comp_autonest/2t
+execute if score @s reapermc.crankshaft.builtin_event.player_shot_bow.shot_bow matches 1.. run function reapermc:crankshaft/builtin_event/player_shot_bow/subevent_entrypoint/player_tick/nested_execute_0
 ```
 
 `@advancement reapermc:crankshaft/builtin_flag/is_charging_bow/handler/on_charge`

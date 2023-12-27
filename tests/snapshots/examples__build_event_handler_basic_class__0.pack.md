@@ -82,13 +82,10 @@ function reapermc:crankshaft/builtin_event/player_tick/subevent_entrypoint/tick
 
 ```mcfunction
 function reapermc:crankshaft/builtin_event/player_join/subevent_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_charge_bow/subevent_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_charge_bow_end/subevent_entrypoint/player_tick
 function reapermc:crankshaft/builtin_event/player_shot_bow/subevent_entrypoint/player_tick
-```
-
-`@function reapermc:crankshaft/builtin_event/player_join/subevent_runner`
-
-```mcfunction
-function reapermc:crankshaft/builtin_event/player_load/subevent_entrypoint/player_join
+function reapermc:crankshaft/builtin_event/player_jump/subevent_entrypoint/player_tick
 ```
 
 `@function reapermc:crankshaft/builtin_event/load/subevent_runner`
@@ -97,9 +94,29 @@ function reapermc:crankshaft/builtin_event/player_load/subevent_entrypoint/playe
 function reapermc:crankshaft/builtin_event/player_load/subevent_entrypoint/load
 ```
 
+`@function reapermc:crankshaft/builtin_event/player_join/subevent_runner`
+
+```mcfunction
+function reapermc:crankshaft/builtin_event/player_load/subevent_entrypoint/player_join
+```
+
+`@function reapermc:crankshaft/builtin_event/player_charge_bow/early_subevent_runner`
+
+```mcfunction
+function reapermc:crankshaft/builtin_event/player_charge_bow_start/early_subevent_entrypoint/player_charge_bow
+```
+
+`@function reapermc:crankshaft/builtin_event/player_charge_bow/subevent_runner`
+
+```mcfunction
+function reapermc:crankshaft/builtin_event/player_charge_bow_end/subevent_entrypoint/player_charge_bow
+function reapermc:crankshaft/builtin_event/player_shot_bow/subevent_entrypoint/player_charge_bow
+```
+
 `@function reapermc:crankshaft/builtin_event/load/on_trigger`
 
 ```mcfunction
+function reapermc:crankshaft/builtin_event/load/early_subevent_runner
 function #reapermc:crankshaft/builtin_event/load/local_payload_fork
 function reapermc:crankshaft/builtin_event/load/subevent_runner
 ```

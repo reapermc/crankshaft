@@ -1,7 +1,11 @@
 from wicked_expressions:api import Scoreboard
-from ./event_handler import BuiltinEvent, event
+from lightning_rod:api import add_tag, remove_tag
+from ./event_handler import BuiltinEvent, event, early_event
 from ./flag_handler import flag
 from ./cwd import get_cwd
+
+# TODO: swap 'if score' operations for wicked-expressions
+# after it's comparison operations start using one shared variable
 
 class Load(BuiltinEvent):
     def __event_init__(self):
@@ -24,7 +28,8 @@ class PlayerJoin(BuiltinEvent):
     def player_tick(self):
         join_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.join_tracker", 'custom:leave_game')['@s']
 
-        if join_tracker >= 1:
+        # if join_tracker >= 1:
+        if score var join_tracker matches 1..:
             join_tracker = 0
             self.trigger()
 
@@ -33,22 +38,68 @@ class PlayerLoad(BuiltinEvent):
     def load(self):
         as @a at @s:
             self.trigger()
-    
+
     @event
     def player_join(self):
         self.trigger()
 
-class PlayerShotBow(BuiltinEvent):
+class PlayerChargeBow(BuiltinEvent):
     @event
     def player_tick(self):
-        use_item_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.shot_bow", 'used:bow')['@s']
         charge_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.charge_time")['@s']
 
         if flag.is_charging_bow == True:
             charge_time_tracker += 1
+            self.trigger(charge_time=charge_time_tracker)
         if flag.is_charging_bow == False:
             charge_time_tracker = 0
 
-        if use_item_tracker >= 1:
-            use_item_tracker = 0
-            self.trigger(charge_time=charge_time_tracker)
+class PlayerChargeBowStart(BuiltinEvent):
+    @early_event
+    def player_charge_bow(self, charge_time):
+        # if charge_time == 1:
+        if score var charge_time matches 1:
+            self.trigger()
+
+class PlayerChargeBowEnd(BuiltinEvent):
+    def __event_init__(self):
+        self.charge_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.charge_time")['@s']
+        self.control_tag = f"{self.TAG_ROOT}.control_tag"
+
+    @event
+    def player_charge_bow(self, charge_time):
+        self.charge_time_tracker = charge_time
+        add_tag(self.control_tag)
+
+    @event
+    def player_tick(self):
+        if flag.is_charging_bow == False:
+            if entity @s[tag=self.control_tag]:
+                remove_tag(self.control_tag)
+                self.trigger(charge_time=self.charge_time_tracker)
+
+class PlayerShotBow(BuiltinEvent):
+    def __event_init__(self):
+        self.charge_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.charge_time")['@s']
+        self.use_item_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.shot_bow", 'used:bow')['@s']
+
+    @event
+    def player_charge_bow(self, charge_time):
+        self.charge_time_tracker = charge_time
+
+    @event
+    def player_tick(self):
+        # if self.use_item_tracker >= 1:
+        if score var self.use_item_tracker matches 1..:
+            self.use_item_tracker = 0
+            self.trigger(charge_time=self.charge_time_tracker)
+
+class PlayerJump(BuiltinEvent):
+    @event
+    def player_tick(self):
+        jump_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.jump_tracker", 'custom:jump')['@s']
+
+        # if jump_tracker >= 1:
+        if score var jump_tracker matches 1..:
+            jump_tracker = 0
+            self.trigger()
