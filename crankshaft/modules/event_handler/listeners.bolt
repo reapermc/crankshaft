@@ -1,0 +1,49 @@
+from typing import Callable
+from ./registry import registered_events
+from ./class_support import ClassDefinitionMethodQueue
+
+def listener_decorator_factory(func: Callable):
+    """Turns decorated function into a decorator."""
+    def wrapper(*args, **kwargs):
+        if args and callable(args[0]):
+            return func(args[0])
+        else:
+            def inner_wrapper(func):
+                return func(func, *args, **kwargs)
+            return inner_wrapper
+    return wrapper
+
+@listener_decorator_factory
+def event(func: Callable, *args, **kwargs):
+    event_id = func.__name__
+    func_is_method = '.' in func.__qualname__
+
+    if func_is_method:
+        ClassDefinitionMethodQueue.instance_methods.append(func)
+        return func
+
+    registered_event = registered_events[event_id]
+    deployed_event = registered_event.safe_deploy()
+    deployed_event.attach_payload(func)
+
+    return func
+
+@listener_decorator_factory
+def class_event(func: Callable, *args, **kwargs):
+    ClassDefinitionMethodQueue.class_methods.append(func)
+    return func
+
+@listener_decorator_factory
+def lazy_class_event(func: Callable, *args, **kwargs):
+    ClassDefinitionMethodQueue.lazy_class_methods.append(func)
+    return func
+
+@listener_decorator_factory
+def early_dependency(func: Callable, *args, **kwargs):
+    ClassDefinitionMethodQueue.early_dependency_methods.append(func)
+    return func
+
+@listener_decorator_factory
+def dependency(func: Callable, *args, **kwargs):
+    ClassDefinitionMethodQueue.dependency_methods.append(func)
+    return func

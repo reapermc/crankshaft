@@ -1,11 +1,9 @@
 from wicked_expressions:api import Scoreboard
-from lightning_rod:api import add_tag, remove_tag
-from ./event_handler import BuiltinEvent, event, early_event
+from lightning_rod:api import revoke_advancement, add_tag, remove_tag
+from ./event_handler/event_definition import BuiltinEvent
+from ./event_handler/listeners import dependency, early_dependency
 from ./flag_handler import flag
 from ./cwd import get_cwd
-
-# TODO: swap 'if score' operations for wicked-expressions
-# after it's comparison operations start using one shared variable
 
 class Load(BuiltinEvent):
     def __event_init__(self):
@@ -18,13 +16,13 @@ class Tick(BuiltinEvent):
         self.trigger()
 
 class PlayerTick(BuiltinEvent):
-    @event
+    @dependency
     def tick(self):
         as @a at @s:
             self.trigger()
 
 class PlayerJoin(BuiltinEvent):
-    @event
+    @dependency
     def player_tick(self):
         join_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.join_tracker", 'custom:leave_game')['@s']
 
@@ -34,28 +32,53 @@ class PlayerJoin(BuiltinEvent):
             self.trigger()
 
 class PlayerLoad(BuiltinEvent):
-    @event
+    @dependency
     def load(self):
         as @a at @s:
             self.trigger()
 
-    @event
+    @dependency
     def player_join(self):
         self.trigger()
 
 class PlayerChargeBow(BuiltinEvent):
-    @event
-    def player_tick(self):
-        charge_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.charge_time")['@s']
+    def __event_init__(self):
+        self.charge_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.charge_time")['@s']
+        self.charging_tag = f"{self.TAG_ROOT}.charging"
+        advancement_path = f"{get_cwd()}/on_charge"
+        advancement_reward_path = f"{get_cwd()}/reward"
+        advancement advancement_path {
+            "criteria": {
+                "requirement": {
+                    "trigger": "minecraft:using_item",
+                    "conditions": {
+                        "item": {
+                            "items": [
+                                "minecraft:bow"
+                            ]
+                        }
+                    }
+                }
+            },
+            "rewards": {
+                "function": advancement_reward_path
+            }
+        }
 
-        if flag.is_charging_bow == True:
-            charge_time_tracker += 1
-            self.trigger(charge_time=charge_time_tracker)
-        if flag.is_charging_bow == False:
-            charge_time_tracker = 0
+        function advancement_reward_path:
+            add_tag(self.charging_tag)
+            self.charge_time_tracker += 1
+            self.trigger(charge_time=self.charge_time_tracker)
+            revoke_advancement(advancement_path)
+
+    @dependency
+    def player_tick(self):
+        if entity @s[tag=!self.charging_tag]:
+            self.charge_time_tracker = 0
+        remove_tag(self.charging_tag)
 
 class PlayerChargeBowStart(BuiltinEvent):
-    @early_event
+    @early_dependency
     def player_charge_bow(self, charge_time):
         # if charge_time == 1:
         if score var charge_time matches 1:
@@ -64,38 +87,61 @@ class PlayerChargeBowStart(BuiltinEvent):
 class PlayerChargeBowEnd(BuiltinEvent):
     def __event_init__(self):
         self.charge_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.charge_time")['@s']
-        self.control_tag = f"{self.TAG_ROOT}.control_tag"
+        self.charging_tag = f"{self.TAG_ROOT}.charging"
+        self.temp = f"{self.TAG_ROOT}.temp"
 
-    @event
+    @dependency
     def player_charge_bow(self, charge_time):
         self.charge_time_tracker = charge_time
-        add_tag(self.control_tag)
+        add_tag(self.charging_tag)
+        add_tag(self.temp)
 
-    @event
+    @dependency
     def player_tick(self):
-        if flag.is_charging_bow == False:
-            if entity @s[tag=self.control_tag]:
-                remove_tag(self.control_tag)
+        if entity @s[tag=!self.charging_tag]:
+            if entity @s[tag=self.temp]:
+                remove_tag(self.temp)
                 self.trigger(charge_time=self.charge_time_tracker)
+        remove_tag(self.charging_tag)
 
 class PlayerShotBow(BuiltinEvent):
     def __event_init__(self):
         self.charge_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.charge_time")['@s']
         self.use_item_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.shot_bow", 'used:bow')['@s']
 
-    @event
+    @dependency
     def player_charge_bow(self, charge_time):
         self.charge_time_tracker = charge_time
 
-    @event
+    @dependency
     def player_tick(self):
         # if self.use_item_tracker >= 1:
         if score var self.use_item_tracker matches 1..:
             self.use_item_tracker = 0
             self.trigger(charge_time=self.charge_time_tracker)
 
+class PlayerUseCoas(BuiltinEvent):
+    @dependency
+    def player_tick(self):
+        use_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.use_tracker", 'used:carrot_on_a_stick')['@s']
+
+        # if death_tracker >= 1:
+        if score var use_tracker matches 1..:
+            use_tracker = 0
+            self.trigger()
+
+class PlayerUseWfoas(BuiltinEvent):
+    @dependency
+    def player_tick(self):
+        use_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.use_tracker", 'used:warped_fungus_on_a_stick')['@s']
+
+        # if death_tracker >= 1:
+        if score var use_tracker matches 1..:
+            use_tracker = 0
+            self.trigger()
+
 class PlayerJump(BuiltinEvent):
-    @event
+    @dependency
     def player_tick(self):
         jump_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.jump_tracker", 'custom:jump')['@s']
 
@@ -103,3 +149,40 @@ class PlayerJump(BuiltinEvent):
         if score var jump_tracker matches 1..:
             jump_tracker = 0
             self.trigger()
+
+class PlayerLand(BuiltinEvent):
+    @dependency
+    def player_tick(self):
+        airborne_tag = f"{self.TAG_ROOT}.airborne"
+
+        if flag.is_airborne == True:
+            add_tag(airborne_tag)
+        if flag.is_airborne == False:
+            if entity @s[tag=airborne_tag]:
+                remove_tag(airborne_tag)
+                self.trigger()
+
+class PlayerDie(BuiltinEvent):
+    @dependency
+    def player_tick(self):
+        death_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.death_tracker", 'deathCount')['@s']
+
+        # if death_tracker >= 1:
+        if score var death_tracker matches 1..:
+            death_tracker = 0
+            self.trigger()
+
+class PlayerRespawn(BuiltinEvent):
+    @dependency
+    def tick(self):
+        death_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.death_tracker", 'deathCount')['@s']
+
+        # unlike '@a', '@e[type=player]'
+        # only targets alive players
+        as @e[type=player] at @s:
+            # if death_tracker >= 1:
+            if score var death_tracker matches 1..:
+                death_tracker = 0
+                self.trigger()
+
+
