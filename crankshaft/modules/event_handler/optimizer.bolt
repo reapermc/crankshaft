@@ -1,0 +1,13 @@
+from ./registry import deployed_events
+from ../utils import defer
+
+@defer
+def remove_unused_events():
+    builtin_event_dir = 'crankshaft/builtin_event/'
+
+    for path in dict(ctx.data['reapermc'].functions):
+        if path.startswith(builtin_event_dir):
+            event_id = path[len(builtin_event_dir):].split('/')[0]
+
+            if event_id not in deployed_events:
+                del ctx.data['reapermc'].functions[path]

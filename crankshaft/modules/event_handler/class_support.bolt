@@ -1,0 +1,88 @@
+from typing import Callable, ClassVar
+from dataclasses import dataclass
+from ./registry import registered_events
+
+@dataclass
+class ClassDefinitionMethodQueue:
+    instance_methods: ClassVar[list[Callable]] = []
+    class_methods: ClassVar[list[Callable]] = []
+    lazy_class_methods: ClassVar[list[Callable]] = []
+    early_dependency_methods: ClassVar[list[Callable]] = []
+    dependency_methods: ClassVar[list[Callable]] = []
+
+    @classmethod
+    def retrieve(cls, method_type):
+        method_type_map = {
+            'instance_methods': cls.instance_methods,
+            'class_methods': cls.class_methods,
+            'lazy_class_methods': cls.lazy_class_methods,
+            'early_dependency_methods': cls.early_dependency_methods,
+            'dependency_methods': cls.dependency_methods,
+        }
+        new_list = method_type_map[method_type].copy()
+        method_type_map[method_type].clear()
+        return new_list
+
+def handle_dependency(dependent_event_class, dependency_method: Callable, early: bool = False):
+    dependency_event_id = dependency_method.__name__
+    dependency_event_class = registered_events[dependency_event_id]
+
+    if early:
+        dependent_event_class.add_early_dependency(dependency_event_class, dependency_method)
+    else:
+        dependent_event_class.add_dependency(dependency_event_class, dependency_method)
+
+def handle_instance_listener(cls, method):
+    event_id = method.__name__
+    event_class = registered_events[event_id]
+    old_init = cls.__init__
+
+    def new_init(self, *args, **kwargs):
+        old_init(self, *args, **kwargs)
+        event = event_class.deploy()
+        event.attach_payload(method, first_arg=self)
+
+    cls.__init__ = new_init
+
+def handle_class_listener(cls, method):
+    event_id = method.__name__
+    event_class = registered_events[event_id]
+
+    event = event_class.safe_deploy()
+    event.attach_payload(method, first_arg=cls)
+
+def handle_lazy_class_method(cls, method):
+    event_id = method.__name__
+    event_class = registered_events[event_id]
+
+    old_init = cls.__init__
+
+    def new_init(self, *args, **kwargs):
+        old_init(self, *args, **kwargs)
+
+        if cls._crankshaft_lazy_class_method_count == 0:
+            return
+
+        cls._crankshaft_lazy_class_method_count -= 1
+        event = event_class.safe_deploy()
+        event.attach_payload(method, first_arg=cls)
+
+    cls.__init__ = new_init
+
+def supports_events(cls):
+    for method in ClassDefinitionMethodQueue.retrieve('early_dependency_methods'):
+        handle_dependency(dependent_event_class=cls, dependency_method=method, early=True)
+    for method in ClassDefinitionMethodQueue.retrieve('dependency_methods'):
+        handle_dependency(dependent_event_class=cls, dependency_method=method)
+    for method in ClassDefinitionMethodQueue.retrieve('instance_methods'):
+        handle_instance_listener(cls, method)
+    for method in ClassDefinitionMethodQueue.retrieve('class_methods'):
+        handle_class_listener(cls, method)
+
+    lazy_class_methods = ClassDefinitionMethodQueue.retrieve('lazy_class_methods')
+    if lazy_class_methods:
+        cls._crankshaft_lazy_class_method_count = len(lazy_class_methods)
+    for method in lazy_class_methods:
+        handle_lazy_class_method(cls, method)
+
+    return cls
