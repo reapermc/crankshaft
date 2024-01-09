@@ -4,6 +4,7 @@ import ./events as _
 
 from ./cwd import get_cwd
 from ./flag_handler import flag
+from ./event_handler/event_definition import BuiltinEvent, CustomEvent
 from ./event_handler/listeners import event, class_event, lazy_class_event, early_dependency, dependency
 from ./event_handler/class_support import supports_events
 

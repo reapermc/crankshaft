@@ -570,7 +570,102 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_wfoas.use_track
 ```json
 {
   "values": [
-    "basic_event3:reapermc/crankshaft/builtin_event/player_load/__payload__"
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_load/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_load/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_load/__ce_dep_runner__",
+      "required": false
+    }
+  ]
+}
+```
+
+`@function_tag reapermc:crankshaft/builtin_event/load/__payload_fork__`
+
+```json
+{
+  "values": [
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/load/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/load/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/load/__ce_dep_runner__",
+      "required": false
+    }
+  ]
+}
+```
+
+`@function_tag reapermc:crankshaft/builtin_event/player_join/__payload_fork__`
+
+```json
+{
+  "values": [
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_join/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_join/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_join/__ce_dep_runner__",
+      "required": false
+    }
+  ]
+}
+```
+
+`@function_tag reapermc:crankshaft/builtin_event/player_tick/__payload_fork__`
+
+```json
+{
+  "values": [
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_tick/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_tick/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_tick/__ce_dep_runner__",
+      "required": false
+    }
+  ]
+}
+```
+
+`@function_tag reapermc:crankshaft/builtin_event/tick/__payload_fork__`
+
+```json
+{
+  "values": [
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/tick/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/tick/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/tick/__ce_dep_runner__",
+      "required": false
+    }
   ]
 }
 ```
@@ -580,7 +675,18 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_wfoas.use_track
 ```json
 {
   "values": [
-    "basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow/__payload__"
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow/__ce_dep_runner__",
+      "required": false
+    }
   ]
 }
 ```
@@ -590,7 +696,18 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_wfoas.use_track
 ```json
 {
   "values": [
-    "basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow_start/__payload__"
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow_start/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow_start/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow_start/__ce_dep_runner__",
+      "required": false
+    }
   ]
 }
 ```
@@ -600,7 +717,18 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_wfoas.use_track
 ```json
 {
   "values": [
-    "basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow_end/__payload__"
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow_end/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow_end/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow_end/__ce_dep_runner__",
+      "required": false
+    }
   ]
 }
 ```
@@ -610,7 +738,18 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_wfoas.use_track
 ```json
 {
   "values": [
-    "basic_event3:reapermc/crankshaft/builtin_event/player_shot_bow/__payload__"
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_shot_bow/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_shot_bow/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_shot_bow/__ce_dep_runner__",
+      "required": false
+    }
   ]
 }
 ```
@@ -620,7 +759,18 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_wfoas.use_track
 ```json
 {
   "values": [
-    "basic_event3:reapermc/crankshaft/builtin_event/player_jump/__payload__"
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_jump/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_jump/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_jump/__ce_dep_runner__",
+      "required": false
+    }
   ]
 }
 ```
@@ -630,7 +780,18 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_wfoas.use_track
 ```json
 {
   "values": [
-    "basic_event3:reapermc/crankshaft/builtin_event/player_land/__payload__"
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_land/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_land/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_land/__ce_dep_runner__",
+      "required": false
+    }
   ]
 }
 ```
@@ -640,7 +801,18 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_wfoas.use_track
 ```json
 {
   "values": [
-    "basic_event3:reapermc/crankshaft/builtin_event/player_die/__payload__"
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_die/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_die/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_die/__ce_dep_runner__",
+      "required": false
+    }
   ]
 }
 ```
@@ -650,7 +822,18 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_wfoas.use_track
 ```json
 {
   "values": [
-    "basic_event3:reapermc/crankshaft/builtin_event/player_respawn/__payload__"
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_respawn/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_respawn/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_respawn/__ce_dep_runner__",
+      "required": false
+    }
   ]
 }
 ```
@@ -660,7 +843,18 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_wfoas.use_track
 ```json
 {
   "values": [
-    "basic_event3:reapermc/crankshaft/builtin_event/player_use_coas/__payload__"
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_use_coas/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_use_coas/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_use_coas/__ce_dep_runner__",
+      "required": false
+    }
   ]
 }
 ```
@@ -670,7 +864,18 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_wfoas.use_track
 ```json
 {
   "values": [
-    "basic_event3:reapermc/crankshaft/builtin_event/player_use_wfoas/__payload__"
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_use_wfoas/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_use_wfoas/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event3:reapermc/crankshaft/builtin_event/player_use_wfoas/__ce_dep_runner__",
+      "required": false
+    }
   ]
 }
 ```

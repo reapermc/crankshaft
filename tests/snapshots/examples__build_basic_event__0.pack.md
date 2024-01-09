@@ -197,7 +197,18 @@ execute if score @s reapermc.crankshaft.builtin_event.player_join.join_tracker m
 ```json
 {
   "values": [
-    "basic_event:reapermc/crankshaft/builtin_event/load/__payload__"
+    {
+      "id": "basic_event:reapermc/crankshaft/builtin_event/load/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event:reapermc/crankshaft/builtin_event/load/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event:reapermc/crankshaft/builtin_event/load/__ce_dep_runner__",
+      "required": false
+    }
   ]
 }
 ```
@@ -207,7 +218,60 @@ execute if score @s reapermc.crankshaft.builtin_event.player_join.join_tracker m
 ```json
 {
   "values": [
-    "basic_event:reapermc/crankshaft/builtin_event/player_join/__payload__"
+    {
+      "id": "basic_event:reapermc/crankshaft/builtin_event/player_join/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event:reapermc/crankshaft/builtin_event/player_join/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event:reapermc/crankshaft/builtin_event/player_join/__ce_dep_runner__",
+      "required": false
+    }
+  ]
+}
+```
+
+`@function_tag reapermc:crankshaft/builtin_event/player_tick/__payload_fork__`
+
+```json
+{
+  "values": [
+    {
+      "id": "basic_event:reapermc/crankshaft/builtin_event/player_tick/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event:reapermc/crankshaft/builtin_event/player_tick/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event:reapermc/crankshaft/builtin_event/player_tick/__ce_dep_runner__",
+      "required": false
+    }
+  ]
+}
+```
+
+`@function_tag reapermc:crankshaft/builtin_event/tick/__payload_fork__`
+
+```json
+{
+  "values": [
+    {
+      "id": "basic_event:reapermc/crankshaft/builtin_event/tick/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event:reapermc/crankshaft/builtin_event/tick/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event:reapermc/crankshaft/builtin_event/tick/__ce_dep_runner__",
+      "required": false
+    }
   ]
 }
 ```

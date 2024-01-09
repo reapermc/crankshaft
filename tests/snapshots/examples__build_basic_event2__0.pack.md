@@ -98,7 +98,18 @@ function reapermc:crankshaft/builtin_event/load/__on_trigger__
 ```json
 {
   "values": [
-    "basic_event2:reapermc/crankshaft/builtin_event/load/__payload__"
+    {
+      "id": "basic_event2:reapermc/crankshaft/builtin_event/load/__ce_early_dep_runner__",
+      "required": false
+    },
+    {
+      "id": "basic_event2:reapermc/crankshaft/builtin_event/load/__payload__",
+      "required": false
+    },
+    {
+      "id": "basic_event2:reapermc/crankshaft/builtin_event/load/__ce_dep_runner__",
+      "required": false
+    }
   ]
 }
 ```

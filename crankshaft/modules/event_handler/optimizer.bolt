@@ -1,13 +1,49 @@
 from ./registry import deployed_events
 from ../utils import defer
+from ../config import Config
+
+# def filter_and_optimize(func_path, start_path: str):
+#     if path.startswith(start_path):
+#         event_id = path[len(builtin_event_dir):].split('/')[0]
+
+#         if event_id not in deployed_events:
+#             print(event_id, path)
+#             # del ctx.data['reapermc'].functions[path]
+
+def filter_and_optimize(func_path, dir_prefixes):
+    for prefix in dir_prefixes:
+        if not func_path.startswith(prefix):
+            continue
+
+        event_id = func_path[len(prefix):].split('/')[0]
+        if event_id in deployed_events:
+            continue
+
+        del ctx.data.functions[func_path]
 
 @defer
 def remove_unused_events():
-    builtin_event_dir = 'crankshaft/builtin_event/'
+    dir_prefixes = [
+        f"{Config.GLOBAL_DIR}/builtin_event/",
+        f"{Config.LOCAL_DIR}/builtin_event/",
+        f"{Config.LOCAL_DIR}/custom_event/",
+    ]
 
-    for path in dict(ctx.data['reapermc'].functions):
-        if path.startswith(builtin_event_dir):
-            event_id = path[len(builtin_event_dir):].split('/')[0]
+    for func_path in dict(ctx.data.functions):
+        filter_and_optimize(func_path, dir_prefixes)
 
-            if event_id not in deployed_events:
-                del ctx.data['reapermc'].functions[path]
+        # if func_path.startswith(builtin_event_dir):
+        #     event_id = func_path[len(builtin_event_dir):].split('/')[0]
+
+        #     if not deployed_events.get(event_id, False):
+        #         del ctx.data.functions[func_path]
+        # elif func_path.startswith(builtin_local_event_dir):
+        #     event_id = func_path[len(builtin_local_event_dir):].split('/')[0]
+
+        #     if not deployed_events.get(event_id, False):
+        #         del ctx.data.functions[func_path]
+        # elif func_path.startswith(custom_event_dir):
+        #     event_id = func_path[len(custom_event_dir):].split('/')[0]
+
+        #     if not deployed_events.get(event_id, False):
+        #         del ctx.data.functions[func_path]
