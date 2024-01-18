@@ -68,3 +68,89 @@ class IsChargingBow(BuiltinFlag):
     def __not_condition__(self):
         if score var self.is_charging matches 0:
             yield True
+
+class IsSneaking(BuiltinFlag):
+    def __flag_init__(self):
+        predicate self.generate_path('check') {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+                "flags": {
+                    "is_sneaking": true
+                }
+            }
+        }
+
+    @contextmanager
+    def __condition__(self):
+        if predicate self.generate_path('check'):
+            yield True
+
+    @contextmanager
+    def __not_condition__(self):
+        unless predicate self.generate_path('check'):
+            yield True
+
+class IsSprinting(BuiltinFlag):
+    def __flag_init__(self):
+        predicate self.generate_path('check') {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+                "flags": {
+                    "is_sprinting": true
+                }
+            }
+        }
+
+    @contextmanager
+    def __condition__(self):
+        if predicate self.generate_path('check'):
+            yield True
+
+    @contextmanager
+    def __not_condition__(self):
+        unless predicate self.generate_path('check'):
+            yield True
+
+class IsSwimming(BuiltinFlag):
+    def __flag_init__(self):
+        predicate self.generate_path('check') {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+                "flags": {
+                    "is_swimming": true
+                }
+            }
+        }
+
+    @contextmanager
+    def __condition__(self):
+        if predicate self.generate_path('check'):
+            yield True
+
+    @contextmanager
+    def __not_condition__(self):
+        unless predicate self.generate_path('check'):
+            yield True
+
+class IsGliding(BuiltinFlag):
+    def __flag_init__(self):
+        predicate self.generate_path('check') {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+                "nbt": "{FallFlying: 1b}"
+            }
+        }
+
+    @contextmanager
+    def __condition__(self):
+        if predicate self.generate_path('check'):
+            yield True
+
+    @contextmanager
+    def __not_condition__(self):
+        unless predicate self.generate_path('check'):
+            yield True

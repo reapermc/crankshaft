@@ -24,7 +24,7 @@ class PlayerTick(BuiltinEvent):
 class PlayerJoin(BuiltinEvent):
     @dependency
     def player_tick(self):
-        join_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.join_tracker", 'custom:leave_game')['@s']
+        join_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.join", 'custom:leave_game')['@s']
 
         # if join_tracker >= 1:
         if score var join_tracker matches 1..:
@@ -123,7 +123,7 @@ class PlayerShotBow(BuiltinEvent):
 class PlayerUseCoas(BuiltinEvent):
     @dependency
     def player_tick(self):
-        use_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.use_tracker", 'used:carrot_on_a_stick')['@s']
+        use_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.use", 'used:carrot_on_a_stick')['@s']
 
         # if death_tracker >= 1:
         if score var use_tracker matches 1..:
@@ -133,7 +133,7 @@ class PlayerUseCoas(BuiltinEvent):
 class PlayerUseWfoas(BuiltinEvent):
     @dependency
     def player_tick(self):
-        use_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.use_tracker", 'used:warped_fungus_on_a_stick')['@s']
+        use_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.use", 'used:warped_fungus_on_a_stick')['@s']
 
         # if death_tracker >= 1:
         if score var use_tracker matches 1..:
@@ -143,7 +143,7 @@ class PlayerUseWfoas(BuiltinEvent):
 class PlayerJump(BuiltinEvent):
     @dependency
     def player_tick(self):
-        jump_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.jump_tracker", 'custom:jump')['@s']
+        jump_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.jump", 'custom:jump')['@s']
 
         # if jump_tracker >= 1:
         if score var jump_tracker matches 1..:
@@ -165,7 +165,7 @@ class PlayerLand(BuiltinEvent):
 class PlayerDie(BuiltinEvent):
     @dependency
     def player_tick(self):
-        death_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.death_tracker", 'deathCount')['@s']
+        death_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.death", 'deathCount')['@s']
 
         # if death_tracker >= 1:
         if score var death_tracker matches 1..:
@@ -175,7 +175,7 @@ class PlayerDie(BuiltinEvent):
 class PlayerRespawn(BuiltinEvent):
     @dependency
     def tick(self):
-        death_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.death_tracker", 'deathCount')['@s']
+        death_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.death", 'deathCount')['@s']
 
         # unlike '@a', '@e[type=player]'
         # only targets alive players
@@ -185,4 +185,211 @@ class PlayerRespawn(BuiltinEvent):
                 death_tracker = 0
                 self.trigger()
 
+class PlayerAirborne(BuiltinEvent):
+    @dependency
+    def player_tick(self):
+        air_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.air_time")['@s']
 
+        if flag.is_airborne == True:
+            air_time_tracker += 1
+            self.trigger(air_time=air_time_tracker)
+        if flag.is_airborne == False:
+            air_time_tracker = 0
+
+class PlayerAirborneStart(BuiltinEvent):
+    @early_dependency
+    def player_airborne(self, air_time):
+        # if charge_time == 1:
+        if score var air_time matches 1:
+            self.trigger()
+
+class PlayerAirborneEnd(BuiltinEvent):
+    def __event_init__(self):
+        self.air_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.air_time")['@s']
+        self.airborne_tag = f"{self.TAG_ROOT}.airborne"
+        self.temp = f"{self.TAG_ROOT}.temp"
+
+    @dependency
+    def player_airborne(self, air_time):
+        self.air_time_tracker = air_time
+        add_tag(self.airborne_tag)
+        add_tag(self.temp)
+
+    @dependency
+    def player_tick(self):
+        if entity @s[tag=!self.airborne_tag]:
+            if entity @s[tag=self.temp]:
+                remove_tag(self.temp)
+                self.trigger(air_time=self.air_time_tracker)
+        remove_tag(self.airborne_tag)
+
+class PlayerSneak(BuiltinEvent):
+    @dependency
+    def player_tick(self):
+        sneak_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.sneak_time")['@s']
+
+        if flag.is_sneaking == True:
+            sneak_time_tracker += 1
+            self.trigger(sneak_time=sneak_time_tracker)
+        if flag.is_sneaking == False:
+            sneak_time_tracker = 0
+
+class PlayerSneakStart(BuiltinEvent):
+    @early_dependency
+    def player_sneak(self, sneak_time):
+        # if charge_time == 1:
+        if score var sneak_time matches 1:
+            self.trigger()
+
+class PlayerSneakEnd(BuiltinEvent):
+    def __event_init__(self):
+        self.sneak_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.sneak_time")['@s']
+        self.sneaking_tag = f"{self.TAG_ROOT}.sneaking"
+        self.temp = f"{self.TAG_ROOT}.temp"
+
+    @dependency
+    def player_sneak(self, sneak_time):
+        self.sneak_time_tracker = sneak_time
+        add_tag(self.sneaking_tag)
+        add_tag(self.temp)
+
+    @dependency
+    def player_tick(self):
+        if entity @s[tag=!self.sneaking_tag]:
+            if entity @s[tag=self.temp]:
+                remove_tag(self.temp)
+                self.trigger(sneak_time=self.sneak_time_tracker)
+        remove_tag(self.sneaking_tag)
+
+class PlayerSprint(BuiltinEvent):
+    @dependency
+    def player_tick(self):
+        sprint_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.sprint_time")['@s']
+
+        if flag.is_sprinting == True:
+            sprint_time_tracker += 1
+            self.trigger(sprint_time=sprint_time_tracker)
+        if flag.is_sprinting == False:
+            sprint_time_tracker = 0
+
+class PlayerSprintStart(BuiltinEvent):
+    @early_dependency
+    def player_sprint(self, sprint_time):
+        # if sprint_time == 1:
+        if score var sprint_time matches 1:
+            self.trigger()
+
+class PlayerSprintEnd(BuiltinEvent):
+    def __event_init__(self):
+        self.sprint_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.sprint_time")['@s']
+        self.sprinting_tag = f"{self.TAG_ROOT}.sprinting"
+        self.temp = f"{self.TAG_ROOT}.temp"
+
+    @dependency
+    def player_sprint(self, sprint_time):
+        self.sprint_time_tracker = sprint_time
+        add_tag(self.sprinting_tag)
+        add_tag(self.temp)
+
+    @dependency
+    def player_tick(self):
+        if entity @s[tag=!self.sprinting_tag]:
+            if entity @s[tag=self.temp]:
+                remove_tag(self.temp)
+                self.trigger(sprint_time=self.sprint_time_tracker)
+        remove_tag(self.sprinting_tag)
+
+class PlayerSwim(BuiltinEvent):
+    @dependency
+    def player_tick(self):
+        swim_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.swim_time")['@s']
+
+        if flag.is_swimming == True:
+            swim_time_tracker += 1
+            self.trigger(swim_time=swim_time_tracker)
+        if flag.is_swimming == False:
+            swim_time_tracker = 0
+
+class PlayerSwimStart(BuiltinEvent):
+    @early_dependency
+    def player_swim(self, swim_time):
+        # if swim_time == 1:
+        if score var swim_time matches 1:
+            self.trigger()
+
+class PlayerSwimEnd(BuiltinEvent):
+    def __event_init__(self):
+        self.swim_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.swim_time")['@s']
+        self.swimming_tag = f"{self.TAG_ROOT}.swimming"
+        self.temp = f"{self.TAG_ROOT}.temp"
+
+    @dependency
+    def player_swim(self, swim_time):
+        self.swim_time_tracker = swim_time
+        add_tag(self.swimming_tag)
+        add_tag(self.temp)
+
+    @dependency
+    def player_tick(self):
+        if entity @s[tag=!self.swimming_tag]:
+            if entity @s[tag=self.temp]:
+                remove_tag(self.temp)
+                self.trigger(swim_time=self.swim_time_tracker)
+        remove_tag(self.swimming_tag)
+
+class PlayerGlide(BuiltinEvent):
+    @dependency
+    def player_tick(self):
+        glide_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.glide_time")['@s']
+
+        if flag.is_gliding == True:
+            glide_time_tracker += 1
+            self.trigger(glide_time=glide_time_tracker)
+        if flag.is_gliding == False:
+            glide_time_tracker = 0
+
+class PlayerGlideStart(BuiltinEvent):
+    @early_dependency
+    def player_glide(self, glide_time):
+        # if glide_time == 1:
+        if score var glide_time matches 1:
+            self.trigger()
+
+class PlayerGlideEnd(BuiltinEvent):
+    def __event_init__(self):
+        self.glide_time_tracker = Scoreboard(f"{self.SCOREBOARD_ROOT}.glide_time")['@s']
+        self.gliding_tag = f"{self.TAG_ROOT}.gliding"
+        self.temp = f"{self.TAG_ROOT}.temp"
+
+    @dependency
+    def player_glide(self, glide_time):
+        self.glide_time_tracker = glide_time
+        add_tag(self.gliding_tag)
+        add_tag(self.temp)
+
+    @dependency
+    def player_tick(self):
+        if entity @s[tag=!self.gliding_tag]:
+            if entity @s[tag=self.temp]:
+                remove_tag(self.temp)
+                self.trigger(glide_time=self.glide_time_tracker)
+        remove_tag(self.gliding_tag)
+
+class PlayerInventoryChange(BuiltinEvent):
+    def __event_init__(self):
+        advancement_path = f"{get_cwd()}/on_charge"
+        advancement_reward_path = f"{get_cwd()}/reward"
+        advancement advancement_path {
+            "criteria": {
+                    "requirement": {
+                    "trigger": "minecraft:inventory_changed"
+                }
+            },
+            "rewards": {
+                "function": advancement_reward_path
+            }
+        }
+
+        function advancement_reward_path:
+            self.trigger()
+            revoke_advancement(advancement_path)

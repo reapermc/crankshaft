@@ -29,16 +29,17 @@
 help --- DO_NOT_DELETE ---
 scoreboard objectives add reapermc.crankshaft dummy
 scoreboard objectives add reapermc.crankshaft.builtin_event.__generic__ dummy
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_join.join_tracker custom:leave_game
+scoreboard objectives add reapermc.crankshaft.custom_event.__generic__ dummy
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_join.join custom:leave_game
 scoreboard objectives add reapermc.crankshaft.builtin_event.player_charge_bow.charge_time dummy
 scoreboard objectives add reapermc.crankshaft.builtin_event.player_charge_bow_end.charge_time dummy
 scoreboard objectives add reapermc.crankshaft.builtin_event.player_shot_bow.charge_time dummy
 scoreboard objectives add reapermc.crankshaft.builtin_event.player_shot_bow.shot_bow used:bow
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_jump.jump_tracker custom:jump
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_die.death_tracker deathCount
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_respawn.death_tracker deathCount
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_use_coas.use_tracker used:carrot_on_a_stick
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_use_wfoas.use_tracker used:warped_fungus_on_a_stick
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_jump.jump custom:jump
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_die.death deathCount
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_respawn.death deathCount
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_use_coas.use used:carrot_on_a_stick
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_use_wfoas.use used:warped_fungus_on_a_stick
 ```
 
 `@function basic_event3:reapermc/wicked_expressions/loader/prio_1`
@@ -175,6 +176,16 @@ function reapermc:crankshaft/builtin_event/player_use_wfoas/dependency_entrypoin
 function reapermc:crankshaft/builtin_event/player_jump/dependency_entrypoint/player_tick
 function reapermc:crankshaft/builtin_event/player_land/dependency_entrypoint/player_tick
 function reapermc:crankshaft/builtin_event/player_die/dependency_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_airborne/dependency_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_airborne_end/dependency_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_sneak/dependency_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_sneak_end/dependency_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_sprint/dependency_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_sprint_end/dependency_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_swim/dependency_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_swim_end/dependency_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_glide/dependency_entrypoint/player_tick
+function reapermc:crankshaft/builtin_event/player_glide_end/dependency_entrypoint/player_tick
 ```
 
 `@function reapermc:crankshaft/builtin_event/load/__dep_runner__`
@@ -245,7 +256,7 @@ function reapermc:crankshaft/builtin_event/player_join/__dep_runner__
 `@function reapermc:crankshaft/builtin_event/player_join/dependency_entrypoint/player_tick/nested_execute_0`
 
 ```mcfunction
-scoreboard players set @s reapermc.crankshaft.builtin_event.player_join.join_tracker 0
+scoreboard players set @s reapermc.crankshaft.builtin_event.player_join.join 0
 function reapermc:crankshaft/builtin_event/player_join/__on_trigger__
 ```
 
@@ -315,7 +326,7 @@ function reapermc:crankshaft/builtin_event/player_jump/__dep_runner__
 `@function reapermc:crankshaft/builtin_event/player_jump/dependency_entrypoint/player_tick/nested_execute_0`
 
 ```mcfunction
-scoreboard players set @s reapermc.crankshaft.builtin_event.player_jump.jump_tracker 0
+scoreboard players set @s reapermc.crankshaft.builtin_event.player_jump.jump 0
 function reapermc:crankshaft/builtin_event/player_jump/__on_trigger__
 ```
 
@@ -351,7 +362,7 @@ function reapermc:crankshaft/builtin_event/player_die/__dep_runner__
 `@function reapermc:crankshaft/builtin_event/player_die/dependency_entrypoint/player_tick/nested_execute_0`
 
 ```mcfunction
-scoreboard players set @s reapermc.crankshaft.builtin_event.player_die.death_tracker 0
+scoreboard players set @s reapermc.crankshaft.builtin_event.player_die.death 0
 function reapermc:crankshaft/builtin_event/player_die/__on_trigger__
 ```
 
@@ -366,7 +377,7 @@ function reapermc:crankshaft/builtin_event/player_respawn/__dep_runner__
 `@function reapermc:crankshaft/builtin_event/player_respawn/dependency_entrypoint/tick/nested_execute_0`
 
 ```mcfunction
-scoreboard players set @s reapermc.crankshaft.builtin_event.player_respawn.death_tracker 0
+scoreboard players set @s reapermc.crankshaft.builtin_event.player_respawn.death 0
 function reapermc:crankshaft/builtin_event/player_respawn/__on_trigger__
 ```
 
@@ -381,7 +392,7 @@ function reapermc:crankshaft/builtin_event/player_use_coas/__dep_runner__
 `@function reapermc:crankshaft/builtin_event/player_use_coas/dependency_entrypoint/player_tick/nested_execute_0`
 
 ```mcfunction
-scoreboard players set @s reapermc.crankshaft.builtin_event.player_use_coas.use_tracker 0
+scoreboard players set @s reapermc.crankshaft.builtin_event.player_use_coas.use 0
 function reapermc:crankshaft/builtin_event/player_use_coas/__on_trigger__
 ```
 
@@ -396,7 +407,7 @@ function reapermc:crankshaft/builtin_event/player_use_wfoas/__dep_runner__
 `@function reapermc:crankshaft/builtin_event/player_use_wfoas/dependency_entrypoint/player_tick/nested_execute_0`
 
 ```mcfunction
-scoreboard players set @s reapermc.crankshaft.builtin_event.player_use_wfoas.use_tracker 0
+scoreboard players set @s reapermc.crankshaft.builtin_event.player_use_wfoas.use 0
 function reapermc:crankshaft/builtin_event/player_use_wfoas/__on_trigger__
 ```
 
@@ -427,7 +438,7 @@ execute as @a at @s run function reapermc:crankshaft/builtin_event/player_tick/_
 `@function reapermc:crankshaft/builtin_event/player_join/dependency_entrypoint/player_tick`
 
 ```mcfunction
-execute if score @s reapermc.crankshaft.builtin_event.player_join.join_tracker matches 1.. run function reapermc:crankshaft/builtin_event/player_join/dependency_entrypoint/player_tick/nested_execute_0
+execute if score @s reapermc.crankshaft.builtin_event.player_join.join matches 1.. run function reapermc:crankshaft/builtin_event/player_join/dependency_entrypoint/player_tick/nested_execute_0
 ```
 
 `@function reapermc:crankshaft/builtin_event/player_load/dependency_entrypoint/player_join`
@@ -497,7 +508,7 @@ execute if score @s reapermc.crankshaft.builtin_event.player_shot_bow.shot_bow m
 `@function reapermc:crankshaft/builtin_event/player_jump/dependency_entrypoint/player_tick`
 
 ```mcfunction
-execute if score @s reapermc.crankshaft.builtin_event.player_jump.jump_tracker matches 1.. run function reapermc:crankshaft/builtin_event/player_jump/dependency_entrypoint/player_tick/nested_execute_0
+execute if score @s reapermc.crankshaft.builtin_event.player_jump.jump matches 1.. run function reapermc:crankshaft/builtin_event/player_jump/dependency_entrypoint/player_tick/nested_execute_0
 ```
 
 `@function reapermc:crankshaft/builtin_event/player_land/dependency_entrypoint/player_tick`
@@ -510,25 +521,25 @@ execute unless predicate reapermc:crankshaft/builtin_flag/is_airborne/handler/ch
 `@function reapermc:crankshaft/builtin_event/player_die/dependency_entrypoint/player_tick`
 
 ```mcfunction
-execute if score @s reapermc.crankshaft.builtin_event.player_die.death_tracker matches 1.. run function reapermc:crankshaft/builtin_event/player_die/dependency_entrypoint/player_tick/nested_execute_0
+execute if score @s reapermc.crankshaft.builtin_event.player_die.death matches 1.. run function reapermc:crankshaft/builtin_event/player_die/dependency_entrypoint/player_tick/nested_execute_0
 ```
 
 `@function reapermc:crankshaft/builtin_event/player_respawn/dependency_entrypoint/tick`
 
 ```mcfunction
-execute as @e[type=player] at @s if score @s reapermc.crankshaft.builtin_event.player_respawn.death_tracker matches 1.. run function reapermc:crankshaft/builtin_event/player_respawn/dependency_entrypoint/tick/nested_execute_0
+execute as @e[type=player] at @s if score @s reapermc.crankshaft.builtin_event.player_respawn.death matches 1.. run function reapermc:crankshaft/builtin_event/player_respawn/dependency_entrypoint/tick/nested_execute_0
 ```
 
 `@function reapermc:crankshaft/builtin_event/player_use_coas/dependency_entrypoint/player_tick`
 
 ```mcfunction
-execute if score @s reapermc.crankshaft.builtin_event.player_use_coas.use_tracker matches 1.. run function reapermc:crankshaft/builtin_event/player_use_coas/dependency_entrypoint/player_tick/nested_execute_0
+execute if score @s reapermc.crankshaft.builtin_event.player_use_coas.use matches 1.. run function reapermc:crankshaft/builtin_event/player_use_coas/dependency_entrypoint/player_tick/nested_execute_0
 ```
 
 `@function reapermc:crankshaft/builtin_event/player_use_wfoas/dependency_entrypoint/player_tick`
 
 ```mcfunction
-execute if score @s reapermc.crankshaft.builtin_event.player_use_wfoas.use_tracker matches 1.. run function reapermc:crankshaft/builtin_event/player_use_wfoas/dependency_entrypoint/player_tick/nested_execute_0
+execute if score @s reapermc.crankshaft.builtin_event.player_use_wfoas.use matches 1.. run function reapermc:crankshaft/builtin_event/player_use_wfoas/dependency_entrypoint/player_tick/nested_execute_0
 ```
 
 `@advancement reapermc:crankshaft/builtin_event/player_charge_bow/__event_init__/on_charge`

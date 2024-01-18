@@ -29,6 +29,7 @@
 help --- DO_NOT_DELETE ---
 scoreboard objectives add reapermc.crankshaft dummy
 scoreboard objectives add reapermc.crankshaft.builtin_event.__generic__ dummy
+scoreboard objectives add reapermc.crankshaft.custom_event.__generic__ dummy
 ```
 
 `@function basic_event2:reapermc/wicked_expressions/loader/prio_1`

@@ -8,8 +8,7 @@ from typing import ClassVar, Callable
 import inspect
 
 @dataclass
-class BuiltinEvent:
-    is_custom_event: ClassVar[bool] = False
+class Event:
     deployed: ClassVar[bool] = False
 
     def __init_subclass__(cls, **kwargs):
@@ -22,6 +21,52 @@ class BuiltinEvent:
 
         super().__init_subclass__(**kwargs)
 
+    @classmethod
+    def safe_deploy(cls):
+        if not cls.deployed:
+            return cls.deploy()
+        return deployed_events[cls.event_id]
+
+    @classmethod
+    def deploy(cls):
+        deployed_event = cls()
+        deployed_event._on_deploy()
+
+        deployed_events[deployed_event.event_id] = deployed_event
+        cls.deployed = True
+        return deployed_event
+
+    def _auto_copy_args(self, func: Callable) -> Callable:
+        """This ensures args passed thru 'self.trigger()' are safe copies."""
+        params = inspect.signature(func).parameters
+        param_list = []
+        type_annotations = {}
+
+        for param in params:
+            param_list.append(param)
+
+        for arg in self._output_args:
+            param = param_list[0]
+            del param_list[0]
+
+            if isinstance(arg, ScoreSource):
+                type_annotations[param] = ExprOnly(Scoreboard)
+            elif isinstance(arg, DataSource):
+                type_annotations[param] = ExprOnly(Data)
+
+        for kwarg_value in self._output_kwargs.values():
+            param = param_list[0]
+            del param_list[0]
+
+            if isinstance(kwarg_value, ScoreSource):
+                type_annotations[param] = ExprOnly(Scoreboard)
+            elif isinstance(kwarg_value, DataSource):
+                type_annotations[param] = ExprOnly(Data)
+
+        return copy_args(**type_annotations)(func)
+
+@dataclass
+class BuiltinEvent(Event):
     @classmethod
     def _patch_class_defaults(cls):
         cls.event_id = pascal_to_snake_case(cls.__name__)
@@ -104,50 +149,6 @@ class BuiltinEvent:
             function f"#{self._path['payload_fork']}"
             function self._path['dep_runner']
 
-    def _auto_copy_args(self, func: Callable) -> Callable:
-        """This ensures args passed thru 'self.trigger()' are safe copies."""
-        params = inspect.signature(func).parameters
-        param_list = []
-        type_annotations = {}
-
-        for param in params:
-            param_list.append(param)
-
-        for arg in self._output_args:
-            param = param_list[0]
-            del param_list[0]
-
-            if isinstance(arg, ScoreSource):
-                type_annotations[param] = ExprOnly(Scoreboard)
-            elif isinstance(arg, DataSource):
-                type_annotations[param] = ExprOnly(Data)
-
-        for kwarg_value in self._output_kwargs.values():
-            param = param_list[0]
-            del param_list[0]
-
-            if isinstance(kwarg_value, ScoreSource):
-                type_annotations[param] = ExprOnly(Scoreboard)
-            elif isinstance(kwarg_value, DataSource):
-                type_annotations[param] = ExprOnly(Data)
-
-        return copy_args(**type_annotations)(func)
-
-    @classmethod
-    def safe_deploy(cls):
-        if not cls.deployed:
-            return cls.deploy()
-        return deployed_events[cls.event_id]
-
-    @classmethod
-    def deploy(cls):
-        deployed_event = cls()
-        deployed_event._on_deploy()
-
-        deployed_events[deployed_event.event_id] = deployed_event
-        cls.deployed = True
-        return deployed_event
-
     def _on_deploy(self):
         if hasattr(self, '__event_init__') and callable(self.__event_init__):
             function self._path['event_init']:
@@ -176,20 +177,7 @@ class BuiltinEvent:
                     method(self, *dependency_instance._output_args, **dependency_instance._output_kwargs)
 
 @dataclass
-class CustomEvent:
-    is_custom_event: ClassVar[bool] = True
-    deployed: ClassVar[bool] = False
-
-    def __init_subclass__(cls, **kwargs):
-        cls._patch_class_defaults()
-        registered_events[cls.event_id] = cls
-
-        # enables in class events by
-        # default for event definitions
-        cls = supports_events(cls)
-
-        super().__init_subclass__(**kwargs)
-
+class CustomEvent(Event):
     @classmethod
     def _patch_class_defaults(cls):
         cls.event_id = pascal_to_snake_case(cls.__name__)
@@ -211,8 +199,8 @@ class CustomEvent:
 
         # helpers
         cls.GENERIC_SCOREBOARD = Scoreboard(f"{Config.SCOREBOARD_ROOT}.custom_event.__generic__")
-        cls.SCOREBOARD_ROOT = f"{Config.SCOREBOARD_ROOT}.custom_event.{cls.event_id}"
-        cls.TAG_ROOT = f"{Config.TAG_ROOT}.custom_event.{cls.event_id}"
+        cls.SCOREBOARD_ROOT = f"{Config.SCOREBOARD_ROOT}.{ctx.project_id}.custom_event.{cls.event_id}"
+        cls.TAG_ROOT = f"{Config.TAG_ROOT}.{ctx.project_id}.custom_event.{cls.event_id}"
 
     def attach_payload(self, func: Callable, first_arg=None):
         append function self._path['payload']:
@@ -228,38 +216,9 @@ class CustomEvent:
         self._output_kwargs = {**output_kwargs}
 
         execute function self._path['on_trigger']:
-            function self._path['custom_event_dep_runner']
-            function self._path['payload']
             function self._path['custom_event_early_dep_runner']
-
-    def _auto_copy_args(self, func: Callable) -> Callable:
-        """This ensures args passed thru 'self.trigger()' are safe copies."""
-        params = inspect.signature(func).parameters
-        param_list = []
-        type_annotations = {}
-
-        for param in params:
-            param_list.append(param)
-
-        for arg in self._output_args:
-            param = param_list[0]
-            del param_list[0]
-
-            if isinstance(arg, ScoreSource):
-                type_annotations[param] = ExprOnly(Scoreboard)
-            elif isinstance(arg, DataSource):
-                type_annotations[param] = ExprOnly(Data)
-
-        for kwarg_value in self._output_kwargs.values():
-            param = param_list[0]
-            del param_list[0]
-
-            if isinstance(kwarg_value, ScoreSource):
-                type_annotations[param] = ExprOnly(Scoreboard)
-            elif isinstance(kwarg_value, DataSource):
-                type_annotations[param] = ExprOnly(Data)
-
-        return copy_args(**type_annotations)(func)
+            function self._path['payload']
+            function self._path['custom_event_dep_runner']
 
     @classmethod
     def add_early_dependency(cls, dependency_event_class, dependency_method: Callable):
@@ -295,21 +254,6 @@ class CustomEvent:
         dependency_event_id = dependency_event_class.event_id
         dir_name = ['dependency_entrypoint', 'early_dependency_entrypoint'][early]
         return f"{Config.LOCAL_DIR}/custom_event/{dependent_event_id}/{dir_name}/{dependency_event_id}"
-
-    @classmethod
-    def safe_deploy(cls):
-        if not cls.deployed:
-            return cls.deploy()
-        return deployed_events[cls.event_id]
-
-    @classmethod
-    def deploy(cls):
-        deployed_event = cls()
-        deployed_event._on_deploy()
-
-        deployed_events[deployed_event.event_id] = deployed_event
-        cls.deployed = True
-        return deployed_event
 
     def _on_deploy(self):
         if hasattr(self, '__event_init__') and callable(self.__event_init__):
