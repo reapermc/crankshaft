@@ -21,140 +21,6 @@
 
 ```
 
-### basic_event3
-
-`@function basic_event3:reapermc/wicked_expressions/loader/prio_0`
-
-```mcfunction
-help --- DO_NOT_DELETE ---
-scoreboard objectives add reapermc.crankshaft dummy
-scoreboard objectives add reapermc.crankshaft.builtin_event.__generic__ dummy
-scoreboard objectives add reapermc.crankshaft.custom_event.__generic__ dummy
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_join.join custom:leave_game
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_charge_bow.charge_time dummy
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_charge_bow_end.charge_time dummy
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_shot_bow.charge_time dummy
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_shot_bow.shot_bow used:bow
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_jump.jump custom:jump
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_die.death deathCount
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_respawn.death deathCount
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_use_coas.use used:carrot_on_a_stick
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_use_wfoas.use used:warped_fungus_on_a_stick
-```
-
-`@function basic_event3:reapermc/wicked_expressions/loader/prio_1`
-
-```mcfunction
-help --- DO_NOT_DELETE ---
-```
-
-`@function basic_event3:reapermc/wicked_expressions/loader/prio_2`
-
-```mcfunction
-help --- DO_NOT_DELETE ---
-```
-
-`@function basic_event3:reapermc/wicked_expressions/loader`
-
-```mcfunction
-function basic_event3:reapermc/wicked_expressions/loader/prio_0
-function basic_event3:reapermc/wicked_expressions/loader/prio_1
-function basic_event3:reapermc/wicked_expressions/loader/prio_2
-```
-
-`@function basic_event3:reapermc/crankshaft/builtin_event/player_load/__payload__`
-
-```mcfunction
-say loaded!
-give @s gold_ingot
-```
-
-`@function basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow/__payload__`
-
-```mcfunction
-scoreboard players operation $basic_event3#copy_args$0 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_charge_bow.charge_time
-tellraw @s ["charging bow: ", {"score": {"name": "$basic_event3#copy_args$0", "objective": "reapermc.wicked_expressions"}}]
-```
-
-`@function basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow_start/__payload__`
-
-```mcfunction
-tellraw @s "started charging bow!"
-```
-
-`@function basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow_end/__payload__`
-
-```mcfunction
-scoreboard players operation $basic_event3#copy_args$1 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_charge_bow_end.charge_time
-tellraw @s ["finished charging: ", {"score": {"name": "$basic_event3#copy_args$1", "objective": "reapermc.wicked_expressions"}}]
-```
-
-`@function basic_event3:reapermc/crankshaft/builtin_event/player_shot_bow/__payload__`
-
-```mcfunction
-scoreboard players operation $basic_event3#copy_args$2 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_shot_bow.charge_time
-tellraw @s ["shot bow: ", {"score": {"name": "$basic_event3#copy_args$2", "objective": "reapermc.wicked_expressions"}}]
-```
-
-`@function basic_event3:reapermc/crankshaft/builtin_event/player_jump/__payload__`
-
-```mcfunction
-say jumped!
-```
-
-`@function basic_event3:reapermc/crankshaft/builtin_event/player_land/__payload__`
-
-```mcfunction
-say landed!
-```
-
-`@function basic_event3:reapermc/crankshaft/builtin_event/player_die/__payload__`
-
-```mcfunction
-say died!
-```
-
-`@function basic_event3:reapermc/crankshaft/builtin_event/player_respawn/__payload__`
-
-```mcfunction
-say respawned!
-```
-
-`@function basic_event3:reapermc/crankshaft/builtin_event/player_use_coas/__payload__`
-
-```mcfunction
-say used coas!
-```
-
-`@function basic_event3:reapermc/crankshaft/builtin_event/player_use_wfoas/__payload__`
-
-```mcfunction
-say used wfoas!
-```
-
-### minecraft
-
-`@function_tag minecraft:load`
-
-```json
-{
-  "values": [
-    "basic_event3:reapermc/wicked_expressions/loader",
-    "reapermc:crankshaft/builtin_event/load/__event_init__"
-  ]
-}
-```
-
-`@function_tag minecraft:tick`
-
-```json
-{
-  "values": [
-    "reapermc:crankshaft/builtin_event/tick/__event_init__"
-  ]
-}
-```
-
 ### reapermc
 
 `@function reapermc:crankshaft/builtin_event/tick/__dep_runner__`
@@ -889,4 +755,135 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_wfoas.use match
     }
   ]
 }
+```
+
+### minecraft
+
+`@function_tag minecraft:load`
+
+```json
+{
+  "values": [
+    "reapermc:crankshaft/builtin_event/load/__event_init__",
+    "basic_event3:reapermc/wicked_expressions/loader"
+  ]
+}
+```
+
+`@function_tag minecraft:tick`
+
+```json
+{
+  "values": [
+    "reapermc:crankshaft/builtin_event/tick/__event_init__"
+  ]
+}
+```
+
+### basic_event3
+
+`@function basic_event3:reapermc/wicked_expressions/loader/prio_0`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_join.join custom:leave_game
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_charge_bow.charge_time dummy
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_charge_bow_end.charge_time dummy
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_shot_bow.charge_time dummy
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_shot_bow.shot_bow used:bow
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_jump.jump custom:jump
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_die.death deathCount
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_respawn.death deathCount
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_use_coas.use used:carrot_on_a_stick
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_use_wfoas.use used:warped_fungus_on_a_stick
+```
+
+`@function basic_event3:reapermc/wicked_expressions/loader/prio_1`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+```
+
+`@function basic_event3:reapermc/wicked_expressions/loader/prio_2`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+```
+
+`@function basic_event3:reapermc/wicked_expressions/loader`
+
+```mcfunction
+function basic_event3:reapermc/wicked_expressions/loader/prio_0
+function basic_event3:reapermc/wicked_expressions/loader/prio_1
+function basic_event3:reapermc/wicked_expressions/loader/prio_2
+```
+
+`@function basic_event3:reapermc/crankshaft/builtin_event/player_load/__payload__`
+
+```mcfunction
+say loaded!
+give @s gold_ingot
+```
+
+`@function basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow/__payload__`
+
+```mcfunction
+scoreboard players operation $basic_event3#copy_args$0 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_charge_bow.charge_time
+tellraw @s ["charging bow: ", {"score": {"name": "$basic_event3#copy_args$0", "objective": "reapermc.wicked_expressions"}}]
+```
+
+`@function basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow_start/__payload__`
+
+```mcfunction
+tellraw @s "started charging bow!"
+```
+
+`@function basic_event3:reapermc/crankshaft/builtin_event/player_charge_bow_end/__payload__`
+
+```mcfunction
+scoreboard players operation $basic_event3#copy_args$1 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_charge_bow_end.charge_time
+tellraw @s ["finished charging: ", {"score": {"name": "$basic_event3#copy_args$1", "objective": "reapermc.wicked_expressions"}}]
+```
+
+`@function basic_event3:reapermc/crankshaft/builtin_event/player_shot_bow/__payload__`
+
+```mcfunction
+scoreboard players operation $basic_event3#copy_args$2 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_shot_bow.charge_time
+tellraw @s ["shot bow: ", {"score": {"name": "$basic_event3#copy_args$2", "objective": "reapermc.wicked_expressions"}}]
+```
+
+`@function basic_event3:reapermc/crankshaft/builtin_event/player_jump/__payload__`
+
+```mcfunction
+say jumped!
+```
+
+`@function basic_event3:reapermc/crankshaft/builtin_event/player_land/__payload__`
+
+```mcfunction
+say landed!
+```
+
+`@function basic_event3:reapermc/crankshaft/builtin_event/player_die/__payload__`
+
+```mcfunction
+say died!
+```
+
+`@function basic_event3:reapermc/crankshaft/builtin_event/player_respawn/__payload__`
+
+```mcfunction
+say respawned!
+```
+
+`@function basic_event3:reapermc/crankshaft/builtin_event/player_use_coas/__payload__`
+
+```mcfunction
+say used coas!
+```
+
+`@function basic_event3:reapermc/crankshaft/builtin_event/player_use_wfoas/__payload__`
+
+```mcfunction
+say used wfoas!
 ```

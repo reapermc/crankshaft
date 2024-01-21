@@ -32,5 +32,3 @@ def player_use_magic_wand():
         summon sheep ~ ~ ~ {CustomName: '{"text": "jeb_"}'}
         particle firework ~ ~ ~ 0 0 0 0.2 50 force
         particle flash ~ ~ ~ 0 0 0 0 0 force
-
-        

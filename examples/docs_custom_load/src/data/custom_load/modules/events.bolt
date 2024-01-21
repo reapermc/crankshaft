@@ -1,0 +1,7 @@
+from crankshaft:api import CustomEvent
+
+class CustomLoad(CustomEvent):
+    def __event_init__(self):
+        current_path = ~/
+        merge function_tag minecraft:load {"values": [current_path]}
+        self.trigger()
