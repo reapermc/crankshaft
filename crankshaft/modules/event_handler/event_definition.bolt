@@ -92,7 +92,7 @@ class BuiltinEvent(Event):
         }
 
         # helpers
-        cls.GENERIC_SCOREBOARD = Scoreboard(f"{Config.SCOREBOARD_ROOT}.builtin_event.__generic__")
+        # cls.GENERIC_SCOREBOARD = Scoreboard(f"{Config.SCOREBOARD_ROOT}.builtin_event.__generic__")
         cls.SCOREBOARD_ROOT = f"{Config.SCOREBOARD_ROOT}.builtin_event.{cls.event_id}"
         cls.TAG_ROOT = f"{Config.TAG_ROOT}.builtin_event.{cls.event_id}"
 
@@ -198,7 +198,7 @@ class CustomEvent(Event):
         }
 
         # helpers
-        cls.GENERIC_SCOREBOARD = Scoreboard(f"{Config.SCOREBOARD_ROOT}.custom_event.__generic__")
+        # cls.GENERIC_SCOREBOARD = Scoreboard(f"{Config.SCOREBOARD_ROOT}.custom_event.__generic__")
         cls.SCOREBOARD_ROOT = f"{Config.SCOREBOARD_ROOT}.{ctx.project_id}.custom_event.{cls.event_id}"
         cls.TAG_ROOT = f"{Config.TAG_ROOT}.{ctx.project_id}.custom_event.{cls.event_id}"
 

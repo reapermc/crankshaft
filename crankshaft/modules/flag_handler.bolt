@@ -48,7 +48,7 @@ class BuiltinFlag:
             'flag_init': f"{GLOBAL_PATH}/handler/__flag_init__",
         }
         cls.SCOREBOARD_ROOT = f"{Config.SCOREBOARD_ROOT}.builtin_flag.{cls.flag_id}"
-        cls.generic_score_outcome = Scoreboard(f"{Config.SCOREBOARD_ROOT}")['$generic_event_outcome']
+        # cls.generic_score_outcome = Scoreboard(f"{Config.SCOREBOARD_ROOT}")['$generic_event_outcome']
 
     def generate_path(self, subpath: str):
         return f"{self._path['handler']}/{subpath}"
@@ -87,6 +87,6 @@ def _get_deployed_flag_by_id(flag_id: str) -> BuiltinFlag:
             return flag
 
 # this is the easiest way to hack the flag syntax,
-# we do this because only the instance
-# lets us take advantage of '__getattribute__'
+# we do this as '__getattribute__'
+# only works on class instances
 flag = Flag()

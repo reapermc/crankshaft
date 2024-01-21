@@ -8,7 +8,7 @@ from ./event_handler/event_definition import BuiltinEvent, CustomEvent
 from ./event_handler/listeners import event, class_event, lazy_class_event, early_dependency, dependency
 from ./event_handler/class_support import supports_events
 
-# this module autoruns when the module is imported
+# this module autoruns when it's imported
 # this is because @defer works the way it does
 # yes, this is terrible, but it does the job for now
 import ./event_handler/optimizer as _

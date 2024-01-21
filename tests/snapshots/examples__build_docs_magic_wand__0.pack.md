@@ -13,14 +13,6 @@
 }
 ```
 
-### demo
-
-`@function(strip_final_newline) demo:main`
-
-```mcfunction
-
-```
-
 ### reapermc
 
 `@function reapermc:crankshaft/builtin_event/tick/__dep_runner__`
@@ -109,15 +101,15 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_coas.use matche
 {
   "values": [
     {
-      "id": "basic_event4:reapermc/crankshaft/builtin_event/player_use_coas/__ce_early_dep_runner__",
+      "id": "docs_magic_wand:reapermc/crankshaft/builtin_event/player_use_coas/__ce_early_dep_runner__",
       "required": false
     },
     {
-      "id": "basic_event4:reapermc/crankshaft/builtin_event/player_use_coas/__payload__",
+      "id": "docs_magic_wand:reapermc/crankshaft/builtin_event/player_use_coas/__payload__",
       "required": false
     },
     {
-      "id": "basic_event4:reapermc/crankshaft/builtin_event/player_use_coas/__ce_dep_runner__",
+      "id": "docs_magic_wand:reapermc/crankshaft/builtin_event/player_use_coas/__ce_dep_runner__",
       "required": false
     }
   ]
@@ -130,15 +122,15 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_coas.use matche
 {
   "values": [
     {
-      "id": "basic_event4:reapermc/crankshaft/builtin_event/player_tick/__ce_early_dep_runner__",
+      "id": "docs_magic_wand:reapermc/crankshaft/builtin_event/player_tick/__ce_early_dep_runner__",
       "required": false
     },
     {
-      "id": "basic_event4:reapermc/crankshaft/builtin_event/player_tick/__payload__",
+      "id": "docs_magic_wand:reapermc/crankshaft/builtin_event/player_tick/__payload__",
       "required": false
     },
     {
-      "id": "basic_event4:reapermc/crankshaft/builtin_event/player_tick/__ce_dep_runner__",
+      "id": "docs_magic_wand:reapermc/crankshaft/builtin_event/player_tick/__ce_dep_runner__",
       "required": false
     }
   ]
@@ -151,19 +143,82 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_coas.use matche
 {
   "values": [
     {
-      "id": "basic_event4:reapermc/crankshaft/builtin_event/tick/__ce_early_dep_runner__",
+      "id": "docs_magic_wand:reapermc/crankshaft/builtin_event/tick/__ce_early_dep_runner__",
       "required": false
     },
     {
-      "id": "basic_event4:reapermc/crankshaft/builtin_event/tick/__payload__",
+      "id": "docs_magic_wand:reapermc/crankshaft/builtin_event/tick/__payload__",
       "required": false
     },
     {
-      "id": "basic_event4:reapermc/crankshaft/builtin_event/tick/__ce_dep_runner__",
+      "id": "docs_magic_wand:reapermc/crankshaft/builtin_event/tick/__ce_dep_runner__",
       "required": false
     }
   ]
 }
+```
+
+### docs_magic_wand
+
+`@function docs_magic_wand:reapermc/crankshaft/builtin_event/player_use_coas/__ce_dep_runner__`
+
+```mcfunction
+function docs_magic_wand:reapermc/crankshaft/custom_event/player_use_magic_wand/dependency_entrypoint/player_use_coas
+```
+
+`@function docs_magic_wand:reapermc/wicked_expressions/loader/prio_0`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_use_coas.use used:carrot_on_a_stick
+```
+
+`@function docs_magic_wand:reapermc/wicked_expressions/loader/prio_1`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+```
+
+`@function docs_magic_wand:reapermc/wicked_expressions/loader/prio_2`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+```
+
+`@function docs_magic_wand:reapermc/wicked_expressions/loader`
+
+```mcfunction
+function docs_magic_wand:reapermc/wicked_expressions/loader/prio_0
+function docs_magic_wand:reapermc/wicked_expressions/loader/prio_1
+function docs_magic_wand:reapermc/wicked_expressions/loader/prio_2
+```
+
+`@function docs_magic_wand:reapermc/crankshaft/custom_event/player_use_magic_wand/__on_trigger__`
+
+```mcfunction
+function docs_magic_wand:reapermc/crankshaft/custom_event/player_use_magic_wand/__ce_early_dep_runner__
+function docs_magic_wand:reapermc/crankshaft/custom_event/player_use_magic_wand/__payload__
+function docs_magic_wand:reapermc/crankshaft/custom_event/player_use_magic_wand/__ce_dep_runner
+```
+
+`@function docs_magic_wand:reapermc/crankshaft/custom_event/player_use_magic_wand/__payload__/nested_execute_0`
+
+```mcfunction
+summon sheep ~ ~ ~ {CustomName: '{"text": "jeb_"}'}
+particle firework ~ ~ ~ 0 0 0 0.2 50 force
+particle flash ~ ~ ~ 0 0 0 0 0 force
+```
+
+`@function docs_magic_wand:reapermc/crankshaft/custom_event/player_use_magic_wand/dependency_entrypoint/player_use_coas`
+
+```mcfunction
+execute if data entity @s SelectedItem.tag{custom_item_id: "magic_wand"} run function docs_magic_wand:reapermc/crankshaft/custom_event/player_use_magic_wand/__on_trigger__
+```
+
+`@function docs_magic_wand:reapermc/crankshaft/custom_event/player_use_magic_wand/__payload__`
+
+```mcfunction
+execute anchored eyes positioned ^ ^ ^6 run function docs_magic_wand:reapermc/crankshaft/custom_event/player_use_magic_wand/__payload__/nested_execute_0
 ```
 
 ### minecraft
@@ -183,43 +238,7 @@ execute if score @s reapermc.crankshaft.builtin_event.player_use_coas.use matche
 ```json
 {
   "values": [
-    "basic_event4:reapermc/wicked_expressions/loader"
+    "docs_magic_wand:reapermc/wicked_expressions/loader"
   ]
 }
-```
-
-### basic_event4
-
-`@function basic_event4:reapermc/wicked_expressions/loader/prio_0`
-
-```mcfunction
-help --- DO_NOT_DELETE ---
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_use_coas.use used:carrot_on_a_stick
-```
-
-`@function basic_event4:reapermc/wicked_expressions/loader/prio_1`
-
-```mcfunction
-help --- DO_NOT_DELETE ---
-```
-
-`@function basic_event4:reapermc/wicked_expressions/loader/prio_2`
-
-```mcfunction
-help --- DO_NOT_DELETE ---
-```
-
-`@function basic_event4:reapermc/wicked_expressions/loader`
-
-```mcfunction
-function basic_event4:reapermc/wicked_expressions/loader/prio_0
-function basic_event4:reapermc/wicked_expressions/loader/prio_1
-function basic_event4:reapermc/wicked_expressions/loader/prio_2
-```
-
-`@function basic_event4:reapermc/crankshaft/builtin_event/player_use_coas/__payload__`
-
-```mcfunction
-say click!
-give @s diamond
 ```

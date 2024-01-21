@@ -1,0 +1,7 @@
+from crankshaft:api import CustomEvent, dependency
+
+class PlayerUseMagicWand(CustomEvent):
+    @dependency
+    def player_use_coas(self):
+        if data entity @s SelectedItem.tag{custom_item_id: "magic_wand"}:
+            self.trigger()

@@ -21,103 +21,6 @@
 
 ```
 
-### basic_event6
-
-`@function basic_event6:reapermc/wicked_expressions/loader/prio_0`
-
-```mcfunction
-help --- DO_NOT_DELETE ---
-scoreboard objectives add reapermc.crankshaft dummy
-scoreboard objectives add reapermc.crankshaft.builtin_event.__generic__ dummy
-scoreboard objectives add reapermc.crankshaft.custom_event.__generic__ dummy
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_sprint.sprint_time dummy
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_sprint_end.sprint_time dummy
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_swim.swim_time dummy
-scoreboard objectives add reapermc.crankshaft.builtin_event.player_swim_end.swim_time dummy
-```
-
-`@function basic_event6:reapermc/wicked_expressions/loader/prio_1`
-
-```mcfunction
-help --- DO_NOT_DELETE ---
-```
-
-`@function basic_event6:reapermc/wicked_expressions/loader/prio_2`
-
-```mcfunction
-help --- DO_NOT_DELETE ---
-```
-
-`@function basic_event6:reapermc/wicked_expressions/loader`
-
-```mcfunction
-function basic_event6:reapermc/wicked_expressions/loader/prio_0
-function basic_event6:reapermc/wicked_expressions/loader/prio_1
-function basic_event6:reapermc/wicked_expressions/loader/prio_2
-```
-
-`@function basic_event6:reapermc/crankshaft/builtin_event/player_sprint_start/__payload__`
-
-```mcfunction
-tellraw @a "start"
-```
-
-`@function basic_event6:reapermc/crankshaft/builtin_event/player_sprint/__payload__`
-
-```mcfunction
-scoreboard players operation $basic_event6#copy_args$0 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_sprint.sprint_time
-tellraw @s {"score": {"name": "$basic_event6#copy_args$0", "objective": "reapermc.wicked_expressions"}}
-```
-
-`@function basic_event6:reapermc/crankshaft/builtin_event/player_sprint_end/__payload__`
-
-```mcfunction
-scoreboard players operation $basic_event6#copy_args$1 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_sprint_end.sprint_time
-tellraw @s ["end ", {"score": {"name": "$basic_event6#copy_args$1", "objective": "reapermc.wicked_expressions"}}]
-```
-
-`@function basic_event6:reapermc/crankshaft/builtin_event/player_swim_start/__payload__`
-
-```mcfunction
-tellraw @s "start"
-```
-
-`@function basic_event6:reapermc/crankshaft/builtin_event/player_swim/__payload__`
-
-```mcfunction
-scoreboard players operation $basic_event6#copy_args$2 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_swim.swim_time
-tellraw @s {"score": {"name": "$basic_event6#copy_args$2", "objective": "reapermc.wicked_expressions"}}
-```
-
-`@function basic_event6:reapermc/crankshaft/builtin_event/player_swim_end/__payload__`
-
-```mcfunction
-scoreboard players operation $basic_event6#copy_args$3 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_swim_end.swim_time
-tellraw @s ["end ", {"score": {"name": "$basic_event6#copy_args$3", "objective": "reapermc.wicked_expressions"}}]
-```
-
-### minecraft
-
-`@function_tag minecraft:load`
-
-```json
-{
-  "values": [
-    "basic_event6:reapermc/wicked_expressions/loader"
-  ]
-}
-```
-
-`@function_tag minecraft:tick`
-
-```json
-{
-  "values": [
-    "reapermc:crankshaft/builtin_event/tick/__event_init__"
-  ]
-}
-```
-
 ### reapermc
 
 `@function reapermc:crankshaft/builtin_event/tick/__dep_runner__`
@@ -553,4 +456,98 @@ tag @s remove reapermc.crankshaft.builtin_event.player_swim_end.swimming
     }
   ]
 }
+```
+
+### minecraft
+
+`@function_tag minecraft:tick`
+
+```json
+{
+  "values": [
+    "reapermc:crankshaft/builtin_event/tick/__event_init__"
+  ]
+}
+```
+
+`@function_tag minecraft:load`
+
+```json
+{
+  "values": [
+    "basic_event6:reapermc/wicked_expressions/loader"
+  ]
+}
+```
+
+### basic_event6
+
+`@function basic_event6:reapermc/wicked_expressions/loader/prio_0`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_sprint.sprint_time dummy
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_sprint_end.sprint_time dummy
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_swim.swim_time dummy
+scoreboard objectives add reapermc.crankshaft.builtin_event.player_swim_end.swim_time dummy
+```
+
+`@function basic_event6:reapermc/wicked_expressions/loader/prio_1`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+```
+
+`@function basic_event6:reapermc/wicked_expressions/loader/prio_2`
+
+```mcfunction
+help --- DO_NOT_DELETE ---
+```
+
+`@function basic_event6:reapermc/wicked_expressions/loader`
+
+```mcfunction
+function basic_event6:reapermc/wicked_expressions/loader/prio_0
+function basic_event6:reapermc/wicked_expressions/loader/prio_1
+function basic_event6:reapermc/wicked_expressions/loader/prio_2
+```
+
+`@function basic_event6:reapermc/crankshaft/builtin_event/player_sprint_start/__payload__`
+
+```mcfunction
+tellraw @a "start"
+```
+
+`@function basic_event6:reapermc/crankshaft/builtin_event/player_sprint/__payload__`
+
+```mcfunction
+scoreboard players operation $basic_event6#copy_args$0 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_sprint.sprint_time
+tellraw @s {"score": {"name": "$basic_event6#copy_args$0", "objective": "reapermc.wicked_expressions"}}
+```
+
+`@function basic_event6:reapermc/crankshaft/builtin_event/player_sprint_end/__payload__`
+
+```mcfunction
+scoreboard players operation $basic_event6#copy_args$1 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_sprint_end.sprint_time
+tellraw @s ["end ", {"score": {"name": "$basic_event6#copy_args$1", "objective": "reapermc.wicked_expressions"}}]
+```
+
+`@function basic_event6:reapermc/crankshaft/builtin_event/player_swim_start/__payload__`
+
+```mcfunction
+tellraw @s "start"
+```
+
+`@function basic_event6:reapermc/crankshaft/builtin_event/player_swim/__payload__`
+
+```mcfunction
+scoreboard players operation $basic_event6#copy_args$2 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_swim.swim_time
+tellraw @s {"score": {"name": "$basic_event6#copy_args$2", "objective": "reapermc.wicked_expressions"}}
+```
+
+`@function basic_event6:reapermc/crankshaft/builtin_event/player_swim_end/__payload__`
+
+```mcfunction
+scoreboard players operation $basic_event6#copy_args$3 reapermc.wicked_expressions = @s reapermc.crankshaft.builtin_event.player_swim_end.swim_time
+tellraw @s ["end ", {"score": {"name": "$basic_event6#copy_args$3", "objective": "reapermc.wicked_expressions"}}]
 ```
