@@ -2,6 +2,17 @@
 
 <!--next-version-placeholder-->
 
+## v1.0.0 (2024-01-22)
+
+### Feature
+
+* V1.0.0 release ([`3c4eb76`](https://github.com/reapermc/crankshaft/commit/3c4eb7643a5e7766a5166344f2be878b9d63f6c5))
+* Expand built-in event library ([`cbd2c38`](https://github.com/reapermc/crankshaft/commit/cbd2c38ee48bac9a5ad77122134530c6e524c3d8))
+
+### Breaking
+
+* v1.0.0 release ([`3c4eb76`](https://github.com/reapermc/crankshaft/commit/3c4eb7643a5e7766a5166344f2be878b9d63f6c5))
+
 ## v0.9.2 (2023-08-27)
 
 ### Fix
