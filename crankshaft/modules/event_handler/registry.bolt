@@ -1,0 +1,7 @@
+from typing import Type, Any
+# from ./event_definition import BuiltinEvent
+
+# TODO: change 'Type' to 'Type[BuiltinEvent]' and
+# 'Any' to 'BuiltinEvent' once bolt's imports are fixed
+registered_events: dict[str, Type] = {}
+deployed_events: dict[str, Any] = {}

@@ -1,0 +1,275 @@
+from wicked_expressions:api import copy_args, ExprOnly, ScoreSource, DataSource, Scoreboard, Data
+from ./registry import deployed_events, registered_events
+from ./class_support import supports_events
+from ../utils import pascal_to_snake_case
+from ../config import Config
+from dataclasses import dataclass
+from typing import ClassVar, Callable
+import inspect
+
+@dataclass
+class Event:
+    deployed: ClassVar[bool] = False
+
+    def __init_subclass__(cls, **kwargs):
+        cls._patch_class_defaults()
+        registered_events[cls.event_id] = cls
+
+        # enables in class events by
+        # default for event definitions
+        cls = supports_events(cls)
+
+        super().__init_subclass__(**kwargs)
+
+    @classmethod
+    def safe_deploy(cls):
+        if not cls.deployed:
+            return cls.deploy()
+        return deployed_events[cls.event_id]
+
+    @classmethod
+    def deploy(cls):
+        deployed_event = cls()
+        deployed_event._on_deploy()
+
+        deployed_events[deployed_event.event_id] = deployed_event
+        cls.deployed = True
+        return deployed_event
+
+    def _auto_copy_args(self, func: Callable) -> Callable:
+        """This ensures args passed thru 'self.trigger()' are safe copies."""
+        params = inspect.signature(func).parameters
+        param_list = []
+        type_annotations = {}
+
+        for param in params:
+            param_list.append(param)
+
+        for arg in self._output_args:
+            param = param_list[0]
+            del param_list[0]
+
+            if isinstance(arg, ScoreSource):
+                type_annotations[param] = ExprOnly(Scoreboard)
+            elif isinstance(arg, DataSource):
+                type_annotations[param] = ExprOnly(Data)
+
+        for kwarg_value in self._output_kwargs.values():
+            param = param_list[0]
+            del param_list[0]
+
+            if isinstance(kwarg_value, ScoreSource):
+                type_annotations[param] = ExprOnly(Scoreboard)
+            elif isinstance(kwarg_value, DataSource):
+                type_annotations[param] = ExprOnly(Data)
+
+        return copy_args(**type_annotations)(func)
+
+@dataclass
+class BuiltinEvent(Event):
+    @classmethod
+    def _patch_class_defaults(cls):
+        cls.event_id = pascal_to_snake_case(cls.__name__)
+
+        LOCAL_PATH = f"{Config.LOCAL_DIR}/builtin_event/{cls.event_id}"
+        GLOBAL_PATH = f"{Config.GLOBAL_DIR}/builtin_event/{cls.event_id}"
+
+        cls._output_args = []
+        cls._output_kwargs = {}
+        cls.dependencies = []
+        cls._lazy_dependency_methods = {}
+        cls._lazy_early_dependency_methods = {}
+        cls._path = {
+            'payload': f"{LOCAL_PATH}/__payload__",
+            'handler': f"{GLOBAL_PATH}/handler/",
+            'on_trigger': f"{GLOBAL_PATH}/__on_trigger__",
+            'event_init': f"{GLOBAL_PATH}/__event_init__",
+            'payload_fork': f"{GLOBAL_PATH}/__payload_fork__",
+            'custom_event_early_dep_runner': f"{LOCAL_PATH}/__ce_early_dep_runner__",
+            'custom_event_dep_runner': f"{LOCAL_PATH}/__ce_dep_runner__",
+            'early_dep_runner': f"{GLOBAL_PATH}/__early_dep_runner__",
+            'dep_runner': f"{GLOBAL_PATH}/__dep_runner__",
+        }
+
+        # helpers
+        # cls.GENERIC_SCOREBOARD = Scoreboard(f"{Config.SCOREBOARD_ROOT}.builtin_event.__generic__")
+        cls.SCOREBOARD_ROOT = f"{Config.SCOREBOARD_ROOT}.builtin_event.{cls.event_id}"
+        cls.TAG_ROOT = f"{Config.TAG_ROOT}.builtin_event.{cls.event_id}"
+
+    @classmethod
+    def add_early_dependency(cls, dependency_event_class, dependency_method: Callable):
+        append function dependency_event_class._path['early_dep_runner']:
+            function cls._generate_dependency_connector(dependency_event_class, early=True)
+
+        dependency_event_id = dependency_event_class.event_id
+
+        if dependency_event_id not in cls._lazy_early_dependency_methods:
+            cls._lazy_early_dependency_methods[dependency_event_id] = []
+        cls._lazy_early_dependency_methods[dependency_event_id].append(dependency_method)
+
+        if dependency_event_class not in cls.dependencies:
+            cls.dependencies.append(dependency_event_class)
+
+    @classmethod
+    def add_dependency(cls, dependency_event_class, dependency_method: Callable):
+        append function dependency_event_class._path['dep_runner']:
+            function cls._generate_dependency_connector(dependency_event_class)
+
+        dependency_event_id = dependency_event_class.event_id
+
+        if dependency_event_id not in cls._lazy_dependency_methods:
+            cls._lazy_dependency_methods[dependency_event_id] = []
+        cls._lazy_dependency_methods[dependency_event_id].append(dependency_method)
+
+        if dependency_event_class not in cls.dependencies:
+            cls.dependencies.append(dependency_event_class)
+
+    @classmethod
+    def _generate_dependency_connector(cls, dependency_event_class, early: bool = False) -> str:
+        dependent_event_id = cls.event_id
+        dependency_event_id = dependency_event_class.event_id
+        dir_name = ['dependency_entrypoint', 'early_dependency_entrypoint'][early]
+        return f"{Config.GLOBAL_DIR}/builtin_event/{dependent_event_id}/{dir_name}/{dependency_event_id}"
+
+    def attach_payload(self, func: Callable, first_arg=None):
+        append function self._path['payload']:
+            func = self._auto_copy_args(func)
+
+            if first_arg == None:
+                func(*self._output_args, **self._output_kwargs)
+            else:
+                func(first_arg, *self._output_args, **self._output_kwargs)
+
+    def trigger(self, *output_args, **output_kwargs):
+        self._output_args = [*output_args]
+        self._output_kwargs = {**output_kwargs}
+
+        execute function self._path['on_trigger']:
+            function self._path['early_dep_runner']
+            function f"#{self._path['payload_fork']}"
+            function self._path['dep_runner']
+
+    def _on_deploy(self):
+        if hasattr(self, '__event_init__') and callable(self.__event_init__):
+            function self._path['event_init']:
+                self.__event_init__()
+
+        merge function_tag self._path['payload_fork'] {
+            "values": [
+                {"id": self._path['custom_event_early_dep_runner'], "required": false},
+                {"id": self._path['payload'], "required": false},
+                {"id": self._path['custom_event_dep_runner'], "required": false},
+            ]
+        }
+
+        for dependency in self.dependencies:
+            dependency_instance = dependency.safe_deploy()
+
+            early_connector_path = self._generate_dependency_connector(dependency, early=True)
+            connector_path = self._generate_dependency_connector(dependency)
+
+            for method in self._lazy_early_dependency_methods.get(dependency.event_id, []):
+                append function early_connector_path:
+                    method(self, *dependency_instance._output_args, **dependency_instance._output_kwargs)
+
+            for method in self._lazy_dependency_methods.get(dependency.event_id, []):
+                append function connector_path:
+                    method(self, *dependency_instance._output_args, **dependency_instance._output_kwargs)
+
+@dataclass
+class CustomEvent(Event):
+    @classmethod
+    def _patch_class_defaults(cls):
+        cls.event_id = pascal_to_snake_case(cls.__name__)
+
+        LOCAL_PATH = f"{Config.LOCAL_DIR}/custom_event/{cls.event_id}"
+
+        cls._output_args = []
+        cls._output_kwargs = {}
+        cls.dependencies = []
+        cls._lazy_dependency_methods = {}
+        cls._lazy_early_dependency_methods = {}
+        cls._path = {
+            'custom_event_dep_runner': f"{LOCAL_PATH}/__ce_dep_runner",
+            'custom_event_early_dep_runner': f"{LOCAL_PATH}/__ce_early_dep_runner__",
+            'payload': f"{LOCAL_PATH}/__payload__",
+            'on_trigger': f"{LOCAL_PATH}/__on_trigger__",
+            'event_init': f"{LOCAL_PATH}/__event_init__",
+        }
+
+        # helpers
+        # cls.GENERIC_SCOREBOARD = Scoreboard(f"{Config.SCOREBOARD_ROOT}.custom_event.__generic__")
+        cls.SCOREBOARD_ROOT = f"{Config.SCOREBOARD_ROOT}.{ctx.project_id}.custom_event.{cls.event_id}"
+        cls.TAG_ROOT = f"{Config.TAG_ROOT}.{ctx.project_id}.custom_event.{cls.event_id}"
+
+    def attach_payload(self, func: Callable, first_arg=None):
+        append function self._path['payload']:
+            func = self._auto_copy_args(func)
+
+            if first_arg == None:
+                func(*self._output_args, **self._output_kwargs)
+            else:
+                func(first_arg, *self._output_args, **self._output_kwargs)
+
+    def trigger(self, *output_args, **output_kwargs):
+        self._output_args = [*output_args]
+        self._output_kwargs = {**output_kwargs}
+
+        execute function self._path['on_trigger']:
+            function self._path['custom_event_early_dep_runner']
+            function self._path['payload']
+            function self._path['custom_event_dep_runner']
+
+    @classmethod
+    def add_early_dependency(cls, dependency_event_class, dependency_method: Callable):
+        append function dependency_event_class._path['custom_event_dep_runner']:
+            function cls._generate_dependency_connector(dependency_event_class, early=True)
+
+        dependency_event_id = dependency_event_class.event_id
+
+        if dependency_event_id not in cls._lazy_early_dependency_methods:
+            cls._lazy_early_dependency_methods[dependency_event_id] = []
+        cls._lazy_early_dependency_methods[dependency_event_id].append(dependency_method)
+
+        if dependency_event_class not in cls.dependencies:
+            cls.dependencies.append(dependency_event_class)
+
+    @classmethod
+    def add_dependency(cls, dependency_event_class, dependency_method: Callable):
+        append function dependency_event_class._path['custom_event_dep_runner']:
+            function cls._generate_dependency_connector(dependency_event_class)
+
+        dependency_event_id = dependency_event_class.event_id
+
+        if dependency_event_id not in cls._lazy_dependency_methods:
+            cls._lazy_dependency_methods[dependency_event_id] = []
+        cls._lazy_dependency_methods[dependency_event_id].append(dependency_method)
+
+        if dependency_event_class not in cls.dependencies:
+            cls.dependencies.append(dependency_event_class)
+
+    @classmethod
+    def _generate_dependency_connector(cls, dependency_event_class, early: bool = False) -> str:
+        dependent_event_id = cls.event_id
+        dependency_event_id = dependency_event_class.event_id
+        dir_name = ['dependency_entrypoint', 'early_dependency_entrypoint'][early]
+        return f"{Config.LOCAL_DIR}/custom_event/{dependent_event_id}/{dir_name}/{dependency_event_id}"
+
+    def _on_deploy(self):
+        if hasattr(self, '__event_init__') and callable(self.__event_init__):
+            function self._path['event_init']:
+                self.__event_init__()
+
+        for dependency in self.dependencies:
+            dependency_instance = dependency.safe_deploy()
+
+            early_connector_path = self._generate_dependency_connector(dependency, early=True)
+            connector_path = self._generate_dependency_connector(dependency)
+
+            for method in self._lazy_early_dependency_methods.get(dependency.event_id, []):
+                append function early_connector_path:
+                    method(self, *dependency_instance._output_args, **dependency_instance._output_kwargs)
+
+            for method in self._lazy_dependency_methods.get(dependency.event_id, []):
+                append function connector_path:
+                    method(self, *dependency_instance._output_args, **dependency_instance._output_kwargs)

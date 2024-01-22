@@ -1,70 +1,41 @@
-# crankshaft
+# Crankshaft
 
 [![GitHub Actions](https://github.com/reapermc/crankshaft/workflows/CI/badge.svg)](https://github.com/reapermc/crankshaft/actions)
+[![ReaperMC Discord](https://img.shields.io/discord/1145490732161974294?color=7289DA&label=ReaperMC&logo=discord&logoColor=fff)](https://discord.gg/PwdeKpUtRr)
+[![Beet Discord](https://img.shields.io/discord/900530660677156924?color=7289DA&label=Beet&logo=discord&logoColor=fff)](https://discord.gg/98MdSGMm8j)
 
 > Flow control library for the Bolt scripting language.
 
-## Introduction
-
-**Minecraft version: `1.20.1`**
-
-This library implements various flow control APIs, which excel at speeding up prototyping and creating datapacks.
-
 ```py
-from crankshaft:api import Listener
-from crankshaft:events import on_load, on_player_join, on_player_jump
-from crankshaft:flags import is_sneaking
+from crankshaft:api import event
 
-@Listener(on_load)
+@event
 def load():
-    tellraw @a "datapack loaded!"
+    tellraw @a "Hello, World!"
 
-@Listener(on_player_join)
+@event
 def player_join():
-    say "I just joined the server!"
-
-@Listener(on_player_jump)
-def player_jump():
-    if not is_sneaking:
-        tellraw @a "JUMP!"
-    else:
-        tellraw @a "JUMP!... (I was sneaking as well)"
+    tellraw @s {"text": "A diamond for you!", "color": "aqua"}
+    give @s diamond
 ```
-
-## Installation
-
-```bash
-pip install crankshaft
-```
-
-## Getting started
-
-The library is designed to be used within any `bolt` script (either a `.mcfunction` or `bolt` file) inside a `bolt` enabled project.
-
-```yaml
-require:
-    - bolt
-    - crankshaft
-
-pipeline:
-    - mecha
-```
-
-Once you've required `bolt` and `crankshaft`, you are able to import the package's `api` module directly inside your bolt script.
-
-Most of the imports come from the `crankshaft:api` module as shown below.
-
-```py
-from crankshaft:api import Listener
-```
-
-Now you're free to use the API!
-
 
 ## Documentation
 
-Coming soon...
-<!-- Docs available [here](./docs/home.md). -->
+Available over at [Crankshaft Documentation](https://reapermc.github.io/crankshaft/docs)
+
+## Contributing
+
+Contributions are welcome. Make sure to first open an issue discussing a problem or a new feature before creating a pull request. This project uses [poetry](https://python-poetry.org).
+
+```bash
+poetry install
+```
+
+You can run the tests with `poetry run pytest -v`.
+
+```bash
+poetry run pytest -v
+```
 
 ---
 

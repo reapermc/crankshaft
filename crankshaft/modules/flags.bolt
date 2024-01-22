@@ -1,13 +1,156 @@
-"""Module from which builtin flags are imported."""
+from wicked_expressions:api import Scoreboard
+from lightning_rod:api import revoke_advancement
+from ./flag_handler import BuiltinFlag
+from contextlib import contextmanager
 
-from ./flags/is_baby import is_baby
-from ./flags/is_airborne import is_airborne
-from ./flags/is_on_ground import is_on_ground
-from ./flags/is_burning import is_burning
-from ./flags/is_player import is_player
-from ./flags/is_sneaking import is_sneaking
-from ./flags/is_sprinting import is_sprinting
-from ./flags/is_swimming import is_swimming
-from ./flags/is_gliding import is_gliding
-from ./flags/is_charging_bow import is_charging_bow
-from ./flags/is_in_ground import is_in_ground
+class IsAirborne(BuiltinFlag):
+    def __flag_init__(self):
+        predicate self.generate_path('check') {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+                "nbt": "{OnGround: 0b}"
+            }
+        }
+
+    @contextmanager
+    def __condition__(self):
+        if predicate self.generate_path('check'):
+            yield True
+
+    @contextmanager
+    def __not_condition__(self):
+        unless predicate self.generate_path('check'):
+            yield True
+
+class IsChargingBow(BuiltinFlag):
+    def __flag_init__(self):
+        self.is_charging = Scoreboard(f"{self.SCOREBOARD_ROOT}.is_charging")['@s']
+        advancement_path = self.generate_path('on_charge')
+        advancement_reward_path = self.generate_path('on_charge_reward')
+        tick_path = self.generate_path('tick')
+
+        merge function_tag minecraft:tick {"replace": false, "values": [tick_path]}
+        function tick_path:
+            as @a:
+                # if self.is_charging > 0:
+                if score var self.is_charging matches 1..:
+                    self.is_charging -= 1
+
+        advancement advancement_path {
+            "criteria": {
+                "requirement": {
+                    "trigger": "minecraft:using_item",
+                    "conditions": {
+                        "item": {
+                            "items": [
+                                "minecraft:bow"
+                            ]
+                        }
+                    }
+                }
+            },
+            "rewards": {
+                "function": advancement_reward_path
+            }
+        }
+
+        function advancement_reward_path:
+            revoke_advancement(advancement_path)
+            self.is_charging = 1
+
+    @contextmanager
+    def __condition__(self):
+        unless score var self.is_charging matches 0:
+            yield True
+
+    @contextmanager
+    def __not_condition__(self):
+        if score var self.is_charging matches 0:
+            yield True
+
+class IsSneaking(BuiltinFlag):
+    def __flag_init__(self):
+        predicate self.generate_path('check') {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+                "flags": {
+                    "is_sneaking": true
+                }
+            }
+        }
+
+    @contextmanager
+    def __condition__(self):
+        if predicate self.generate_path('check'):
+            yield True
+
+    @contextmanager
+    def __not_condition__(self):
+        unless predicate self.generate_path('check'):
+            yield True
+
+class IsSprinting(BuiltinFlag):
+    def __flag_init__(self):
+        predicate self.generate_path('check') {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+                "flags": {
+                    "is_sprinting": true
+                }
+            }
+        }
+
+    @contextmanager
+    def __condition__(self):
+        if predicate self.generate_path('check'):
+            yield True
+
+    @contextmanager
+    def __not_condition__(self):
+        unless predicate self.generate_path('check'):
+            yield True
+
+class IsSwimming(BuiltinFlag):
+    def __flag_init__(self):
+        predicate self.generate_path('check') {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+                "flags": {
+                    "is_swimming": true
+                }
+            }
+        }
+
+    @contextmanager
+    def __condition__(self):
+        if predicate self.generate_path('check'):
+            yield True
+
+    @contextmanager
+    def __not_condition__(self):
+        unless predicate self.generate_path('check'):
+            yield True
+
+class IsGliding(BuiltinFlag):
+    def __flag_init__(self):
+        predicate self.generate_path('check') {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+                "nbt": "{FallFlying: 1b}"
+            }
+        }
+
+    @contextmanager
+    def __condition__(self):
+        if predicate self.generate_path('check'):
+            yield True
+
+    @contextmanager
+    def __not_condition__(self):
+        unless predicate self.generate_path('check'):
+            yield True
