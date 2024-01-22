@@ -19,7 +19,7 @@ Here's a basic example demonstrating flag usage in Python:
 
 .. code-block:: python
 
-    from crankshaft:api import crankshaft
+    from crankshaft:api import flag
 
     if flag.is_airborne == True:
         tellraw @a "in air!"
