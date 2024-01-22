@@ -1,0 +1,6 @@
+import ./events as _
+from crankshaft:api import event
+
+@event
+def custom_load():
+    tellraw @a "This runs off my custom load event!"

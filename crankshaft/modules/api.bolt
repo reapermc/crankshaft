@@ -1,3 +1,14 @@
-from ./defer import defer
-from ./event_handler import BuiltinEvent, Event, Entrypoint, Listener
-from ./flag import Flag, CustomFlag
+# these 2 are necessary for preloading
+import ./flags as _
+import ./events as _
+
+from ./cwd import get_cwd
+from ./flag_handler import flag
+from ./event_handler/event_definition import BuiltinEvent, CustomEvent
+from ./event_handler/listeners import event, class_event, lazy_class_event, early_dependency, dependency
+from ./event_handler/class_support import supports_events
+
+# this module autoruns when it's imported
+# this is because @defer works the way it does
+# yes, this is terrible, but it does the job for now
+import ./event_handler/optimizer as _

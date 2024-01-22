@@ -1,7 +1,0 @@
-from ../event_handler import BuiltinEvent, Entrypoint
-
-def handler(event):
-    event.trigger()
-
-on_tick = BuiltinEvent('on_tick')
-on_tick.attach_handler(handler, 'minecraft:tick', Entrypoint.FUNCTION_TAG)

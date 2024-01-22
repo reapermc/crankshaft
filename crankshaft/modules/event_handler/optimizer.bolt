@@ -1,0 +1,25 @@
+from ./registry import deployed_events
+from ../utils import defer
+from ../config import Config
+
+def filter_and_optimize(func_path, dir_prefixes):
+    for prefix in dir_prefixes:
+        if not func_path.startswith(prefix):
+            continue
+
+        event_id = func_path[len(prefix):].split('/')[0]
+        if event_id in deployed_events:
+            continue
+
+        del ctx.data.functions[func_path]
+
+@defer
+def remove_unused_events():
+    dir_prefixes = [
+        f"{Config.GLOBAL_DIR}/builtin_event/",
+        f"{Config.LOCAL_DIR}/builtin_event/",
+        f"{Config.LOCAL_DIR}/custom_event/",
+    ]
+
+    for func_path in dict(ctx.data.functions):
+        filter_and_optimize(func_path, dir_prefixes)

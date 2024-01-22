@@ -1,9 +1,0 @@
-from ../event_handler import BuiltinEvent, Entrypoint
-from ./on_tick import on_tick
-
-def handler(event):
-    as @a at @s:
-        event.trigger()
-
-on_player_tick = BuiltinEvent('on_player_tick')
-on_player_tick.attach_handler(handler, on_tick, Entrypoint.EVENT)

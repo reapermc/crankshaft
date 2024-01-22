@@ -1,7 +1,0 @@
-from ../event_handler import BuiltinEvent, Entrypoint
-
-def handler(event):
-    event.trigger()
-
-on_load = BuiltinEvent('on_load')
-on_load.attach_handler(handler, 'minecraft:load', Entrypoint.FUNCTION_TAG)

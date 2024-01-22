@@ -1,0 +1,92 @@
+from wicked_expressions:api import Scoreboard
+from dataclasses import dataclass, replace
+from typing import Type, ClassVar
+from contextlib import contextmanager
+from ./utils import pascal_to_snake_case, logger
+from ./config import Config
+
+deployed_flags: list = []
+
+@dataclass
+class Flag:
+    """
+    This serves as an importable API namespace, that dynamically gets updated when flags are defined.
+    """
+
+    @classmethod
+    def register_flag(cls, flag_class: Type):
+        setattr(cls, flag_class.flag_id, flag_class)
+
+    def __getattribute__(self, flag_id):
+        flag_class = super().__getattribute__(flag_id)
+
+        if not flag_class.deployed:
+            flag_class.deploy()
+
+        return _get_deployed_flag_by_id(flag_id)
+
+@dataclass
+class BuiltinFlag:
+    invert_next_branch: bool = False
+    deployed: ClassVar[bool] = False
+
+    def __init_subclass__(cls):
+        cls._patch_class_defaults()
+        Flag.register_flag(flag_class=cls)
+
+    @classmethod
+    def _patch_class_defaults(cls):
+        cls.flag_id = pascal_to_snake_case(cls.__name__)
+
+        LOCAL_PATH = f"{Config.LOCAL_DIR}/builtin_flag/{cls.flag_id}"
+        GLOBAL_PATH = f"{Config.GLOBAL_DIR}/builtin_flag/{cls.flag_id}"
+
+        cls.trigger_args = []
+        cls.trigger_kwargs = {}
+        cls._path = {
+            'handler': f"{GLOBAL_PATH}/handler",
+            'flag_init': f"{GLOBAL_PATH}/handler/__flag_init__",
+        }
+        cls.SCOREBOARD_ROOT = f"{Config.SCOREBOARD_ROOT}.builtin_flag.{cls.flag_id}"
+        # cls.generic_score_outcome = Scoreboard(f"{Config.SCOREBOARD_ROOT}")['$generic_event_outcome']
+
+    def generate_path(self, subpath: str):
+        return f"{self._path['handler']}/{subpath}"
+
+    @classmethod
+    def deploy(cls):
+        flag_instance = cls()
+        cls._init_deployed_instance(flag_instance)
+        deployed_flags.append(flag_instance)
+        cls.deployed = True
+
+    @classmethod
+    def _init_deployed_instance(cls, self):
+        # this only runs once during deployment
+        # __post_init__ breaks due to __not__
+        if hasattr(self, '__flag_init__') and callable(self.__flag_init__):
+            function self._path['flag_init']:
+                self.__flag_init__()
+
+    def __eq__(self, other):
+        self._check_true = other
+        return self
+
+    @contextmanager
+    def __branch__(self):
+        if self._check_true:
+            with self.__condition__():
+                yield True
+        else:
+            with self.__not_condition__():
+                yield True
+
+def _get_deployed_flag_by_id(flag_id: str) -> BuiltinFlag:
+    for flag in deployed_flags:
+        if flag.flag_id == flag_id:
+            return flag
+
+# this is the easiest way to hack the flag syntax,
+# we do this as '__getattribute__'
+# only works on class instances
+flag = Flag()
